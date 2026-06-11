@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工时录入系统</title>
+
+<style>
+body{font-family:Arial;margin:10px;}
+table{border-collapse:collapse;width:100%;max-width:900px;margin:auto;table-layout:fixed;}
+th,td{border:1px solid #999;font-size:13px;padding:2px;text-align:center;height:28px}
+th{background:#0b73b8;color:#fff}
+.sum{background:#fef3c7;font-weight:bold}
+.readonly{background:#eee}
+input,select{width:100%;height:24px;border:none;font-size:13px}
+button{height:24px;font-size:13px}
+.top th{background:#0b73b8}
+.top td{background:#e6f0fa}
+.role{background:#ffe000}
+</style>
+
+</head>
+
+<body>
+
+<h2 style="text-align:center;">工时录入系统</h2>
+
+<!-- ✅ 员工扫码信息 -->
+<table class="top" style="max-width:600px;margin:auto;margin-bottom:10px;">
+<tr>
+<th>姓名</th><th>工号</th><th>岗位</th><th>周数</th>
+</tr>
+<tr>
+<td id="name">--</td>
+<td id="id">--</td>
+<td id="role" class="role">--</td>
+<td><input id="week"></td>
+</tr>
+</table>
+
+<table>
+<thead>
+<tr>
+<th style="width:50px"></th>
+<th style="width:40px">序号</th>
+<th style="width:100px">工时类别</th>
+<th style="width:140px">生产号</th>
+<th style="width:90px">项目号</th>
+<th style="width:70px">单元号</th>
+<th style="width:150px">备注</th>
+<th style="width:80px">星期</th>
+<th style="width:60px;background:#8dc63f">正班</th>
+<th style="width:60px">加班</th>
+</tr>
+</thead>
+
+<tbody id="tbody"></tbody>
+
+<tfoot>
+<tr>
+<td><button onclick="addRow()">+</button></td>
+<td colspan="7" style="text-align:right">汇总</td>
+<td class="sum" id="sumR">0</td>
+<td class="sum" id="sumO">0</td>
+</tr>
+</tfoot>
+</table>
+
+<br>
+<div style="text-align:center;">
+<button onclick="save()">保存</button>
+<button onclick="submit()">提交</button>
+</div>
+
+<div id="msg" style="color:red;margin-top:10px;text-align:center;"></div>
+
+<script>
+
+// ✅ 扫码带员工信息（关键）
+const urlParams = new URLSearchParams(window.location.search);
+
+document.getElementById("name").innerText = urlParams.get("name") || "丁允志";
+document.getElementById("id").innerText = urlParams.get("id") || "F1";
+document.getElementById("role").innerText = urlParams.get("role") || "主管";
+
+
+// ✅ 星期函数
+function getTodayCN(){
+  const arr=["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+  return arr[new Date().getDay()];
+}
+
+// ✅ 周数自动
+function getWeek(){
+  const d=new Date();
+  const onejan=new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
+}
+document.getElementById("week").value=getWeek();
+
+
+// ✅ Excel解析结果（完整）
+const productionMap = {
+"0351706-02-31": {project:"P0351706",unit:"U503"},
+"0351706-02-27": {project:"P0351706",unit:"U451"},
+"0351706-02-26": {project:"P0351706",unit:"U381"},
+"0351706-02-25": {project:"P0351706",unit:"U361"},
+"0351706-02-24": {project:"P0351706",unit:"U344"},
+"0351706-02-23": {project:"P0351706",unit:"U343"},
+"0351706-02-22": {project:"P0351706",unit:"U335"},
+"0351706-02-20": {project:"P0351706",unit:"U123-1"},
+"0351706-02-19": {project:"P0351706",unit:"U123"},
+"0351706-02-17": {project:"P0351706",unit:"U115-1"},
+"0351706-02-16": {project:"P0351706",unit:"U115"},
+"0351706-02-14": {project:"P0351706",unit:"U114-1"},
+"0351706-02-13": {project:"P0351706",unit:"U114"},
+"0351706-02-11": {project:"P0351706",unit:"U112-3"},
+"0351706-02-09": {project:"P0351706",unit:"U112-1"},
+"0351706-02-08": {project:"P0351706",unit:"U112"},
+"0351706-02-07": {project:"P0351706",unit:"U110-1"},
+"88031": {project:"其他工作",unit:""},
+"104": {project:"仓库作业",unit:""},
+"100": {project:"请假",unit:""}
+};
+
+const list=Object.keys(productionMap);
+
+const types=["机械组装","保温作业","电气作业","车间管理","额外工时","其它作业"];
+const notes=["","项目图纸更改返工","供应商问题返工","内部质量问题返工","其它返工"];
+const days=["星期一","星期二","星期三","星期四","星期五","星期六","星期日"];
+
+let rows=[];
+
+
+// ✅ 新增行（已优化输入速度）
+function addRow(){
+ rows.push({
+   type:"机械组装",
+   prod:"",
+   project:"",
+   unit:"",
+   note:"",
+   day:getTodayCN(),
+   regular:"8",
+   overtime:""
+ });
+ render();
+}
+
+function delRow(i){
+ rows.splice(i,1);
+ render();
+}
+
+function setVal(i,k,v){
+ rows[i][k]=v;
+ render();
+}
+
+function setProd(i,v){
+ rows[i].prod=v;
+ rows[i].project=productionMap[v]?.project||"";
+ rows[i].unit=productionMap[v]?.unit||"";
+ render();
+}
+
+// ✅ 渲染
+function render(){
+ let tb=document.getElementById("tbody");
+ tb.innerHTML="";
+ let sumR=0,sumO=0;
+
+ rows.forEach((r,i)=>{
+   sumR+=Number(r.regular||0);
+   sumO+=Number(r.overtime||0);
+
+   tb.innerHTML+=`
+<tr>
+<td><button onclick="delRow(${i})">删</button></td>
+<td>${i+1}</td>
+
+<td>
+<select onchange="setVal(${i},'type',this.value)">
+${types.map(t=>`<option ${t==r.type?'selected':''}>${t}</option>`)}
+</select>
+</td>
+
+<td>
+<select onchange="setProd(${i},this.value)">
+<option></option>
+${list.map(p=>`<option ${p==r.prod?'selected':''}>${p}</option>`)}
+</select>
+</td>
+
+<td class="readonly">${r.project}</td>
+<td class="readonly">${r.unit}</td>
+
+<td>
+${r.type=="额外工时"?
+`<select onchange="setVal(${i},'note',this.value)">
+${notes.map(n=>`<option ${n==r.note?'selected':''}>${n}</option>`)}
+</select>`:
+`<input value="${r.note||""}" onchange="setVal(${i},'note',this.value)">`}
+</td>
+
+<td>
+<select onchange="setVal(${i},'day',this.value)">
+${days.map(d=>`<option ${d==r.day?'selected':''}>${d}</option>`)}
+</select>
+</td>
+
+<td><input type="number" value="${r.regular}" onchange="setVal(${i},'regular',this.value)"></td>
+<td><input type="number" value="${r.overtime}" onchange="setVal(${i},'overtime',this.value)"></td>
+</tr>`;
+ });
+
+ document.getElementById("sumR").innerText=sumR;
+ document.getElementById("sumO").innerText=sumO;
+}
+
+
+// ✅ 保存
+function save(){
+ localStorage.setItem("data",JSON.stringify(rows));
+ msg("已保存");
+}
+
+// ✅ 提交校验
+function submit(){
+ let err=[];
+ let total={};
+ days.forEach(d=>total[d]=0);
+
+ rows.forEach((r,i)=>{
+   if(!r.prod) err.push(`第${i+1}行未选生产号`);
+   if(isNaN(r.regular)) err.push(`第${i+1}行正班错误`);
+   total[r.day]+=Number(r.regular||0);
+ });
+
+ ["星期一","星期二","星期三","星期四","星期五"].forEach(d=>{
+   if(total[d]!=0 && total[d]!=8){
+     err.push(`${d}正班必须=8`);
+   }
+ });
+
+ if(err.length){ msg(err.join("<br>")); return; }
+
+ msg("提交成功");
+}
+
+// ✅ 提示
+function msg(t){
+ document.getElementById("msg").innerHTML=t;
+}
+
+// 初始化
+addRow();
+
+</script>
+
+</body>
+</html>
