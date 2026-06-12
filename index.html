@@ -4,12 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>工时录入系统</title>
-
 <style>
   body { font-family: Arial, Helvetica, sans-serif; margin: 10px; }
   h2 { text-align: center; }
 
-  .wrap-top, .wrap-main, .actions, #msg, .small-note {
+  .wrap-top, .wrap-main, .actions, #msg, .small-note, .history-wrap {
     max-width: 625px;
     margin-left: auto;
     margin-right: auto;
@@ -49,19 +48,23 @@
     background: transparent;
   }
 
-  input[type="number"] { text-align: center; }
+  /* 文本输入但支持数字键盘，避免上下箭头 */
+  input.num-like {
+    text-align: center;
+  }
 
   button {
     height: 24px;
     min-width: 24px;
     font-size: 12px;
     cursor: pointer;
+    border: 1px solid #999;
+    background: #f3f3f3;
   }
 
-  .btn-row {
-    width: 22px;
-    padding: 0;
-  }
+  .btn-row { width: 22px; padding: 0; }
+  .btn-submit { background:#0b73b8; color:#fff; border-color:#0b73b8; }
+  .btn-export { background:#28a745; color:#fff; border-color:#28a745; }
 
   .actions {
     margin-top: 10px;
@@ -86,18 +89,14 @@
     line-height: 1.4;
   }
 
-  /* 可选：按钮颜色 */
-  .btn-submit {
-    background: #0b73b8;
-    color: #fff;
-    border: 1px solid #0b73b8;
-  }
-
-  .btn-export {
-    background: #28a745;
-    color: #fff;
-    border: 1px solid #28a745;
-  }
+  .history-wrap { margin-top:10px; }
+  .history-title { font-weight:700; margin: 0 0 4px 0; }
+  .mini { font-size:12px; }
+  .history-box { border:1px solid #999; padding:6px; }
+  .history-empty { color:#666; font-size:12px; }
+  .pill { display:inline-block; padding:2px 6px; margin:2px; border:1px solid #ccc; border-radius:10px; font-size:12px; }
+  .pill-good { background:#eef8ee; }
+  .pill-bad { background:#fff3f3; }
 </style>
 </head>
 <body>
@@ -125,6 +124,14 @@
       <td><input id="week" type="text"></td>
     </tr>
   </table>
+</div>
+
+<div class="history-wrap">
+  <div class="history-title">本周已保存 / 已提交数据</div>
+  <div class="history-box">
+    <div id="weekTotals" class="mini"></div>
+    <div id="weekRows" class="mini" style="margin-top:6px;"></div>
+  </div>
 </div>
 
 <div class="wrap-main" style="margin-top:10px;">
@@ -177,7 +184,7 @@
 <div class="actions">
   <button onclick="save()">保存</button>
   <button class="btn-submit" onclick="submitForm()">提交</button>
-  <button id="exportBtn" class="btn-export" onclick="exportCSV()" style="display:none;">导出数据</button>
+  <button id="exportBtn" class="btn-export" onclick="exportCSV()" style="display:none;">导出</button>
 </div>
 
 <div id="msg"></div>
@@ -354,7 +361,7 @@ const productionMap = {
 
 // 自动生成映射
 const projectMap = {};
-Object.entries(productionMap).forEach(([k,v]) => {
+Object.entries(productionMap).forEach(([k,v])=>{
   if(!projectMap[v.project]) projectMap[v.project] = [];
   projectMap[v.project].push({prod:k, unit:v.unit});
 });
@@ -378,13 +385,16 @@ function getToday(){
   return arr[new Date().getDay()];
 }
 
+function displayDay(d){
+  return d ? ("星期" + d) : "";
+}
+
 function getWeek(){
   const d = new Date();
   const onejan = new Date(d.getFullYear(),0,1);
   return Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
 }
 
-// 周次规范化
 function normalizeWeek(input){
   let val = String(input || "").trim().toUpperCase();
   if(!val) return "";
@@ -409,9 +419,8 @@ document.getElementById("id").innerText = userId || "--";
 document.getElementById("role").innerText = info.role || params.get("role") || "--";
 document.getElementById("week").value = getWeek();
 
-// 只有 X1 显示导出按钮
+// 只有 X1 显示导出按钮（不改你现有结构，直接追加）
 if(userId === "X1"){
-  // 创建按钮，避免改动你现有结构
   const exportBtn = document.createElement("button");
   exportBtn.id = "exportBtn";
   exportBtn.className = "btn-export";
@@ -431,10 +440,54 @@ function addRow(){
     unit:"",
     note:"",
     day:getToday(),
-    regular:"8",
+    regular:"",
     overtime:""
   });
   render();
+}
+
+function getAllWeeksStore(){
+  return "timesheet_all_weeks";
+}
+
+function getUserWeeksStore(){
+  return "timesheet_" + userId + "_weeks";
+}
+
+function computeDayTotals(dataRows){
+  const totals = {"一":{regular:0,overtime:0},"二":{regular:0,overtime:0},"三":{regular:0,overtime:0},"四":{regular:0,overtime:0},"五":{regular:0,overtime:0},"六":{regular:0,overtime:0},"日":{regular:0,overtime:0}};
+  dataRows.forEach(r=>{
+    const d = r.day;
+    if(!totals[d]) return;
+    totals[d].regular += Number(r.regular || 0);
+    totals[d].overtime += Number(r.overtime || 0);
+  });
+  return totals;
+}
+
+function renderWeekOverview(){
+  const weekKey = normalizeWeek(document.getElementById("week").value);
+  const totalsDiv = document.getElementById("weekTotals");
+  const rowsDiv = document.getElementById("weekRows");
+
+  if(!rows.length){
+    totalsDiv.innerHTML = '<span class="history-empty">本周暂无数据</span>';
+    rowsDiv.innerHTML = '';
+    return;
+  }
+
+  const totals = computeDayTotals(rows);
+  totalsDiv.innerHTML = days.map(d=>{
+    const reg = totals[d].regular;
+    const ot = totals[d].overtime;
+    const okReg = (reg === 0 || reg === 8);
+    const okOt = (ot === 0 || ot === 4);
+    return `<span class="pill ${okReg && okOt ? 'pill-good' : 'pill-bad'}">星期${d}：正班 ${reg}h / 夜加班 ${ot}h</span>`;
+  }).join(' ');
+
+  rowsDiv.innerHTML = rows.map((r,i)=>{
+    return `<div>${i+1}. ${displayDay(r.day)} ｜ ${r.type || ''} ｜ ${r.project || ''} ｜ ${r.prod || ''} ｜ ${r.unit || ''} ｜ 正班 ${r.regular || 0}h ｜ 夜加班 ${r.overtime || 0}h ${r.note ? '｜ ' + r.note : ''}</div>`;
+  }).join('');
 }
 
 function render(){
@@ -498,23 +551,20 @@ function render(){
   </td>
 
   <td>
-    <select onchange="rows[${i}].day=this.value">
+    <select onchange="rows[${i}].day=this.value; render()">
       ${days.map(d=>`<option ${d==r.day?"selected":""}>${d}</option>`).join("")}
     </select>
   </td>
 
-  <td><input type="number" step="0.5" value="${r.regular}" onchange="rows[${i}].regular=this.value"></td>
-  <td><input type="number" step="0.5" value="${r.overtime}" onchange="rows[${i}].overtime=this.value"></td>
+  <td><input class="num-like" type="text" inputmode="decimal" value="${r.regular || ''}" onchange="rows[${i}].regular=this.value.trim(); render()"></td>
+  <td><input class="num-like" type="text" inputmode="decimal" value="${r.overtime || ''}" onchange="rows[${i}].overtime=this.value.trim(); render()"></td>
 </tr>`;
   });
 
   document.getElementById("tbody").innerHTML = html;
   document.getElementById("sumR").innerText = sr;
   document.getElementById("sumO").innerText = so;
-}
-
-function getStoreKey(){
-  return "timesheet_" + userId + "_weeks";
+  renderWeekOverview();
 }
 
 function save(){
@@ -524,51 +574,79 @@ function save(){
     return;
   }
 
-  const storeKey = getStoreKey();
+  let userWeeks = {};
+  try{
+    userWeeks = JSON.parse(localStorage.getItem(getUserWeeksStore()) || "{}");
+  }catch(e){ userWeeks = {}; }
+  userWeeks[weekKey] = rows;
+  localStorage.setItem(getUserWeeksStore(), JSON.stringify(userWeeks));
+
+  // 同时写入全员周数据（注意：仅能汇总到同一台设备中已保存的员工数据）
   let allWeeks = {};
   try{
-    allWeeks = JSON.parse(localStorage.getItem(storeKey) || "{}");
-  }catch(e){
-    allWeeks = {};
-  }
+    allWeeks = JSON.parse(localStorage.getItem(getAllWeeksStore()) || "{}");
+  }catch(e){ allWeeks = {}; }
+  if(!allWeeks[weekKey]) allWeeks[weekKey] = {};
+  allWeeks[weekKey][userId] = rows;
+  localStorage.setItem(getAllWeeksStore(), JSON.stringify(allWeeks));
 
-  allWeeks[weekKey] = rows;
-  localStorage.setItem(storeKey, JSON.stringify(allWeeks));
   document.getElementById("msg").innerText = "已保存";
 }
 
-function submitForm(){
+function validateRows(){
   let err = [];
-  let total = {"一":0,"二":0,"三":0,"四":0,"五":0,"六":0,"日":0};
+  const totals = {"一":{regular:0,overtime:0},"二":{regular:0,overtime:0},"三":{regular:0,overtime:0},"四":{regular:0,overtime:0},"五":{regular:0,overtime:0},"六":{regular:0,overtime:0},"日":{regular:0,overtime:0}};
 
   rows.forEach((r,i)=>{
     if(!r.project) err.push(`第${i+1}行未选项目`);
     if(!r.prod) err.push(`第${i+1}行未选生产号`);
     if(!r.unit) err.push(`第${i+1}行未选单元号`);
-    if(r.regular==="" || isNaN(Number(r.regular))) err.push(`第${i+1}行正班错误`);
-    if(r.overtime!=="" && isNaN(Number(r.overtime))) err.push(`第${i+1}行夜加班错误`);
 
-    total[r.day] += Number(r.regular||0);
+    const reg = Number(r.regular || 0);
+    const ot = Number(r.overtime || 0);
+    if(r.regular !== "" && Number.isNaN(reg)) err.push(`第${i+1}行正班错误`);
+    if(r.overtime !== "" && Number.isNaN(ot)) err.push(`第${i+1}行夜加班错误`);
 
-    if(Number(r.overtime||0) > 8){
-      err.push(`第${i+1}行夜加班异常`);
+    if(totals[r.day]){
+      totals[r.day].regular += reg;
+      totals[r.day].overtime += ot;
     }
   });
 
-  ["一","二","三","四","五"].forEach(d=>{
-    if(total[d] !== 0 && total[d] !== 8){
-      err.push(`${d} 正班必须=8`);
+  ["一","二","三","四","五","六","日"].forEach(d=>{
+    const reg = totals[d].regular;
+    const ot = totals[d].overtime;
+
+    // 每天正班只能是 0 或 8
+    if(reg !== 0 && reg !== 8){
+      err.push(`星期${d} 正班工时错误（只能为 0h 或 8h，当前 ${reg}h）`);
+    }
+
+    // 每天夜加班只能是 0 或 4
+    if(ot !== 0 && ot !== 4){
+      err.push(`星期${d} 夜加班工时错误（只能为 0h 或 4h，当前 ${ot}h）`);
+    }
+
+    // 特别提醒：超 8h 正班
+    if(reg > 8){
+      err.push(`星期${d} 正班超出 8h，不能提交`);
     }
   });
 
-  document.getElementById("msg").innerHTML = err.length ? err.join("<br>") : "提交成功";
+  return err;
 }
 
-// ✅ 只有 X1 可用：导出指定周次 CSV
-function exportCSV(){
-  if(userId !== "X1"){
-    return;
+function submitForm(){
+  const err = validateRows();
+  document.getElementById("msg").innerHTML = err.length ? err.join("<br>") : "提交成功";
+  if(!err.length){
+    save();
   }
+}
+
+// 只有 X1 可用：导出指定周次 CSV（导出同一台设备中已保存的所有员工该周数据）
+function exportCSV(){
+  if(userId !== "X1") return;
 
   const weekInput = prompt("请输入要导出的周次，例如：WEEK22 或 22", "WEEK" + document.getElementById("week").value);
   const weekKey = normalizeWeek(weekInput);
@@ -577,59 +655,58 @@ function exportCSV(){
     return;
   }
 
-  const storeKey = getStoreKey();
   let allWeeks = {};
   try{
-    allWeeks = JSON.parse(localStorage.getItem(storeKey) || "{}");
-  }catch(e){
-    allWeeks = {};
-  }
+    allWeeks = JSON.parse(localStorage.getItem(getAllWeeksStore()) || "{}");
+  }catch(e){ allWeeks = {}; }
 
-  // 如果导出的周次正好是当前页周次，优先用当前 rows（避免先保存的步骤）
-  const currentWeek = normalizeWeek(document.getElementById("week").value);
-  const exportRows = (weekKey === currentWeek && rows.length > 0)
-    ? rows
-    : (allWeeks[weekKey] || []);
-
-  if(!exportRows.length){
-    alert(`${weekKey} 没有可导出的数据`);
+  const weekData = allWeeks[weekKey] || {};
+  const userIds = Object.keys(weekData);
+  if(!userIds.length){
+    alert(`${weekKey} 没有可导出的数据（仅能导出本设备已保存的员工数据）`);
     return;
   }
 
-  const headers = ["序号","工时类别","项目号","生产号","单元号","备注","星期","正班","夜加班"];
+  const headers = ["周次","工号","姓名","岗位","序号","工时类别","项目号","生产号","单元号","备注","星期","正班","夜加班"];
   const csv = [headers.join(",")];
 
-  exportRows.forEach((r,i)=>{
-    csv.push([
-      i+1,
-      r.type || "",
-      r.project || "",
-      r.prod || "",
-      r.unit || "",
-      (r.note || "").replace(/,/g, "，"),
-      r.day || "",
-      r.regular || "",
-      r.overtime || ""
-    ].join(","));
+  userIds.forEach(uid=>{
+    const personRows = weekData[uid] || [];
+    const p = employeeMap[uid] || {name:"",role:""};
+    personRows.forEach((r,i)=>{
+      csv.push([
+        weekKey,
+        uid,
+        (p.name || "").replace(/,/g, "，"),
+        (p.role || "").replace(/,/g, "，"),
+        i+1,
+        (r.type || "").replace(/,/g, "，"),
+        (r.project || "").replace(/,/g, "，"),
+        (r.prod || "").replace(/,/g, "，"),
+        (r.unit || "").replace(/,/g, "，"),
+        (r.note || "").replace(/,/g, "，"),
+        r.day || "",
+        r.regular || "",
+        r.overtime || ""
+      ].join(","));
+    });
   });
 
   const blob = new Blob(["\uFEFF" + csv.join("\n")], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
-
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${weekKey}_工时数据.csv`;
+  link.download = `${weekKey}_全员工时数据.csv`;
   link.click();
   URL.revokeObjectURL(url);
 }
 
-// 页面加载时按当前周次恢复数据
+// 首次加载：按当前周次恢复本人的数据
 try{
-  const storeKey = getStoreKey();
-  const allWeeks = JSON.parse(localStorage.getItem(storeKey) || "{}");
+  const userWeeks = JSON.parse(localStorage.getItem(getUserWeeksStore()) || "{}");
   const currentWeek = normalizeWeek(document.getElementById("week").value);
-  if(allWeeks[currentWeek] && Array.isArray(allWeeks[currentWeek]) && allWeeks[currentWeek].length){
-    rows = allWeeks[currentWeek];
+  if(userWeeks[currentWeek] && Array.isArray(userWeeks[currentWeek]) && userWeeks[currentWeek].length){
+    rows = userWeeks[currentWeek];
   }
 }catch(e){}
 
