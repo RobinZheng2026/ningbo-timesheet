@@ -447,7 +447,7 @@ document.getElementById("role").innerText = info.role || params.get("role") || "
 
 // 周数 & 今天
 function getTodayCN(){
-  const arr=["星期日","星期一","星期二","星期三","星期四","星期五","星期六"];
+  const arr=[一","二","三","四","五","六","日"];
   return arr[new Date().getDay()];
 }
 function getWeek(){
@@ -578,7 +578,7 @@ function render(){
 
   <td>
     <select onchange="setVal(${i},'day',this.value)">
-      ${["星期一","星期二","星期三","星期四","星期五","星期六","星期日"].map(d=>`<option ${d===r.day?"selected":""}>${d}</option>`).join("")}
+      ${[一","二","三","四","五","六","日"].map(d=>`<option ${d===r.day?"selected":""}>${d}</option>`).join("")}
     </select>
   </td>
 
@@ -600,7 +600,7 @@ function save(){
 function submitForm(){
   let err=[];
   let total={};
-  ["星期一","星期二","星期三","星期四","星期五","星期六","星期日"].forEach(d=>total[d]=0);
+  [一","二","三","四","五","六","日"].forEach(d=>total[d]=0);
 
   rows.forEach((r,i)=>{
     if(!r.project) err.push(`第${i+1}行未选项目`);
@@ -616,7 +616,7 @@ function submitForm(){
     }
   });
 
-  ["星期一","星期二","星期三","星期四","星期五"].forEach(d=>{
+  [一","二","三","四","五","六","日"].forEach(d=>{
     if(total[d]!==0 && total[d]!==8){
       err.push(`${d}正班必须=8`);
     }
