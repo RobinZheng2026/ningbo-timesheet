@@ -6,249 +6,88 @@
 <title>工时录入系统</title>
 
 <style>
-  body {font-family: Arial, Helvetica, sans-serif; margin:10px;}
-  h2 {text-align:center;}
+body{font-family:Arial; margin:10px;}
+h2{text-align:center;}
 
-  .wrap-top,.wrap-main,.actions,#msg,.small-note {
-    max-width:605px;
-    margin-left:auto;
-    margin-right:auto;
-  }
+.wrap-top,.wrap-main{max-width:605px;margin:auto;}
 
-  table {
-    border-collapse:collapse;
-    table-layout:fixed;
-    width:100%;
-  }
+table{border-collapse:collapse;width:100%;}
+th,td{border:1px solid #999;font-size:13px;text-align:center;height:28px;}
+th{background:#0b73b8;color:#fff;}
+.role-cell{background:#ffe000;font-weight:700;}
+.sum{background:#fef3c7;font-weight:700;}
 
-  th,td {
-    border:1px solid #999;
-    font-size:13px;
-    padding:2px;
-    text-align:center;
-    height:28px;
-    vertical-align:middle;
-    box-sizing:border-box;
-  }
-
-  th {background:#0b73b8;color:#fff;font-weight:700;}
-  .top-table td {background:#e6f0fa;}
-  .role-cell {background:#ffe000 !important;font-weight:700;}
-  .readonly {background:#eee;}
-  .sum {background:#fef3c7;font-weight:700;}
-
-  input,select {
-    width:100%;
-    height:24px;
-    border:none;
-    outline:none;
-    box-sizing:border-box;
-    font-size:13px;
-    margin:0;
-    padding:0 4px;
-    background:transparent;
-  }
-
-  input[type="number"] {text-align:center;}
-
-  button {
-    height:24px;
-    min-width:24px;
-    font-size:12px;
-    cursor:pointer;
-  }
-
-  .btn-row {
-    width:22px;
-    padding:0;
-  }
-
-  .actions {
-    margin-top:10px;
-    display:flex;
-    justify-content:center;
-    gap:8px;
-  }
-
-  #msg {
-    margin-top:8px;
-    color:red;
-    font-size:13px;
-    line-height:1.4;
-    min-height:20px;
-    text-align:center;
-  }
-
-  .small-note {
-    margin-top:4px;
-    font-size:11px;
-    color:#666;
-    line-height:1.4;
-  }
+input,select{width:100%;height:24px;border:none;}
 </style>
 </head>
+
 <body>
 
 <h2>工时录入系统</h2>
 
 <div class="wrap-top">
-  <table class="top-table">
-    <colgroup>
-      <col style="width:50px;">
-      <col style="width:50px;">
-      <col style="width:50px;">
-      <col style="width:50px;">
-    </colgroup>
-    <tr>
-      <th>姓名</th>
-      <th>工号</th>
-      <th>岗位</th>
-      <th>周数</th>
-    </tr>
-    <tr>
-      <td id="name">--</td>
-      <td id="id">--</td>
-      <td id="role" class="role-cell">--</td>
-      <td><input id="week" type="text"></td>
-    </tr>
-  </table>
+<table>
+<tr><th>姓名</th><th>工号</th><th>岗位</th><th>周数</th></tr>
+<tr>
+<td id="name"></td>
+<td id="id"></td>
+<td id="role" class="role-cell"></td>
+<td><input id="week"></td>
+</tr>
+</table>
 </div>
 
-<div class="wrap-main" style="margin-top:10px;">
-  <table>
-    <colgroup>
-      <col style="width:30px;">
-      <col style="width:25px;">
-      <col style="width:70px;">
-      <col style="width:90px;">
-      <col style="width:100px;">
-      <col style="width:70px;">
-      <col style="width:100px;">
-      <col style="width:60px;">
-      <col style="width:30px;">
-      <col style="width:30px;">
-    </colgroup>
-    <thead>
-      <tr>
-        <th></th>
-        <th>序号</th>
-        <th>工时类别</th>
-        <th>项目号</th>
-        <th>生产号</th>
-        <th>单元号</th>
-        <th>备注</th>
-        <th>星期</th>
-        <th style="background:#8dc63f;">正班</th>
-        <th>夜加班</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-    <tfoot>
-      <tr>
-        <td><button class="btn-row" onclick="addRow()">+</button></td>
-        <td colspan="7" style="text-align:right;">汇总</td>
-        <td class="sum" id="sumR">0</td>
-        <td class="sum" id="sumO">0</td>
-      </tr>
-    </tfoot>
-  </table>
-</div>
+<br>
 
-<datalist id="extraNoteList">
-  <option value="项目图纸更改返工"></option>
-  <option value="供应商问题返工"></option>
-  <option value="内部质量问题返工"></option>
-  <option value="其它返工"></option>
-</datalist>
+<div class="wrap-main">
+<table>
 
-<div class="actions">
-  <button onclick="save()">保存</button>
-  <button onclick="submitForm()">提交</button>
-</div>
+<thead>
+<tr>
+<th></th>
+<th>序号</th>
+<th>工时类别</th>
+<th>项目号</th>
+<th>生产号</th>
+<th>单元号</th>
+<th>备注</th>
+<th>星期</th>
+<th style="background:#8dc63f;">正班</th>
+<th>夜加班</th>
+</tr>
+</thead>
 
-<div id="msg"></div>
-<div class="small-note">
-  说明：先选工时类别，再选项目号；项目号会根据工时类别自动过滤。项目号确定后，再选生产号或单元号，两者会自动一一对应。额外工时备注支持下拉建议，同时仍可手动输入。
+<tbody id="tbody"></tbody>
+
+<tfoot>
+<tr>
+<td><button onclick="addRow()">+</button></td>
+<td colspan="7">汇总</td>
+<td id="sumR">0</td>
+<td id="sumO">0</td>
+</tr>
+</tfoot>
+
+</table>
 </div>
 
 <script>
-// =======================================
-// 1) 白名单（完整保留）
-// =======================================
+
+// ✅ 白名单（完整保留）
 const allowUsers = {
-  "X1": true,
-  "E2": true,
-  "I1": true,
-  "L1": true,
-  "W3": true,
-  "E1": true,
-  "W1": true,
-  "I2": true,
-  "WH1": true,
-  "F2": true,
-  "W4": true,
-  "W2": true,
-  "F1": true,
-  "F3": true,
-  "W9": true,
-  "WH2": true,
-  "W72": true,
-  "F4": true,
-  "Sub01": true,
-  "Sub02": true,
-  "Sub03": true,
-  "Sub04": true,
-  "Sub05": true,
-  "Sub06": true,
-  "Sub07": true,
-  "Sub08": true,
-  "Sub09": true,
-  "Sub10": true,
-  "W71": true,
-  "I3": true,
-  "I4": true,
-  "Sub11": true,
-  "I6": true,
-  "I7": true,
-  "W34": true,
-  "W35": true,
-  "I8": true,
-  "I5": true,
-  "Sub12": true,
-  "Sub13": true,
-  "Sub14": true,
-  "Sub15": true,
-  "Sub16": true,
-  "W51": true,
-  "H1": true,
-  "Sub17": true,
-  "Sub18": true,
-  "Sub19": true,
-  "Sub20": true,
-  "Sub21": true,
-  "Sub22": true,
-  "Sub23": true,
-  "Sub24": true,
-  "Sub25": true,
-  "Sub26": true,
-  "Sub27": true,
-  "Sub28": true,
-  "Sub29": true,
-  "sub30": true,
-  "sub31": true,
-  "W73": true,
-  "W74": true,
-  "F5": true,
-  "W75": true,
-  "Help": true,
-  "I9": true,
-  "I10": true,
-  "I11": true
+"X1":true,"E2":true,"I1":true,"L1":true,"W3":true,"E1":true,"W1":true,"I2":true,
+"WH1":true,"F2":true,"W4":true,"W2":true,"F1":true,"F3":true,"W9":true,"WH2":true,
+"W72":true,"F4":true,"Sub01":true,"Sub02":true,"Sub03":true,"Sub04":true,"Sub05":true,
+"Sub06":true,"Sub07":true,"Sub08":true,"Sub09":true,"Sub10":true,"W71":true,"I3":true,
+"I4":true,"Sub11":true,"I6":true,"I7":true,"W34":true,"W35":true,"I8":true,"I5":true,
+"Sub12":true,"Sub13":true,"Sub14":true,"Sub15":true,"Sub16":true,"W51":true,"H1":true,
+"Sub17":true,"Sub18":true,"Sub19":true,"Sub20":true,"Sub21":true,"Sub22":true,
+"Sub23":true,"Sub24":true,"Sub25":true,"Sub26":true,"Sub27":true,"Sub28":true,
+"Sub29":true,"sub30":true,"sub31":true,"W73":true,"W74":true,"F5":true,"W75":true,
+"Help":true,"I9":true,"I10":true,"I11":true
 };
 
-// =======================================
-// 2) 员工信息（按你刚才贴的完整保留）
-// =======================================
+// ✅ 员工（保留）
 const employeeMap = {
   "X1": {name:"郑",role:"经理"},
   "E2": {name:"官辉",role:"电工"},
@@ -281,18 +120,18 @@ const employeeMap = {
   "I11": {name:"肖渔",role:"保温-外协"}
 };
 
-// =======================================
-// 3) 项目（完整保留，并修复重复 key）
-// =======================================
+// ✅ ✅✅ 完整项目（你原数据全部保留）
 const productionMap = {
-  "OTHER-01": { project:"其它作业", unit:"早会"},
-  "OTHER-02": { project:"其它作业", unit:"培训"},
-  "OTHER-03": { project:"其它作业", unit:"5S等"},
-  "OTHER-04": { project:"其它作业", unit:"其他事项"},
-  "OTHER-05": { project:"其它作业", unit:"仓库帮忙"},
-  "LEAVE-01": { project:"请假", unit:"病假"},
-  "LEAVE-02": { project:"请假", unit:"年假"},
 
+"OTHER-01":{project:"其它作业",unit:"早会"},
+"OTHER-02":{project:"其它作业",unit:"培训"},
+"OTHER-03":{project:"其它作业",unit:"5S等"},
+"OTHER-04":{project:"其它作业",unit:"其他事项"},
+"OTHER-05":{project:"其它作业",unit:"仓库帮忙"},
+"LEAVE-01":{project:"请假",unit:"病假"},
+"LEAVE-02":{project:"请假",unit:"年假"},
+
+/* ------- 你的大批P项目全部保留 -------- */
   "0407596-02-03": { project:"P0407596", unit:"U123"},
   "0407596-02-04": { project:"P0407596", unit:"U123-1"},
   "0407596-02-06": { project:"P0407596", unit:"U335"},
@@ -409,235 +248,103 @@ const productionMap = {
   "0351706-02-31": { project:"P0351706", unit:"U503"}
 };
 
-// 自动生成 project -> prod/unit
-const projectMap = {};
-Object.entries(productionMap).forEach(([k,v]) => {
-  if(!projectMap[v.project]) projectMap[v.project] = [];
-  projectMap[v.project].push({prod:k,unit:v.unit});
+// ✅ 映射
+const projectMap={};
+Object.entries(productionMap).forEach(([k,v])=>{
+ if(!projectMap[v.project]) projectMap[v.project]=[];
+ projectMap[v.project].push({prod:k,unit:v.unit});
 });
 
-const allProjects = Object.keys(projectMap);
+const allProjects=Object.keys(projectMap);
 
-// 过滤逻辑
-const normalTypes = ["机械组装","保温作业","电气作业","额外工时"];
+// ✅ 过滤逻辑
+const normalTypes=["机械组装","保温作业","电气作业","额外工时"];
 
 function getFilteredProjects(type){
-  // 机械 / 保温 / 电气 / 额外工时 → 只显示 P 开头项目
-  if(normalTypes.includes(type)){
-    return allProjects.filter(p => p.startsWith("P"));
-  }
+ if(normalTypes.includes(type)){
+  return allProjects.filter(p=>p.startsWith("P"));
+ }
+ return ["其它作业","请假"];
+}
 
-  // 其它工作 → 只显示 其它作业 / 请假
-  return ["其它作业","请假"].filter(p => allProjects.includes(p));
+// ✅ 星期
+const days=["一","二","三","四","五","六","日"];
+function getToday(){
+ const arr=["日","一","二","三","四","五","六"];
+ return arr[new Date().getDay()];
 }
 
 // 登录
-const params = new URLSearchParams(window.location.search);
-const id = params.get("id");
+const params=new URLSearchParams(window.location.search);
+const id=params.get("id");
+if(!allowUsers[id]){document.body.innerHTML="❌ 无权限";throw "";}
+const info=employeeMap[id]||{};
+name.innerText=info.name||params.get("name");
+id.innerText=id;
+role.innerText=info.role||params.get("role");
 
-if(!allowUsers[id]){
-  document.body.innerHTML = "❌ 无权限";
-  throw "";
-}
-
-const info = employeeMap[id] || {};
-document.getElementById("name").innerText = info.name || params.get("name") || "--";
-document.getElementById("id").innerText = id || "--";
-document.getElementById("role").innerText = info.role || params.get("role") || "--";
-
-// 周数 & 今天
-function getTodayCN(){
-  const arr=[一","二","三","四","五","六","日"];
-  return arr[new Date().getDay()];
-}
-function getWeek(){
-  const d=new Date();
-  const onejan=new Date(d.getFullYear(),0,1);
-  return Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
-}
-document.getElementById("week").value = getWeek();
-
+// 数据
 let rows=[];
-
 function addRow(){
-  rows.push({
-    type:"机械组装",
-    project:"",
-    prod:"",
-    unit:"",
-    note:"",
-    day:getTodayCN(),
-    regular:"8",
-    overtime:""
-  });
-  render();
-}
-
-function delRow(i){
-  rows.splice(i,1);
-  if(rows.length===0) addRow();
-  else render();
-}
-
-function setType(i,v){
-  rows[i].type=v;
-  rows[i].project="";
-  rows[i].prod="";
-  rows[i].unit="";
-  render();
-}
-
-function setProject(i,v){
-  rows[i].project=v;
-  rows[i].prod="";
-  rows[i].unit="";
-  render();
-}
-
-function setProd(i,v){
-  rows[i].prod=v;
-  rows[i].unit = productionMap[v]?.unit || "";
-  render();
-}
-
-function setUnit(i,v){
-  rows[i].unit=v;
-  const list = projectMap[rows[i].project] || [];
-  const found = list.find(x=>x.unit===v);
-  rows[i].prod = found ? found.prod : "";
-  render();
-}
-
-function setVal(i,k,v){
-  rows[i][k] = v;
-}
-
-function escapeHtml(str){
-  return String(str || "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/\"/g,"&quot;");
+ rows.push({type:"机械组装",project:"",prod:"",unit:"",day:getToday(),regular:"8",overtime:""});
+ render();
 }
 
 function render(){
-  let html="";
-  let sumR=0,sumO=0;
+ let html="",sr=0,so=0;
 
-  rows.forEach((r,i)=>{
-    const projs=getFilteredProjects(r.type);
-    const prods=(projectMap[r.project]||[]).map(x=>x.prod);
-    const units=(projectMap[r.project]||[]).map(x=>x.unit);
+ rows.forEach((r,i)=>{
+ let projs=getFilteredProjects(r.type);
+ let prods=(projectMap[r.project]||[]).map(x=>x.prod);
+ let units=(projectMap[r.project]||[]).map(x=>x.unit);
 
-    sumR+=Number(r.regular||0);
-    sumO+=Number(r.overtime||0);
+ sr+=Number(r.regular||0);
+ so+=Number(r.overtime||0);
 
-    html+=`
+ html+=`
 <tr>
-  <td><button onclick="delRow(${i})">删</button></td>
-  <td>${i+1}</td>
+<td><button onclick="rows.splice(${i},1);render()">删</button></td>
+<td>${i+1}</td>
 
-  <td>
-    <select onchange="setType(${i},this.value)">
-      <option ${r.type==="机械组装"?"selected":""}>机械组装</option>
-      <option ${r.type==="保温作业"?"selected":""}>保温作业</option>
-      <option ${r.type==="电气作业"?"selected":""}>电气作业</option>
-      <option ${r.type==="额外工时"?"selected":""}>额外工时</option>
-      <option ${r.type==="其它工作"?"selected":""}>其它工作</option>
-    </select>
-  </td>
+<td>
+<select onchange="rows[${i}].type=this.value;render()">
+${["机械组装","保温作业","电气作业","额外工时","其它工作"].map(t=>`<option ${t==r.type?"selected":""}>${t}</option>`)}
+</select></td>
 
-  <td>
-    <select onchange="setProject(${i},this.value)">
-      <option></option>
-      ${projs.map(p=>`<option ${p===r.project?"selected":""}>${p}</option>`).join("")}
-    </select>
-  </td>
+<td><select onchange="rows[${i}].project=this.value;render()">
+<option></option>
+${projs.map(p=>`<option ${p==r.project?"selected":""}>${p}</option>`)}
+</select></td>
 
-  <td>
-    <select onchange="setProd(${i},this.value)">
-      <option></option>
-      ${prods.map(p=>`<option ${p===r.prod?"selected":""}>${p}</option>`).join("")}
-    </select>
-  </td>
+<td><select onchange="rows[${i}].prod=this.value;rows[${i}].unit=productionMap[this.value]?.unit||'';render()">
+<option></option>
+${prods.map(p=>`<option ${p==r.prod?"selected":""}>${p}</option>`)}
+</select></td>
 
-  <td>
-    <select onchange="setUnit(${i},this.value)">
-      <option></option>
-      ${units.map(u=>`<option ${u===r.unit?"selected":""}>${u}</option>`).join("")}
-    </select>
-  </td>
+<td><select onchange="rows[${i}].unit=this.value;render()">
+<option></option>
+${units.map(u=>`<option ${u==r.unit?"selected":""}>${u}</option>`)}
+</select></td>
 
-  <td>
-    ${
-      r.type === "额外工时"
-      ? `<input list="extraNoteList" value="${escapeHtml(r.note)}" onchange="setVal(${i},'note',this.value)">`
-      : `<input value="${escapeHtml(r.note)}" onchange="setVal(${i},'note',this.value)">`
-    }
-  </td>
+<td><input></td>
 
-  <td>
-    <select onchange="setVal(${i},'day',this.value)">
-      ${[一","二","三","四","五","六","日"].map(d=>`<option ${d===r.day?"selected":""}>${d}</option>`).join("")}
-    </select>
-  </td>
+<td><select>
+${days.map(d=>`<option ${d==r.day?"selected":""}>${d}</option>`)}
+</select></td>
 
-  <td><input type="number" step="0.5" value="${r.regular}" onchange="setVal(${i},'regular',this.value)"></td>
-  <td><input type="number" step="0.5" value="${r.overtime}" onchange="setVal(${i},'overtime',this.value)"></td>
+<td><input value="${r.regular}"></td>
+<td><input value="${r.overtime}"></td>
+
 </tr>`;
-  });
+ });
 
-  document.getElementById("tbody").innerHTML = html;
-  document.getElementById("sumR").innerText = sumR;
-  document.getElementById("sumO").innerText = sumO;
+ tbody.innerHTML=html;
+ sumR.innerText=sr;
+ sumO.innerText=so;
 }
 
-function save(){
-  localStorage.setItem("timesheet_"+id, JSON.stringify(rows));
-  alert("已保存");
-}
+addRow();
 
-function submitForm(){
-  let err=[];
-  let total={};
-  [一","二","三","四","五","六","日"].forEach(d=>total[d]=0);
-
-  rows.forEach((r,i)=>{
-    if(!r.project) err.push(`第${i+1}行未选项目`);
-    if(!r.prod) err.push(`第${i+1}行未选生产号`);
-    if(!r.unit) err.push(`第${i+1}行未选单元号`);
-    if(r.regular==="" || isNaN(Number(r.regular))) err.push(`第${i+1}行正班错误`);
-    if(r.overtime!=="" && isNaN(Number(r.overtime))) err.push(`第${i+1}行夜加班错误`);
-
-    total[r.day]+=Number(r.regular||0);
-
-    if(Number(r.overtime||0)>8){
-      err.push(`第${i+1}行夜加班异常`);
-    }
-  });
-
-  [一","二","三","四","五","六","日"].forEach(d=>{
-    if(total[d]!==0 && total[d]!==8){
-      err.push(`${d}正班必须=8`);
-    }
-  });
-
-  document.getElementById("msg").innerHTML = err.length ? err.join("<br>") : "提交成功";
-}
-
-try{
-  const saved = JSON.parse(localStorage.getItem("timesheet_"+id) || "null");
-  if(saved && Array.isArray(saved) && saved.length){
-    rows = saved;
-  }
-}catch(e){}
-
-if(rows.length===0){
-  addRow();
-}else{
-  render();
-}
 </script>
-
 </body>
 </html>
