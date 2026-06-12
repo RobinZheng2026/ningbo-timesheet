@@ -501,7 +501,7 @@ function submitForm(){
     }
   });
 
-  ["周一","周二","周三","周四","周五"].forEach(d=>{
+  ["一","二","三","四","五"].forEach(d=>{
     if(total[d] !== 0 && total[d] !== 8){
       err.push(`${d} 正班必须=8`);
     }
