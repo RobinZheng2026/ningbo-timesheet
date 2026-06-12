@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9,71 +6,174 @@
 <title>工时录入系统</title>
 
 <style>
-body{font-family:Arial;margin:10px;}
-h2{text-align:center;}
+  body {font-family: Arial, Helvetica, sans-serif; margin:10px;}
+  h2 {text-align:center;}
 
-.wrap-top,.wrap-main{max-width:605px;margin:auto;}
+  .wrap-top,.wrap-main,.actions,#msg,.small-note {
+    max-width:605px;
+    margin-left:auto;
+    margin-right:auto;
+  }
 
-table{border-collapse:collapse;width:100%;}
-th,td{border:1px solid #999;font-size:13px;text-align:center;height:28px;}
-th{background:#0b73b8;color:#fff;}
+  table {
+    border-collapse:collapse;
+    table-layout:fixed;
+    width:100%;
+  }
 
-.role-cell{background:#ffe000;font-weight:700;}
-.sum{background:#fef3c7;font-weight:700;}
+  th,td {
+    border:1px solid #999;
+    font-size:13px;
+    padding:2px;
+    text-align:center;
+    height:28px;
+    vertical-align:middle;
+    box-sizing:border-box;
+  }
 
-input,select{width:100%;height:24px;border:none;}
+  th {background:#0b73b8;color:#fff;font-weight:700;}
+  .top-table td {background:#e6f0fa;}
+  .role-cell {background:#ffe000 !important;font-weight:700;}
+  .readonly {background:#eee;}
+  .sum {background:#fef3c7;font-weight:700;}
+
+  input,select {
+    width:100%;
+    height:24px;
+    border:none;
+    outline:none;
+    box-sizing:border-box;
+    font-size:13px;
+    margin:0;
+    padding:0 4px;
+    background:transparent;
+  }
+
+  input[type="number"] {text-align:center;}
+
+  button {
+    height:24px;
+    min-width:24px;
+    font-size:12px;
+    cursor:pointer;
+  }
+
+  .btn-row {
+    width:22px;
+    padding:0;
+  }
+
+  .actions {
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:8px;
+  }
+
+  #msg {
+    margin-top:8px;
+    color:red;
+    font-size:13px;
+    line-height:1.4;
+    min-height:20px;
+    text-align:center;
+  }
+
+  .small-note {
+    margin-top:4px;
+    font-size:11px;
+    color:#666;
+    line-height:1.4;
+  }
 </style>
 </head>
-
 <body>
 
 <h2>工时录入系统</h2>
 
 <div class="wrap-top">
-<table>
-<tr><th>姓名</th><th>工号</th><th>岗位</th><th>周数</th></tr>
-<tr>
-<td id="name"></td>
-<td id="id"></td>
-<td id="role" class="role-cell"></td>
-<td><input id="week"></td>
-</tr>
-</table>
+  <table class="top-table">
+    <colgroup>
+      <col style="width:50px;">
+      <col style="width:50px;">
+      <col style="width:50px;">
+      <col style="width:50px;">
+    </colgroup>
+    <tr>
+      <th>姓名</th>
+      <th>工号</th>
+      <th>岗位</th>
+      <th>周数</th>
+    </tr>
+    <tr>
+      <td id="name">--</td>
+      <td id="id">--</td>
+      <td id="role" class="role-cell">--</td>
+      <td><input id="week" type="text"></td>
+    </tr>
+  </table>
 </div>
 
-<br>
+<div class="wrap-main" style="margin-top:10px;">
+  <table>
+    <colgroup>
+      <col style="width:30px;">
+      <col style="width:25px;">
+      <col style="width:70px;">
+      <col style="width:90px;">
+      <col style="width:100px;">
+      <col style="width:70px;">
+      <col style="width:100px;">
+      <col style="width:60px;">
+      <col style="width:30px;">
+      <col style="width:30px;">
+    </colgroup>
+    <thead>
+      <tr>
+        <th></th>
+        <th>序号</th>
+        <th>工时类别</th>
+        <th>项目号</th>
+        <th>生产号</th>
+        <th>单元号</th>
+        <th>备注</th>
+        <th>星期</th>
+        <th style="background:#8dc63f;">正班</th>
+        <th>夜加班</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+    <tfoot>
+      <tr>
+        <td><button class="btn-row" onclick="addRow()">+</button></td>
+        <td colspan="7" style="text-align:right;">汇总</td>
+        <td class="sum" id="sumR">0</td>
+        <td class="sum" id="sumO">0</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
 
-<div class="wrap-main">
-<table>
+<datalist id="extraNoteList">
+  <option value="项目图纸更改返工"></option>
+  <option value="供应商问题返工"></option>
+  <option value="内部质量问题返工"></option>
+  <option value="其它返工"></option>
+</datalist>
 
-<thead>
-<tr>
-<th></th><th>序号</th><th>工时类别</th><th>项目号</th>
-<th>生产号</th><th>单元号</th><th>备注</th>
-<th>星期</th><th style="background:#8dc63f;">正班</th><th>夜加班</th>
-</tr>
-</thead>
+<div class="actions">
+  <button onclick="save()">保存</button>
+  <button onclick="submitForm()">提交</button>
+</div>
 
-<tbody id="tbody"></tbody>
-
-<tfoot>
-<tr>
-<td><button onclick="addRow()">+</button></td>
-<td colspan="7">汇总</td>
-<td id="sumR">0</td>
-<td id="sumO">0</td>
-</tr>
-</tfoot>
-
-</table>
+<div id="msg"></div>
+<div class="small-note">
+  说明：先选工时类别，再选项目号；项目号会根据工时类别自动过滤。项目号确定后，再选生产号或单元号，两者会自动一一对应。额外工时备注支持下拉建议，同时仍可手动输入。
 </div>
 
 <script>
 
-// ✅ 保留你的数据（完全不动）
-const allowUsers = { /* 你的完整白名单 그대로 */ };
-const employeeMap = { /* 你的完整员工 그대로 */ };
-const productionMap = { /* 你的完整项目 그대로 */ };
+
 
 // ✅ 白名单（完整保留）
 const allowUsers = {
