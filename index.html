@@ -85,6 +85,19 @@
     color: #666;
     line-height: 1.4;
   }
+
+  /* 可选：按钮颜色 */
+  .btn-submit {
+    background: #0b73b8;
+    color: #fff;
+    border: 1px solid #0b73b8;
+  }
+
+  .btn-export {
+    background: #28a745;
+    color: #fff;
+    border: 1px solid #28a745;
+  }
 </style>
 </head>
 <body>
@@ -163,7 +176,8 @@
 
 <div class="actions">
   <button onclick="save()">保存</button>
-  <button onclick="submitForm()">提交</button>
+  <button class="btn-submit" onclick="submitForm()">提交</button>
+  <button id="exportBtn" class="btn-export" onclick="exportCSV()" style="display:none;">导出数据</button>
 </div>
 
 <div id="msg"></div>
@@ -340,7 +354,7 @@ const productionMap = {
 
 // 自动生成映射
 const projectMap = {};
-Object.entries(productionMap).forEach(([k,v])=>{
+Object.entries(productionMap).forEach(([k,v]) => {
   if(!projectMap[v.project]) projectMap[v.project] = [];
   projectMap[v.project].push({prod:k, unit:v.unit});
 });
@@ -370,6 +384,16 @@ function getWeek(){
   return Math.ceil((((d-onejan)/86400000)+onejan.getDay()+1)/7);
 }
 
+// 周次规范化
+function normalizeWeek(input){
+  let val = String(input || "").trim().toUpperCase();
+  if(!val) return "";
+  if(!val.startsWith("WEEK")) {
+    val = "WEEK" + val.replace(/^W/i, "");
+  }
+  return val;
+}
+
 // 登录
 const params = new URLSearchParams(window.location.search);
 const userId = params.get("id");
@@ -384,6 +408,17 @@ document.getElementById("name").innerText = info.name || params.get("name") || "
 document.getElementById("id").innerText = userId || "--";
 document.getElementById("role").innerText = info.role || params.get("role") || "--";
 document.getElementById("week").value = getWeek();
+
+// 只有 X1 显示导出按钮
+if(userId === "X1"){
+  // 创建按钮，避免改动你现有结构
+  const exportBtn = document.createElement("button");
+  exportBtn.id = "exportBtn";
+  exportBtn.className = "btn-export";
+  exportBtn.textContent = "导出";
+  exportBtn.onclick = exportCSV;
+  document.querySelector(".actions").appendChild(exportBtn);
+}
 
 // 主数据
 let rows = [];
@@ -478,8 +513,27 @@ function render(){
   document.getElementById("sumO").innerText = so;
 }
 
+function getStoreKey(){
+  return "timesheet_" + userId + "_weeks";
+}
+
 function save(){
-  localStorage.setItem("timesheet_"+userId, JSON.stringify(rows));
+  const weekKey = normalizeWeek(document.getElementById("week").value);
+  if(!weekKey){
+    document.getElementById("msg").innerText = "请先填写周次";
+    return;
+  }
+
+  const storeKey = getStoreKey();
+  let allWeeks = {};
+  try{
+    allWeeks = JSON.parse(localStorage.getItem(storeKey) || "{}");
+  }catch(e){
+    allWeeks = {};
+  }
+
+  allWeeks[weekKey] = rows;
+  localStorage.setItem(storeKey, JSON.stringify(allWeeks));
   document.getElementById("msg").innerText = "已保存";
 }
 
@@ -510,10 +564,72 @@ function submitForm(){
   document.getElementById("msg").innerHTML = err.length ? err.join("<br>") : "提交成功";
 }
 
+// ✅ 只有 X1 可用：导出指定周次 CSV
+function exportCSV(){
+  if(userId !== "X1"){
+    return;
+  }
+
+  const weekInput = prompt("请输入要导出的周次，例如：WEEK22 或 22", "WEEK" + document.getElementById("week").value);
+  const weekKey = normalizeWeek(weekInput);
+  if(!weekKey){
+    alert("未输入有效周次");
+    return;
+  }
+
+  const storeKey = getStoreKey();
+  let allWeeks = {};
+  try{
+    allWeeks = JSON.parse(localStorage.getItem(storeKey) || "{}");
+  }catch(e){
+    allWeeks = {};
+  }
+
+  // 如果导出的周次正好是当前页周次，优先用当前 rows（避免先保存的步骤）
+  const currentWeek = normalizeWeek(document.getElementById("week").value);
+  const exportRows = (weekKey === currentWeek && rows.length > 0)
+    ? rows
+    : (allWeeks[weekKey] || []);
+
+  if(!exportRows.length){
+    alert(`${weekKey} 没有可导出的数据`);
+    return;
+  }
+
+  const headers = ["序号","工时类别","项目号","生产号","单元号","备注","星期","正班","夜加班"];
+  const csv = [headers.join(",")];
+
+  exportRows.forEach((r,i)=>{
+    csv.push([
+      i+1,
+      r.type || "",
+      r.project || "",
+      r.prod || "",
+      r.unit || "",
+      (r.note || "").replace(/,/g, "，"),
+      r.day || "",
+      r.regular || "",
+      r.overtime || ""
+    ].join(","));
+  });
+
+  const blob = new Blob(["\uFEFF" + csv.join("\n")], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${weekKey}_工时数据.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+// 页面加载时按当前周次恢复数据
 try{
-  const saved = JSON.parse(localStorage.getItem("timesheet_"+userId) || "null");
-  if(saved && Array.isArray(saved) && saved.length){
-    rows = saved;
+  const storeKey = getStoreKey();
+  const allWeeks = JSON.parse(localStorage.getItem(storeKey) || "{}");
+  const currentWeek = normalizeWeek(document.getElementById("week").value);
+  if(allWeeks[currentWeek] && Array.isArray(allWeeks[currentWeek]) && allWeeks[currentWeek].length){
+    rows = allWeeks[currentWeek];
   }
 }catch(e){}
 
