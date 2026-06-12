@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,7 +9,7 @@
 <title>工时录入系统</title>
 
 <style>
-body{font-family:Arial; margin:10px;}
+body{font-family:Arial;margin:10px;}
 h2{text-align:center;}
 
 .wrap-top,.wrap-main{max-width:605px;margin:auto;}
@@ -14,6 +17,7 @@ h2{text-align:center;}
 table{border-collapse:collapse;width:100%;}
 th,td{border:1px solid #999;font-size:13px;text-align:center;height:28px;}
 th{background:#0b73b8;color:#fff;}
+
 .role-cell{background:#ffe000;font-weight:700;}
 .sum{background:#fef3c7;font-weight:700;}
 
@@ -44,16 +48,9 @@ input,select{width:100%;height:24px;border:none;}
 
 <thead>
 <tr>
-<th></th>
-<th>序号</th>
-<th>工时类别</th>
-<th>项目号</th>
-<th>生产号</th>
-<th>单元号</th>
-<th>备注</th>
-<th>星期</th>
-<th style="background:#8dc63f;">正班</th>
-<th>夜加班</th>
+<th></th><th>序号</th><th>工时类别</th><th>项目号</th>
+<th>生产号</th><th>单元号</th><th>备注</th>
+<th>星期</th><th style="background:#8dc63f;">正班</th><th>夜加班</th>
 </tr>
 </thead>
 
@@ -72,6 +69,11 @@ input,select{width:100%;height:24px;border:none;}
 </div>
 
 <script>
+
+// ✅ 保留你的数据（完全不动）
+const allowUsers = { /* 你的完整白名单 그대로 */ };
+const employeeMap = { /* 你的完整员工 그대로 */ };
+const productionMap = { /* 你的完整项目 그대로 */ };
 
 // ✅ 白名单（完整保留）
 const allowUsers = {
@@ -120,9 +122,8 @@ const employeeMap = {
   "I11": {name:"肖渔",role:"保温-外协"}
 };
 
-// ✅ ✅✅ 完整项目（你原数据全部保留）
+// 完整项目（你原数据全部保留）
 const productionMap = {
-
 "OTHER-01":{project:"其它作业",unit:"早会"},
 "OTHER-02":{project:"其它作业",unit:"培训"},
 "OTHER-03":{project:"其它作业",unit:"5S等"},
@@ -130,8 +131,6 @@ const productionMap = {
 "OTHER-05":{project:"其它作业",unit:"仓库帮忙"},
 "LEAVE-01":{project:"请假",unit:"病假"},
 "LEAVE-02":{project:"请假",unit:"年假"},
-
-/* ------- 你的大批P项目全部保留 -------- */
   "0407596-02-03": { project:"P0407596", unit:"U123"},
   "0407596-02-04": { project:"P0407596", unit:"U123-1"},
   "0407596-02-06": { project:"P0407596", unit:"U335"},
@@ -155,7 +154,6 @@ const productionMap = {
   "0407596-02-25": { project:"P0407596", unit:"U641B-1"},
   "0407596-02-24": { project:"P0407596", unit:"U641C"},
   "0407596-02-26": { project:"P0407596", unit:"U641C-1"},
-
   "0382530-02-08": { project:"P0382530", unit:"U114-1"},
   "NIN-53075": { project:"P0382530", unit:"U125"},
   "NIN-53076": { project:"P0382530", unit:"129348"},
@@ -178,9 +176,7 @@ const productionMap = {
   "0382530-02-20": { project:"P0382530", unit:"U401"},
   "NIN-53059": { project:"P0382530", unit:"P0335-DH2000A"},
   "NIN-53060": { project:"P0382530", unit:"129822"},
-
   "00360-02-30": { project:"P00360", unit:"U361B"},
-
   "0373305-02-03": { project:"P0373305", unit:"U121"},
   "0373305-02-05": { project:"P0373305", unit:"U123"},
   "0373305-02-06": { project:"P0373305", unit:"U123"},
@@ -200,7 +196,6 @@ const productionMap = {
   "NIN-53056": { project:"P0373305", unit:"U611-B"},
   "NIN-53057": { project:"P0373305", unit:"U611-C"},
   "NIN-53058": { project:"P0373305", unit:"U611-D"},
-
   "88359-02-06": { project:"P88359", unit:"U201-2"},
   "88359-02-07": { project:"P88359", unit:"U335"},
   "88359-02-08": { project:"P88359", unit:"U341"},
@@ -209,7 +204,6 @@ const productionMap = {
   "88359-02-10": { project:"P88359", unit:"U371"},
   "88359-02-11": { project:"P88359", unit:"U381"},
   "88359-02-14": { project:"P88359", unit:"U451"},
-
   "0384374-02-03": { project:"P0384374", unit:"U120"},
   "0384374-02-05": { project:"P0384374", unit:"U126"},
   "0384374-02-06": { project:"P0384374", unit:"U126-1"},
@@ -229,7 +223,6 @@ const productionMap = {
   "0384374-02-21": { project:"P0384374", unit:"U641B"},
   "0384374-02-22": { project:"P0384374", unit:"U641C"},
   "0384374-02-23": { project:"P0384374", unit:"U641D"},
-
   "0351706-02-03": { project:"P0351706", unit:"U103"},
   "0351706-02-04": { project:"P0351706", unit:"U104"},
   "0351706-02-07": { project:"P0351706", unit:"U110-1"},
@@ -247,8 +240,8 @@ const productionMap = {
   "0351706-02-27": { project:"P0351706", unit:"U451"},
   "0351706-02-31": { project:"P0351706", unit:"U503"}
 };
-
-// ✅ 映射
+  
+// ✅ 自动生成映射
 const projectMap={};
 Object.entries(productionMap).forEach(([k,v])=>{
  if(!projectMap[v.project]) projectMap[v.project]=[];
@@ -257,36 +250,50 @@ Object.entries(productionMap).forEach(([k,v])=>{
 
 const allProjects=Object.keys(projectMap);
 
-// ✅ 过滤逻辑
+// ✅ 工时过滤（修复）
 const normalTypes=["机械组装","保温作业","电气作业","额外工时"];
 
 function getFilteredProjects(type){
  if(normalTypes.includes(type)){
-  return allProjects.filter(p=>p.startsWith("P"));
+   return allProjects.filter(p=>p.startsWith("P"));
  }
- return ["其它作业","请假"];
+ return ["其它作业","请假"].filter(p=>allProjects.includes(p));
 }
 
-// ✅ 星期
+// ✅ 星期（修复版）
 const days=["一","二","三","四","五","六","日"];
 function getToday(){
  const arr=["日","一","二","三","四","五","六"];
  return arr[new Date().getDay()];
 }
 
-// 登录
+// ✅ 登录
 const params=new URLSearchParams(window.location.search);
 const id=params.get("id");
-if(!allowUsers[id]){document.body.innerHTML="❌ 无权限";throw "";}
-const info=employeeMap[id]||{};
-name.innerText=info.name||params.get("name");
-id.innerText=id;
-role.innerText=info.role||params.get("role");
 
-// 数据
+if(!allowUsers[id]){
+ document.body.innerHTML="❌ 无权限";
+ throw "";
+}
+
+const info=employeeMap[id]||{};
+document.getElementById("name").innerText=info.name||params.get("name");
+document.getElementById("id").innerText=id;
+document.getElementById("role").innerText=info.role||params.get("role");
+
+// ✅ 主数据
 let rows=[];
+
 function addRow(){
- rows.push({type:"机械组装",project:"",prod:"",unit:"",day:getToday(),regular:"8",overtime:""});
+ rows.push({
+  type:"机械组装",
+  project:"",
+  prod:"",
+  unit:"",
+  day:getToday(),
+  regular:"8",
+  overtime:""
+ });
  render();
 }
 
@@ -294,6 +301,7 @@ function render(){
  let html="",sr=0,so=0;
 
  rows.forEach((r,i)=>{
+
  let projs=getFilteredProjects(r.type);
  let prods=(projectMap[r.project]||[]).map(x=>x.prod);
  let units=(projectMap[r.project]||[]).map(x=>x.unit);
@@ -306,9 +314,9 @@ function render(){
 <td><button onclick="rows.splice(${i},1);render()">删</button></td>
 <td>${i+1}</td>
 
-<td>
-<select onchange="rows[${i}].type=this.value;render()">
-${["机械组装","保温作业","电气作业","额外工时","其它工作"].map(t=>`<option ${t==r.type?"selected":""}>${t}</option>`)}
+<td><select onchange="rows[${i}].type=this.value;render()">
+${["机械组装","保温作业","电气作业","额外工时","其它工作"]
+.map(t=>`<option ${t==r.type?"selected":""}>${t}</option>`)}
 </select></td>
 
 <td><select onchange="rows[${i}].project=this.value;render()">
@@ -316,7 +324,11 @@ ${["机械组装","保温作业","电气作业","额外工时","其它工作"].m
 ${projs.map(p=>`<option ${p==r.project?"selected":""}>${p}</option>`)}
 </select></td>
 
-<td><select onchange="rows[${i}].prod=this.value;rows[${i}].unit=productionMap[this.value]?.unit||'';render()">
+<td><select onchange="
+rows[${i}].prod=this.value;
+rows[${i}].project=productionMap[this.value]?.project||'';
+rows[${i}].unit=productionMap[this.value]?.unit||'';
+render()">
 <option></option>
 ${prods.map(p=>`<option ${p==r.prod?"selected":""}>${p}</option>`)}
 </select></td>
@@ -328,7 +340,7 @@ ${units.map(u=>`<option ${u==r.unit?"selected":""}>${u}</option>`)}
 
 <td><input></td>
 
-<td><select>
+<td><select onchange="rows[${i}].day=this.value">
 ${days.map(d=>`<option ${d==r.day?"selected":""}>${d}</option>`)}
 </select></td>
 
@@ -338,13 +350,14 @@ ${days.map(d=>`<option ${d==r.day?"selected":""}>${d}</option>`)}
 </tr>`;
  });
 
- tbody.innerHTML=html;
- sumR.innerText=sr;
- sumO.innerText=so;
+ document.getElementById("tbody").innerHTML=html;
+ document.getElementById("sumR").innerText=sr;
+ document.getElementById("sumO").innerText=so;
 }
 
 addRow();
 
 </script>
+
 </body>
 </html>
