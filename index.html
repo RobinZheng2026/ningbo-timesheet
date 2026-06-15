@@ -2,11 +2,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Timesheet Entry</title>
+<title>车间工时填报</title>
+
 <style>
 body {
-  font-family: Arial;
   margin: 0;
+  font-family: Arial, sans-serif;
   background: #f4f6f8;
 }
 
@@ -14,36 +15,42 @@ body {
   background: #0078d4;
   color: white;
   text-align: center;
-  padding: 15px;
-  font-size: 18px;
+  padding: 16px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .container {
   text-align: center;
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
-.info {
-  font-size: 16px;
-  margin-bottom: 20px;
-  color: #333;
+.user-box {
+  margin: 30px auto;
+  padding: 15px;
+  width: 80%;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  font-size: 18px;
 }
 
 button {
   padding: 20px 40px;
   font-size: 20px;
-  background: #0078d4;
+  background: #28a745;
   color: white;
   border: none;
   border-radius: 12px;
 }
 
-.footer {
-  margin-top: 40px;
-  font-size: 12px;
-  color: #888;
+.tip {
+  margin-top: 30px;
+  color: #666;
 }
+
 </style>
+
 </head>
 
 <body>
@@ -54,42 +61,87 @@ button {
 
 <div class="container">
 
-  <div class="info" id="userInfo">
+  <div id="userInfo" class="user-box">
     正在识别员工...
   </div>
 
-  <button onclick="openForm()">
-    点击填写工时
-  </button>
+  <button onclick="openForm()">点击填写工时</button>
 
-  <div class="footer">
-    扫码进入，每日填报
+  <div class="tip">
+    扫码进入，每日填写
   </div>
 
 </div>
 
 <script>
 
-// ✅ 从二维码URL里拿ID（如果你后面要用）
+// ✅ 员工映射（你这份名单全部写进来了）
+const employeeMap = {
+  "1237794":"郑",
+  "1177215":"官辉",
+  "1177235":"王家伟",
+  "1177264":"李剑锋",
+  "1177265":"李建军",
+  "1177266":"李念亭",
+  "1177310":"师海芳",
+  "1177333":"黄维昆",
+  "1177336":"席新永",
+  "1177338":"叶峰",
+  "1177339":"虞志胜",
+  "1177342":"庄允吉",
+  "1235746":"丁允志",
+  "1236416":"张道仅",
+  "1239728":"郭振宗",
+  "1254596":"候海晴",
+  "1259740":"汪保平",
+  "1262912":"向波",
+
+  "900001":"林泽学",
+  "900002":"堂自赠",
+  "900003":"刘建希",
+  "900004":"邓翼阳",
+  "900005":"邓茂胜",
+  "900006":"宋冠楠",
+  "900007":"曹珪",
+  "900008":"侯自峰",
+  "900009":"刘晨光",
+  "900010":"肖永登",
+  "900011":"唐先发",
+  "900012":"肖渔"
+};
+
+// ✅ 读取URL参数
 function getParam(name) {
   const url = new URL(window.location.href);
   return url.searchParams.get(name);
 }
 
-const empId = getParam("ID");
+const empId = getParam("id");
 
-if (empId) {
-  document.getElementById("userInfo").innerText = "员工ID：" + empId;
+const infoEl = document.getElementById("userInfo");
+
+// ✅ 页面识别员工
+if (empId && employeeMap[empId]) {
+  infoEl.innerHTML = "员工：" + employeeMap[empId] + "<br>工号：" + empId;
+} else if (empId) {
+  infoEl.innerHTML = "工号：" + empId + "（未识别，请联系管理员）";
 } else {
-  document.getElementById("userInfo").innerText = "请使用员工二维码扫码";
+  infoEl.innerHTML = "请使用员工二维码扫码";
 }
 
-// ✅ 跳转Forms
+// ✅ 跳转 Forms（带ID）
 function openForm() {
-  window.location.href = "https://forms.office.com/r/BRJkqhawRM";
+  const baseUrl = "https://forms.office.com/r/BRJkqhawRM"; // 🔴替换
+  const finalUrl = baseUrl + "?id=" + encodeURIComponent(empId || "");
+  window.location.href = finalUrl;
 }
 
 </script>
 
 </body>
 </html>
+
+
+
+
+
