@@ -6,22 +6,27 @@
 <style>
 body {
   font-family: Arial;
-  text-align: center;
-  margin-top: 80px;
-  background: #f5f7fa;
+  margin: 0;
+  background: #f4f6f8;
 }
 
 .header {
   background: #0078d4;
   color: white;
+  text-align: center;
   padding: 15px;
-  position: fixed;
-  top: 0;
-  width: 100%;
+  font-size: 18px;
 }
 
-.card {
-  margin-top: 120px;
+.container {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.info {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 button {
@@ -30,7 +35,13 @@ button {
   background: #0078d4;
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
+}
+
+.footer {
+  margin-top: 40px;
+  font-size: 12px;
+  color: #888;
 }
 </style>
 </head>
@@ -38,19 +49,46 @@ button {
 <body>
 
 <div class="header">
-  Timesheet Entry（车间工时填报）
+  车间工时填报系统
 </div>
 
-<div class="card">
+<div class="container">
+
+  <div class="info" id="userInfo">
+    正在识别员工...
+  </div>
+
   <button onclick="openForm()">
     点击填写工时
   </button>
+
+  <div class="footer">
+    扫码进入，每日填报
+  </div>
+
 </div>
 
 <script>
-function openForm() {
-  window.location.href = "https://forms.office.com/r/BRJkqhawRM";
+
+// ✅ 从二维码URL里拿ID（如果你后面要用）
+function getParam(name) {
+  const url = new URL(window.location.href);
+  return url.searchParams.get(name);
 }
+
+const empId = getParam("ID");
+
+if (empId) {
+  document.getElementById("userInfo").innerText = "员工ID：" + empId;
+} else {
+  document.getElementById("userInfo").innerText = "请使用员工二维码扫码";
+}
+
+// ✅ 跳转Forms
+function openForm() {
+  window.location.href = "https://forms.office.com/r/BRIjqkhawRM";
+}
+
 </script>
 
 </body>
