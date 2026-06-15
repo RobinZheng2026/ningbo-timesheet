@@ -198,9 +198,8 @@ function goForm() {
   
   const base = "https://forms.office.com/r/BRJkqhawRM";
 
-  const finalUrl = base + "?id=" + encodeURIComponent(empIdParam || "");
-
-  window.location.href = finalUrl;
+  // ✅ 不再带参数！！！
+  window.location.href = base;
 }
 
 </script>
