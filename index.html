@@ -1,209 +1,590 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>车间工时填报系统</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>车间工时填报</title>
+  <style>
+    :root{
+      --brand:#0078d4;
+      --brand-dark:#005ea6;
+      --ok:#1f8f4c;
+      --warn:#b45309;
+      --danger:#b91c1c;
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --text:#1f2937;
+      --sub:#6b7280;
+      --border:#d1d5db;
+      --shadow:0 6px 18px rgba(0,0,0,.08);
+      --radius:16px;
+    }
 
-<style>
+    *{ box-sizing:border-box; }
 
-body {
-  margin: 0;
-  font-family: "Microsoft YaHei", Arial;
-  background: #f4f6f8;
-}
+    body{
+      margin:0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      background: linear-gradient(180deg, #eef5fb 0%, var(--bg) 100%);
+      color:var(--text);
+    }
 
-.header {
-  background: #0078d4;
-  color: white;
-  text-align: center;
-  padding: 16px;
-  font-size: 20px;
-  font-weight: bold;
-}
+    .header{
+      background: var(--brand);
+      color:#fff;
+      text-align:center;
+      padding:16px 12px;
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:.5px;
+      box-shadow:0 2px 8px rgba(0,0,0,.1);
+    }
 
-.container {
-  text-align: center;
-  margin-top: 40px;
-}
+    .wrap{
+      max-width: 560px;
+      margin: 20px auto;
+      padding: 0 16px 32px;
+    }
 
-.card {
-  background: white;
-  margin: 20px;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
+    .card{
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 16px 22px;
+      border:1px solid rgba(0,0,0,.04);
+    }
 
-.big {
-  font-size: 18px;
-  margin: 10px 0;
-}
+    .sec-title{
+      margin: 16px 0 10px;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--brand);
+      border-left: 4px solid var(--brand);
+      padding-left: 8px;
+    }
 
-.name {
-  font-size: 22px;
-  font-weight: bold;
-  color: #0078d4;
-}
+    .employee-box{
+      margin-top: 8px;
+      padding: 14px;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:#fcfcfd;
+    }
 
-.id {
-  font-size: 18px;
-  color: #333;
-}
+    .employee-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:8px 0;
+      border-bottom:1px dashed #e5e7eb;
+    }
+    .employee-row:last-child{ border-bottom:none; }
 
-.status-ok {
-  color: green;
-  font-weight: bold;
-}
+    .label{
+      color:var(--sub);
+      font-size:14px;
+      flex:0 0 95px;
+    }
 
-.status-error {
-  color: red;
-  font-weight: bold;
-}
+    .value{
+      font-size:17px;
+      font-weight:700;
+      text-align:right;
+      word-break:break-all;
+      flex:1;
+    }
 
-button {
-  margin-top: 20px;
-  padding: 18px 40px;
-  font-size: 20px;
-  background: #0078d4;
-  color: white;
-  border: none;
-  border-radius: 10px;
-}
+    .value.ok{ color:var(--ok); }
+    .value.warn{ color:var(--warn); }
+    .value.err{ color:var(--danger); }
 
-button:disabled {
-  background: #999;
-}
+    .tip{
+      margin-top: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background:#f8fbff;
+      border:1px solid #dbeafe;
+      color:#1f4b7a;
+      font-size:14px;
+      line-height:1.7;
+    }
 
-.tip {
-  margin-top: 20px;
-  color: #666;
-  font-size: 14px;
-}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
 
-</style>
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
 
+    .field label{
+      font-size:14px;
+      font-weight:700;
+      color:#374151;
+    }
+
+    .field .req{
+      color:#d97706;
+      margin-left:4px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:16px;
+      background:#fff;
+      color:#111827;
+      outline:none;
+    }
+
+    input:focus, select:focus, textarea:focus{
+      border-color:#93c5fd;
+      box-shadow:0 0 0 3px rgba(59,130,246,.15);
+    }
+
+    textarea{
+      min-height:88px;
+      resize:vertical;
+    }
+
+    .btn-area{
+      margin-top:20px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:16px 16px;
+      font-size:18px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .btn:active{ transform:scale(.99); }
+
+    .btn-primary{
+      background: var(--brand);
+      color:#fff;
+      box-shadow:0 8px 18px rgba(0,120,212,.20);
+    }
+
+    .btn-primary:hover{ background: var(--brand-dark); }
+
+    .btn-primary:disabled{
+      background:#9ca3af;
+      box-shadow:none;
+      cursor:not-allowed;
+    }
+
+    .msg{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:12px;
+      font-size:14px;
+      line-height:1.6;
+      display:none;
+    }
+
+    .msg.ok{
+      display:block;
+      background:#ecfdf5;
+      border:1px solid #bbf7d0;
+      color:#166534;
+    }
+
+    .msg.err{
+      display:block;
+      background:#fef2f2;
+      border:1px solid #fecaca;
+      color:#991b1b;
+    }
+
+    .foot{
+      margin-top:18px;
+      text-align:center;
+      color:#9ca3af;
+      font-size:12px;
+    }
+  </style>
 </head>
-
 <body>
+  <div class="header">车间工时填报系统</div>
 
-<div class="header">
-  车间工时填报系统
-</div>
+  <div class="wrap">
+    <div class="card">
+      <div class="sec-title">身份确认</div>
 
-<div class="container">
+      <div class="employee-box">
+        <div class="employee-row">
+          <div class="label">员工姓名</div>
+          <div id="empName" class="value">--</div>
+        </div>
+        <div class="employee-row">
+          <div class="label">员工工号</div>
+          <div id="empId" class="value">--</div>
+        </div>
+        <div class="employee-row">
+          <div class="label">识别状态</div>
+          <div id="empState" class="value warn">待识别</div>
+        </div>
+      </div>
 
-  <div class="card">
+      <div class="tip">
+        请使用本人二维码扫码进入。识别成功后，直接选择本周、星期、工时类别、项目、单元并填写工时。
+      </div>
 
-    <div id="status">正在识别员工...</div>
+      <div class="sec-title">填写工时</div>
 
-    <div class="big name" id="name">--</div>
-    <div class="big id" id="empId">--</div>
+      <div class="grid">
+        <div class="field">
+          <label for="week">Week<span class="req">*</span></label>
+          <select id="week">
+            <option value="">请选择</option>
+            <option value="W25">W25</option>
+            <option value="W26">W26</option>
+            <option value="W27">W27</option>
+            <option value="W28">W28</option>
+          </select>
+        </div>
 
-    <button id="btn" onclick="goForm()" disabled>
-      点击填写工时
-    </button>
+        <div class="field">
+          <label for="weekday">星期<span class="req">*</span></label>
+          <select id="weekday">
+            <option value="">请选择</option>
+            <option value="一">一</option>
+            <option value="二">二</option>
+            <option value="三">三</option>
+            <option value="四">四</option>
+            <option value="五">五</option>
+            <option value="六">六</option>
+            <option value="日">日</option>
+          </select>
+        </div>
 
-    <div class="tip">
-      扫码进入后点击填写
+        <div class="field">
+          <label for="task">工时类别<span class="req">*</span></label>
+          <select id="task">
+            <option value="">请选择</option>
+            <option value="机械组装">机械组装</option>
+            <option value="保温作业">保温作业</option>
+            <option value="电气安装">电气安装</option>
+            <option value="收发料">收发料</option>
+            <option value="物流发货">物流发货</option>
+            <option value="仓库帮忙">仓库帮忙</option>
+            <option value="车间管理">车间管理</option>
+            <option value="其它工作">其它工作</option>
+            <option value="额外工时">额外工时</option>
+            <option value="请假">请假</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="project">项目号<span class="req">*</span></label>
+          <select id="project">
+            <option value="">请选择</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="unit">单元号<span class="req">*</span></label>
+          <select id="unit">
+            <option value="">请先选择项目号</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="regularHours">正常工时（小时）<span class="req">*</span></label>
+          <input id="regularHours" type="number" min="0" max="12" step="0.5" value="8" />
+        </div>
+
+        <div class="field">
+          <label for="otWeekday">工作日加班（小时）</label>
+          <input id="otWeekday" type="number" min="0" max="12" step="0.5" value="0" />
+        </div>
+
+        <div class="field">
+          <label for="otWeekend">周末加班（小时）</label>
+          <input id="otWeekend" type="number" min="0" max="12" step="0.5" value="0" />
+        </div>
+
+        <div class="field">
+          <label for="remark">备注</label>
+          <textarea id="remark" placeholder="可选"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-area">
+        <button id="submitBtn" class="btn btn-primary" onclick="submitForm()" disabled>提交工时</button>
+      </div>
+
+      <div id="msg" class="msg"></div>
+
+      <div class="foot">Ningbo Workshop Timesheet</div>
     </div>
-
   </div>
 
-</div>
+  <script>
+    /***********************
+     * 1) 只改这里：
+     * 把 API_URL 换成你的第三方接收地址
+     ***********************/
+    const API_URL = "https://YOUR-THIRD-PARTY-ENDPOINT.example.com/submit";
 
+    /***********************
+     * 2) 员工主数据
+     ***********************/
+    const employeeMap = {
+      "1237794":"郑",
+      "1177215":"官辉",
+      "1177235":"王家伟",
+      "1177264":"李剑锋",
+      "1177265":"李建军",
+      "1177266":"李念亭",
+      "1177310":"师海芳",
+      "1177333":"黄维昆",
+      "1177336":"席新永",
+      "1177338":"叶峰",
+      "1177339":"虞志胜",
+      "1177342":"庄允吉",
+      "1235746":"丁允志",
+      "1236416":"张道仅",
+      "1239728":"郭振宗",
+      "1254596":"候海晴",
+      "1259740":"汪保平",
+      "1262912":"向波",
+      "900001":"林泽学",
+      "900002":"堂自赠",
+      "900003":"刘建希",
+      "900004":"邓翼阳",
+      "900005":"邓茂胜",
+      "900006":"宋冠楠",
+      "900007":"曹珪",
+      "900008":"侯自峰",
+      "900009":"刘晨光",
+      "900010":"肖永登",
+      "900011":"唐先发",
+      "900012":"肖渔"
+    };
 
-<script>
+    /***********************
+     * 3) 项目与 Unit 映射
+     * 这里已经按你当前提供的在制项目做了分组
+     ***********************/
+    const projectUnits = {
+      "P0407596": [
+        "U123","U123-1","U335","U343","U361","U368","U368-1","U368-3",
+        "U371","U373","U381","U382","U387","U451","U503",
+        "U641A","U641A-1","U641B","U641B-1","U641C","U641C-1"
+      ],
+      "P0407596_v": [
+        "536165"
+      ],
+      "P0382530": [
+        "U114-1","U125","U201A","U201B","U344","U361","U381","U401","P0335-DH2000A"
+      ],
+      "P0382530_V": [
+        "102821","105076","503842","532971","129822"
+      ],
+      "P0373305": [
+        "U121","U123","U123-1","U142","U335","U342","U361","U368","U368-1",
+        "U368-3","U381","U387","U503","U611","U611-A","U611-B","U611-C","U611-D"
+      ],
+      "P88359": [
+        "U201-2","U335","U341","U361","U371","U381","U451"
+      ],
+      "P88359_V": [
+        "536165"
+      ],
+      "P0384374": [
+        "U120","U126","U126-1","U335","U343","U361","U368","U368-1",
+        "U368-3","U371","U373","U381","U387","U451","U641A","U641B","U641C","U641D"
+      ],
+      "P0384374_V": [
+        "536474"
+      ]
+    };
 
-// ✅ 你的员工名单
-const employeeMap = {
-  "1237794":"郑",
-  "1177215":"官辉",
-  "1177235":"王家伟",
-  "1177264":"李剑锋",
-  "1177265":"李建军",
-  "1177266":"李念亭",
-  "1177310":"师海芳",
-  "1177333":"黄维昆",
-  "1177336":"席新永",
-  "1177338":"叶峰",
-  "1177339":"虞志胜",
-  "1177342":"庄允吉",
-  "1235746":"丁允志",
-  "1236416":"张道仅",
-  "1239728":"郭振宗",
-  "1254596":"候海晴",
-  "1259740":"汪保平",
-  "1262912":"向波",
+    /***********************
+     * 4) 页面初始化
+     ***********************/
+    function getParam(name) {
+      const url = new URL(window.location.href);
+      return url.searchParams.get(name);
+    }
 
-  "900001":"林泽学",
-  "900002":"堂自赠",
-  "900003":"刘建希",
-  "900004":"邓翼阳",
-  "900005":"邓茂胜",
-  "900006":"宋冠楠",
-  "900007":"曹珪",
-  "900008":"侯自峰",
-  "900009":"刘晨光",
-  "900010":"肖永登",
-  "900011":"唐先发",
-  "900012":"肖渔"
-};
+    function $(id){ return document.getElementById(id); }
 
-// ✅ 读取URL参数
-function getParam(name) {
-  const url = new URL(window.location.href);
-  return url.searchParams.get(name);
-}
+    function showMsg(text, ok = true){
+      const el = $("msg");
+      el.className = "msg " + (ok ? "ok" : "err");
+      el.innerHTML = text;
+    }
 
-// ✅ 获取ID
-const empIdParam = getParam("id");
+    function fillProjects(){
+      const projectSelect = $("project");
+      Object.keys(projectUnits).forEach(p => {
+        const opt = document.createElement("option");
+        opt.value = p;
+        opt.textContent = p;
+        projectSelect.appendChild(opt);
+      });
+    }
 
-const nameEl = document.getElementById("name");
-const idEl = document.getElementById("empId");
-const statusEl = document.getElementById("status");
-const btn = document.getElementById("btn");
+    function fillUnits(project){
+      const unitSelect = $("unit");
+      unitSelect.innerHTML = "";
 
-if (empIdParam && employeeMap[empIdParam]) {
+      const first = document.createElement("option");
+      first.value = "";
+      first.textContent = project ? "请选择" : "请先选择项目号";
+      unitSelect.appendChild(first);
 
-  nameEl.innerText = employeeMap[empIdParam];
-  idEl.innerText = "工号：" + empIdParam;
+      if(!project || !projectUnits[project]) return;
 
-  statusEl.innerHTML = "<span class='status-ok'>✅ 已识别员工</span>";
+      projectUnits[project].forEach(u => {
+        const opt = document.createElement("option");
+        opt.value = u;
+        opt.textContent = u;
+        unitSelect.appendChild(opt);
+      });
+    }
 
-  btn.disabled = false;
+    const empId = getParam("id");
+    const empName = empId ? employeeMap[empId] : "";
 
-} else if (empIdParam) {
+    function initPage(){
+      fillProjects();
 
-  nameEl.innerText = "未知员工";
-  idEl.innerText = "工号：" + empIdParam;
+      $("project").addEventListener("change", function(){
+        fillUnits(this.value);
+      });
 
-  statusEl.innerHTML = "<span class='status-error'>❌ 未在名单中</span>";
+      $("empId").innerText = empId || "--";
 
-  btn.disabled = true;
+      if (empId && empName) {
+        $("empName").innerText = empName;
+        $("empState").innerText = "识别成功";
+        $("empState").className = "value ok";
+        $("submitBtn").disabled = false;
+      } else if (empId) {
+        $("empName").innerText = "未知员工";
+        $("empState").innerText = "未在名单中";
+        $("empState").className = "value err";
+        $("submitBtn").disabled = true;
+      } else {
+        $("empName").innerText = "--";
+        $("empState").innerText = "请扫码进入";
+        $("empState").className = "value warn";
+        $("submitBtn").disabled = true;
+      }
+    }
 
-} else {
+    /***********************
+     * 5) 校验
+     ***********************/
+    function validate(){
+      if(!empId || !empName){
+        return "未识别到有效员工信息，请使用员工专属二维码扫码。";
+      }
+      if(!$("week").value) return "请选择 Week。";
+      if(!$("weekday").value) return "请选择星期。";
+      if(!$("task").value) return "请选择工时类别。";
+      if(!$("project").value) return "请选择项目号。";
+      if(!$("unit").value) return "请选择单元号。";
 
-  nameEl.innerText = "--";
-  idEl.innerText = "--";
+      const rh = parseFloat($("regularHours").value || "0");
+      const otw = parseFloat($("otWeekday").value || "0");
+      const ote = parseFloat($("otWeekend").value || "0");
 
-  statusEl.innerHTML = "<span class='status-error'>请扫码进入</span>";
+      if (isNaN(rh) || rh < 0 || rh > 12) return "正常工时请输入 0~12 之间的数字。";
+      if (isNaN(otw) || otw < 0 || otw > 12) return "工作日加班请输入 0~12 之间的数字。";
+      if (isNaN(ote) || ote < 0 || ote > 12) return "周末加班请输入 0~12 之间的数字。";
 
-  btn.disabled = true;
-}
+      return "";
+    }
 
+    /***********************
+     * 6) 提交
+     * 只要第三方接口支持 POST JSON，就能接
+     ***********************/
+    async function submitForm(){
+      const err = validate();
+      if (err){
+        showMsg(err, false);
+        return;
+      }
 
-// ✅ 跳转Forms（已替换你给的URL）
-function goForm() {
-  
-  const base = "https://forms.office.com/r/BRJkqhawRM";
+      if (!API_URL || API_URL.indexOf("YOUR-THIRD-PARTY-ENDPOINT") > -1) {
+        showMsg("请先把代码里的 API_URL 换成你的第三方接收地址。", false);
+        return;
+      }
 
-  // ✅ 不再带参数！！！
-  window.location.href = base;
-}
+      const payload = {
+        submitTime: new Date().toISOString(),
+        employeeId: empId,
+        employeeName: empName,
+        week: $("week").value,
+        weekday: $("weekday").value,
+        task: $("task").value,
+        project: $("project").value,
+        unit: $("unit").value,
+        regularHours: Number($("regularHours").value || 0),
+        otWeekday: Number($("otWeekday").value || 0),
+        otWeekend: Number($("otWeekend").value || 0),
+        remark: $("remark").value || ""
+      };
 
-</script>
+      try {
+        $("submitBtn").disabled = true;
+        showMsg("正在提交，请稍候…", true);
 
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error("接口返回失败状态：" + res.status);
+        }
+
+        showMsg("✅ 提交成功。数据已发送到第三方服务器。", true);
+
+        // 成功后保留身份信息，清空当次填写内容
+        $("week").value = "";
+        $("weekday").value = "";
+        $("task").value = "";
+        $("project").value = "";
+        fillUnits("");
+        $("regularHours").value = "8";
+        $("otWeekday").value = "0";
+        $("otWeekend").value = "0";
+        $("remark").value = "";
+
+        $("submitBtn").disabled = false;
+
+      } catch (e) {
+        $("submitBtn").disabled = false;
+        showMsg("提交失败：" + e.message + "。请检查 API_URL 是否正确，或第三方接口是否允许跨域 / POST JSON。", false);
+      }
+    }
+
+    initPage();
+  </script>
 </body>
 </html>
 ``
