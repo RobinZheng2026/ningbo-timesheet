@@ -44,7 +44,7 @@
     }
 
     .wrap{
-      max-width: 640px;
+      max-width: 680px;
       margin: 18px auto;
       padding: 0 14px 28px;
     }
@@ -58,7 +58,7 @@
     }
 
     .sec-title{
-      margin: 6px 0 10px;
+      margin: 8px 0 12px;
       font-size: 16px;
       font-weight: 800;
       color: var(--brand);
@@ -310,6 +310,56 @@
       color:#991b1b;
     }
 
+    .records-wrap{
+      margin-top: 18px;
+      border-top: 1px solid #e5e7eb;
+      padding-top: 14px;
+    }
+
+    .record-tip{
+      font-size: 13px;
+      color: var(--sub);
+      margin-bottom: 10px;
+    }
+
+    .record-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .record-item{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      background:#fcfcfd;
+    }
+
+    .record-top{
+      display:flex;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:6px;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .record-main{
+      font-size:14px;
+      line-height:1.7;
+      color:#374151;
+    }
+
+    .record-empty{
+      padding:14px;
+      border:1px dashed #cbd5e1;
+      border-radius:12px;
+      text-align:center;
+      color:#64748b;
+      background:#f8fafc;
+      font-size:14px;
+    }
+
     .foot{
       margin-top:16px;
       text-align:center;
@@ -321,6 +371,7 @@
       .chip-grid{ grid-template-columns: repeat(2, 1fr); }
       .chip-grid.two{ grid-template-columns: repeat(2, 1fr); }
       .value{ font-size:17px; }
+      .hours-box{ grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -348,7 +399,8 @@
 
       <div class="tip">
         请选择本周、星期、工时类别、项目、单元并填写工时。<br>
-        正常工时默认 8 小时，如有加班直接点加号即可。
+        正常工时默认 8 小时，如有加班直接点加号即可。<br>
+        同一天可以提交多次，但会自动拦截“完全重复的一条记录”。
       </div>
 
       <div class="sec-title">填写工时</div>
@@ -443,19 +495,27 @@
 
       <div id="msg" class="msg"></div>
 
+      <div class="records-wrap">
+        <div class="sec-title">本周已提交记录</div>
+        <div class="record-tip">选择 Week 后会自动显示当前员工本周已经提交的数据，方便查漏补缺。</div>
+        <div id="recordList" class="record-list">
+          <div class="record-empty">请选择 Week 查看本周记录</div>
+        </div>
+      </div>
+
       <div class="foot">Ningbo Workshop Timesheet</div>
     </div>
   </div>
 
   <script>
     /***********************
-     * 1) API 配置
+     * 1) API 配置（已按你当前配置写入）
      ***********************/
     const API_URL = "https://api.baserow.io/api/database/rows/table/1030254/?user_field_names=true";
     const API_TOKEN = "axAm9RgiyTLV2Bk3SEFcOM3arQv0BTQ7";
 
     /***********************
-     * 2) 员工映射
+     * 2) 白名单员工映射
      ***********************/
     const employeeMap = {
       "1237794":"郑",
@@ -539,9 +599,9 @@
       otWeekend: 0
     };
 
-    /***********************
-     * 工具函数
-     ***********************/
+    let isSubmitting = false;
+    let currentWeekRecords = [];
+
     function $(id){ return document.getElementById(id); }
 
     function getParam(name) {
@@ -562,9 +622,12 @@
         const chip = document.createElement("div");
         chip.className = "chip";
         chip.innerText = v;
-        chip.onclick = () => {
+        chip.onclick = async () => {
           state[fieldName] = v;
           renderAllActiveChips();
+          if(fieldName === "week"){
+            await loadWeekRecords();
+          }
         };
         chip.dataset.value = v;
         chip.dataset.field = fieldName;
@@ -582,7 +645,7 @@
 
     function fillProjects(){
       const projectSelect = $("project");
-      projectSelect.innerHTML = '<option value=\"\">请选择项目号</option>';
+      projectSelect.innerHTML = '<option value="">请选择项目号</option>';
       Object.keys(projectUnits).forEach(p => {
         const opt = document.createElement("option");
         opt.value = p;
@@ -631,7 +694,7 @@
     }
 
     /***********************
-     * 身份识别
+     * 白名单身份识别
      ***********************/
     const empId = getParam("id");
     const empName = empId ? employeeMap[empId] : "";
@@ -658,6 +721,175 @@
     }
 
     /***********************
+     * Baserow 读本周记录
+     ***********************/
+    async function loadWeekRecords(){
+      if(!state.week || !empId){
+        renderWeekRecords([]);
+        return;
+      }
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "GET",
+          headers: {
+            "Authorization": "Token " + API_TOKEN,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if(!res.ok){
+          throw new Error("读取记录失败：" + res.status);
+        }
+
+        const data = await res.json();
+        let rows = [];
+
+        if(Array.isArray(data)) {
+          rows = data;
+        } else if(Array.isArray(data.results)) {
+          rows = data.results;
+        }
+
+        rows = rows.filter(r =>
+          String(r.employeeId || "") === String(empId) &&
+          String(r.week || "") === String(state.week)
+        );
+
+        rows.sort((a,b) => {
+          const ta = new Date(a.submitTime || 0).getTime();
+          const tb = new Date(b.submitTime || 0).getTime();
+          return tb - ta;
+        });
+
+        currentWeekRecords = rows;
+        renderWeekRecords(rows);
+
+      } catch(e){
+        renderWeekRecords([], "本周记录读取失败：" + e.message);
+      }
+    }
+
+    function renderWeekRecords(rows, errMsg=""){
+      const box = $("recordList");
+      box.innerHTML = "";
+
+      if(errMsg){
+        box.innerHTML = `<div class="record-empty">${errMsg}</div>`;
+        return;
+      }
+
+      if(!state.week){
+        box.innerHTML = `<div class="record-empty">请选择 Week 查看本周记录</div>`;
+        return;
+      }
+
+      if(!rows || rows.length === 0){
+        box.innerHTML = `<div class="record-empty">当前员工在 ${state.week} 还没有提交记录</div>`;
+        return;
+      }
+
+      rows.forEach(r => {
+        const item = document.createElement("div");
+        item.className = "record-item";
+        item.innerHTML = `
+          <div class="record-top">
+            <div>${r.week || ""} · 星期${r.weekday || ""}</div>
+            <div>${formatTime(r.submitTime)}</div>
+          </div>
+          <div class="record-main">
+            ${safe(r.task)} ｜ ${safe(r.project)} ｜ ${safe(r.unit)}<br>
+            正常工时：${num(r.regularHours)} ｜ 工作日加班：${num(r.otWeekday)} ｜ 周末加班：${num(r.otWeekend)}
+            ${r.remark ? `<br>备注：${safe(r.remark)}` : ""}
+          </div>
+        `;
+        box.appendChild(item);
+      });
+    }
+
+    function formatTime(v){
+      if(!v) return "--";
+      try{
+        const d = new Date(v);
+        if(isNaN(d.getTime())) return v;
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2,"0");
+        const day = String(d.getDate()).padStart(2,"0");
+        const hh = String(d.getHours()).padStart(2,"0");
+        const mm = String(d.getMinutes()).padStart(2,"0");
+        return `${y}-${m}-${day} ${hh}:${mm}`;
+      }catch{
+        return v;
+      }
+    }
+
+    function safe(v){
+      return String(v ?? "").replace(/[<>&"]/g, s => ({
+        "<":"&lt;", ">":"&gt;", "&":"&amp;", "\"":"&quot;"
+      }[s]));
+    }
+
+    function num(v){
+      if(v === null || v === undefined || v === "") return 0;
+      return Number(v);
+    }
+
+    /***********************
+     * 防重复提交
+     * 允许一天多次提交，但阻止“完全相同的一条记录”重复提交
+     ***********************/
+    function buildSubmitSignature(payload){
+      return JSON.stringify({
+        employeeId: payload.employeeId,
+        week: payload.week,
+        weekday: payload.weekday,
+        task: payload.task,
+        project: payload.project,
+        unit: payload.unit,
+        regularHours: Number(payload.regularHours),
+        otWeekday: Number(payload.otWeekday),
+        otWeekend: Number(payload.otWeekend),
+        remark: String(payload.remark || "").trim()
+      });
+    }
+
+    function existsExactDuplicate(signature){
+      return currentWeekRecords.some(r => {
+        const sig = JSON.stringify({
+          employeeId: r.employeeId,
+          week: r.week,
+          weekday: r.weekday,
+          task: r.task,
+          project: r.project,
+          unit: r.unit,
+          regularHours: Number(r.regularHours || 0),
+          otWeekday: Number(r.otWeekday || 0),
+          otWeekend: Number(r.otWeekend || 0),
+          remark: String(r.remark || "").trim()
+        });
+        return sig === signature;
+      });
+    }
+
+    function isFastRepeat(signature){
+      const key = "last_submit_signature";
+      const timeKey = "last_submit_time";
+      const prevSig = localStorage.getItem(key);
+      const prevTs = Number(localStorage.getItem(timeKey) || 0);
+      const now = Date.now();
+
+      if(prevSig === signature && (now - prevTs) < 15000){
+        return true;
+      }
+      return false;
+    }
+
+    function saveLastSubmit(signature){
+      localStorage.setItem("last_submit_signature", signature);
+      localStorage.setItem("last_submit_time", String(Date.now()));
+    }
+
+    /***********************
      * 校验
      ***********************/
     function validate(){
@@ -681,14 +913,14 @@
      * 提交
      ***********************/
     async function submitForm(){
-      const err = validate();
-      if (err){
-        showMsg(err, false);
+      if(isSubmitting){
+        showMsg("正在提交中，请勿重复点击。", false);
         return;
       }
 
-      if (!API_TOKEN || API_TOKEN.includes("把你的Baserow Token填这里")) {
-        showMsg("请先把代码里的 API_TOKEN 替换成你自己的 Baserow token。", false);
+      const err = validate();
+      if (err){
+        showMsg(err, false);
         return;
       }
 
@@ -704,71 +936,3 @@
         regularHours: Number(state.regularHours),
         otWeekday: Number(state.otWeekday),
         otWeekend: Number(state.otWeekend),
-        remark: $("remark").value || ""
-      };
-
-      try {
-        $("submitBtn").disabled = true;
-        showMsg("正在提交，请稍候…", true);
-
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Authorization": "Token " + API_TOKEN,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        if (!res.ok) {
-          throw new Error("接口返回失败状态：" + res.status);
-        }
-
-        showMsg("✅ 提交成功。", true);
-
-        // 保留身份信息，清空本次填写
-        state.week = "";
-        state.weekday = "";
-        state.task = "";
-        state.regularHours = 8;
-        state.otWeekday = 0;
-        state.otWeekend = 0;
-
-        renderAllActiveChips();
-        refreshDisplays();
-
-        $("project").value = "";
-        fillUnits("");
-        $("remark").value = "";
-
-        $("submitBtn").disabled = false;
-
-      } catch (e) {
-        $("submitBtn").disabled = false;
-        showMsg("❌ 提交失败：" + e.message, false);
-      }
-    }
-
-    /***********************
-     * 初始化
-     ***********************/
-    function init(){
-      initEmployee();
-
-      renderChips("weekChips", weekOptions, "week");
-      renderChips("weekdayChips", weekdayOptions, "weekday");
-      renderChips("taskChips", taskOptions, "task");
-      renderAllActiveChips();
-
-      fillProjects();
-      $("project").addEventListener("change", function(){
-        fillUnits(this.value);
-      });
-
-      refreshDisplays();
-    }
-
-    init();
-  </script>
-</body>
-</html>
