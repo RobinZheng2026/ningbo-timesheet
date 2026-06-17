@@ -21,9 +21,10 @@
       --chip:#eef5ff;
       --chip-border:#bfd7f5;
       --chip-active:#0078d4;
+      --chip-text:#1f4b7a;
     }
 
-    * { box-sizing: border-box; }
+    *{ box-sizing:border-box; }
 
     body{
       margin:0;
@@ -44,21 +45,21 @@
     }
 
     .wrap{
-      max-width: 680px;
-      margin: 18px auto;
-      padding: 0 14px 28px;
+      max-width: 760px;
+      margin: 16px auto;
+      padding: 0 12px 28px;
     }
 
     .card{
       background:#fff;
       border-radius:18px;
       box-shadow: var(--shadow);
-      padding:16px 14px 20px;
+      padding:14px 12px 18px;
       border:1px solid rgba(0,0,0,.04);
     }
 
     .sec-title{
-      margin: 8px 0 12px;
+      margin: 6px 0 10px;
       font-size: 16px;
       font-weight: 800;
       color: var(--brand);
@@ -66,44 +67,44 @@
       padding-left: 8px;
     }
 
-    .employee-box{
-      margin-top: 8px;
-      padding: 14px;
+    .id-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      margin-top:8px;
+    }
+
+    .id-card{
       border:1px solid var(--border);
       border-radius:14px;
       background:#fcfcfd;
-    }
-
-    .employee-row{
+      padding:10px 12px;
+      min-height:72px;
       display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:8px 0;
-      border-bottom:1px dashed #e5e7eb;
+      flex-direction:column;
+      justify-content:center;
+      gap:6px;
     }
-    .employee-row:last-child{ border-bottom:none; }
 
-    .label{
+    .id-label{
+      font-size:13px;
       color:var(--sub);
-      font-size:14px;
-      flex:0 0 95px;
     }
 
-    .value{
-      font-size:18px;
-      font-weight:700;
-      text-align:right;
+    .id-value{
+      font-size:20px;
+      font-weight:800;
+      color:#111827;
       word-break:break-all;
-      flex:1;
+      line-height:1.2;
     }
 
-    .value.ok{ color:var(--ok); }
-    .value.warn{ color:var(--warn); }
-    .value.err{ color:var(--danger); }
+    .id-value.ok{ color:var(--ok); }
+    .id-value.warn{ color:var(--warn); }
+    .id-value.err{ color:var(--danger); }
 
     .tip{
-      margin: 12px 0 16px;
+      margin: 12px 0 14px;
       padding: 12px 14px;
       border-radius: 12px;
       background:#f8fbff;
@@ -130,7 +131,7 @@
       margin-left:4px;
     }
 
-    select, textarea, input{
+    select, textarea{
       width:100%;
       padding:12px 12px;
       border:1px solid var(--border);
@@ -141,7 +142,7 @@
       outline:none;
     }
 
-    select:focus, textarea:focus, input:focus{
+    select:focus, textarea:focus{
       border-color:#93c5fd;
       box-shadow:0 0 0 3px rgba(59,130,246,.15);
     }
@@ -153,30 +154,41 @@
 
     .chip-grid{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
+      gap:8px;
     }
 
-    .chip-grid.two{
-      grid-template-columns: repeat(2, 1fr);
+    /* Week 一行4个 */
+    .week-grid{
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* 星期一行7个 */
+    .weekday-grid{
+      grid-template-columns: repeat(7, 1fr);
+    }
+
+    /* 工时类别：桌面一行5个，窄屏自动缩 */
+    .task-grid{
+      grid-template-columns: repeat(5, 1fr);
     }
 
     .chip{
       border:1px solid var(--chip-border);
       background:var(--chip);
-      color:#1f4b7a;
+      color:var(--chip-text);
       border-radius:12px;
-      padding:12px 10px;
+      padding:10px 6px;
       text-align:center;
       font-size:15px;
       font-weight:700;
       cursor:pointer;
       user-select:none;
       transition:.15s ease;
-      min-height:50px;
+      min-height:48px;
       display:flex;
       align-items:center;
       justify-content:center;
+      line-height:1.2;
     }
 
     .chip:active{ transform:scale(.98); }
@@ -216,21 +228,22 @@
     }
 
     .count-btn{
-      width:42px;
-      height:42px;
+      width:44px;
+      height:44px;
       border:none;
       border-radius:12px;
       background:#e8f1fb;
       color:#0f4c81;
-      font-size:22px;
+      font-size:24px;
       font-weight:700;
       cursor:pointer;
+      flex:0 0 44px;
     }
 
     .count-value{
       flex:1;
       text-align:center;
-      font-size:22px;
+      font-size:24px;
       font-weight:800;
       color:#111827;
     }
@@ -367,11 +380,31 @@
       font-size:12px;
     }
 
-    @media (max-width: 440px){
-      .chip-grid{ grid-template-columns: repeat(2, 1fr); }
-      .chip-grid.two{ grid-template-columns: repeat(2, 1fr); }
-      .value{ font-size:17px; }
-      .hours-box{ grid-template-columns:1fr; }
+    @media (max-width: 680px){
+      .task-grid{
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 560px){
+      .id-row{
+        grid-template-columns: 1fr;
+      }
+      .week-grid{
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .weekday-grid{
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .task-grid{
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .hours-box{
+        grid-template-columns:1fr;
+      }
+      .id-value{
+        font-size:18px;
+      }
     }
   </style>
 </head>
@@ -382,25 +415,25 @@
     <div class="card">
 
       <div class="sec-title">身份确认</div>
-      <div class="employee-box">
-        <div class="employee-row">
-          <div class="label">员工姓名</div>
-          <div id="empName" class="value">--</div>
+      <div class="id-row">
+        <div class="id-card">
+          <div class="id-label">员工姓名</div>
+          <div id="empName" class="id-value">--</div>
         </div>
-        <div class="employee-row">
-          <div class="label">员工工号</div>
-          <div id="empId" class="value">--</div>
+        <div class="id-card">
+          <div class="id-label">员工工号</div>
+          <div id="empId" class="id-value">--</div>
         </div>
-        <div class="employee-row">
-          <div class="label">识别状态</div>
-          <div id="empState" class="value warn">待识别</div>
+        <div class="id-card">
+          <div class="id-label">识别状态</div>
+          <div id="empState" class="id-value warn">待识别</div>
         </div>
       </div>
 
       <div class="tip">
         请选择本周、星期、工时类别、项目、单元并填写工时。<br>
         正常工时默认 8 小时，如有加班直接点加号即可。<br>
-        同一天可以提交多次，但会自动拦截“完全重复的一条记录”。
+        允许一天内提交多次，但会自动拦截“完全重复的一条记录”。
       </div>
 
       <div class="sec-title">填写工时</div>
@@ -408,19 +441,19 @@
       <!-- Week -->
       <div class="field">
         <label>Week<span class="req">*</span></label>
-        <div class="chip-grid two" id="weekChips"></div>
+        <div class="chip-grid week-grid" id="weekChips"></div>
       </div>
 
       <!-- weekday -->
       <div class="field">
         <label>星期<span class="req">*</span></label>
-        <div class="chip-grid" id="weekdayChips"></div>
+        <div class="chip-grid weekday-grid" id="weekdayChips"></div>
       </div>
 
       <!-- task -->
       <div class="field">
         <label>工时类别<span class="req">*</span></label>
-        <div class="chip-grid two" id="taskChips"></div>
+        <div class="chip-grid task-grid" id="taskChips"></div>
       </div>
 
       <!-- project -->
@@ -509,10 +542,11 @@
 
   <script>
     /***********************
-     * 1) API 配置（已按你当前配置写入）
+     * 1) API 配置
+     * ⚠️ 建议你后面把 token 换一个新的
      ***********************/
     const API_URL = "https://api.baserow.io/api/database/rows/table/1030254/?user_field_names=true";
-    const API_TOKEN = "axAm9RgiyTLV2Bk3SEFcOM3arQv0BTQ7";
+    const API_TOKEN = "vHwFROkQHYBYJck1Lv4i6kqitbbJI8e1";
 
     /***********************
      * 2) 白名单员工映射
@@ -615,6 +649,31 @@
       el.innerHTML = text;
     }
 
+    function safe(v){
+      return String(v ?? "").replace(/[<>&"]/g, s => ({
+        "<":"&lt;",
+        ">":"&gt;",
+        "&":"&amp;",
+        "\"":"&quot;"
+      }[s]));
+    }
+
+    function formatTime(v){
+      if(!v) return "--";
+      try{
+        const d = new Date(v);
+        if(isNaN(d.getTime())) return v;
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2,"0");
+        const day = String(d.getDate()).padStart(2,"0");
+        const hh = String(d.getHours()).padStart(2,"0");
+        const mm = String(d.getMinutes()).padStart(2,"0");
+        return `${y}-${m}-${day} ${hh}:${mm}`;
+      }catch{
+        return v;
+      }
+    }
+
     function renderChips(containerId, values, fieldName){
       const container = $(containerId);
       container.innerHTML = "";
@@ -622,15 +681,15 @@
         const chip = document.createElement("div");
         chip.className = "chip";
         chip.innerText = v;
+        chip.dataset.value = v;
+        chip.dataset.field = fieldName;
         chip.onclick = async () => {
           state[fieldName] = v;
           renderAllActiveChips();
-          if(fieldName === "week"){
+          if (fieldName === "week") {
             await loadWeekRecords();
           }
         };
-        chip.dataset.value = v;
-        chip.dataset.field = fieldName;
         container.appendChild(chip);
       });
     }
@@ -682,8 +741,8 @@
     function changeNumber(field, delta){
       const now = Number(state[field] || 0);
       let next = Math.round((now + delta) * 2) / 2;
-      if (next < 0) next = 0;
-      if (next > 12) next = 12;
+      if(next < 0) next = 0;
+      if(next > 12) next = 12;
       state[field] = next;
       refreshDisplays();
     }
@@ -694,7 +753,7 @@
     }
 
     /***********************
-     * 白名单身份识别
+     * 6) 白名单身份识别
      ***********************/
     const empId = getParam("id");
     const empName = empId ? employeeMap[empId] : "";
@@ -705,23 +764,23 @@
       if (empId && empName) {
         $("empName").innerText = empName;
         $("empState").innerText = "识别成功";
-        $("empState").className = "value ok";
+        $("empState").className = "id-value ok";
         $("submitBtn").disabled = false;
       } else if (empId) {
         $("empName").innerText = "未知员工";
         $("empState").innerText = "未在名单中";
-        $("empState").className = "value err";
+        $("empState").className = "id-value err";
         $("submitBtn").disabled = true;
       } else {
         $("empName").innerText = "--";
         $("empState").innerText = "请扫码进入";
-        $("empState").className = "value warn";
+        $("empState").className = "id-value warn";
         $("submitBtn").disabled = true;
       }
     }
 
     /***********************
-     * Baserow 读本周记录
+     * 7) 读取本周记录
      ***********************/
     async function loadWeekRecords(){
       if(!state.week || !empId){
@@ -745,9 +804,9 @@
         const data = await res.json();
         let rows = [];
 
-        if(Array.isArray(data)) {
+        if (Array.isArray(data)) {
           rows = data;
-        } else if(Array.isArray(data.results)) {
+        } else if (Array.isArray(data.results)) {
           rows = data.results;
         }
 
@@ -756,7 +815,7 @@
           String(r.week || "") === String(state.week)
         );
 
-        rows.sort((a,b) => {
+        rows.sort((a, b) => {
           const ta = new Date(a.submitTime || 0).getTime();
           const tb = new Date(b.submitTime || 0).getTime();
           return tb - ta;
@@ -770,12 +829,12 @@
       }
     }
 
-    function renderWeekRecords(rows, errMsg=""){
+    function renderWeekRecords(rows, errMsg = ""){
       const box = $("recordList");
       box.innerHTML = "";
 
       if(errMsg){
-        box.innerHTML = `<div class="record-empty">${errMsg}</div>`;
+        box.innerHTML = `<div class="record-empty">${safe(errMsg)}</div>`;
         return;
       }
 
@@ -785,7 +844,7 @@
       }
 
       if(!rows || rows.length === 0){
-        box.innerHTML = `<div class="record-empty">当前员工在 ${state.week} 还没有提交记录</div>`;
+        box.innerHTML = `<div class="record-empty">当前员工在 ${safe(state.week)} 还没有提交记录</div>`;
         return;
       }
 
@@ -794,12 +853,12 @@
         item.className = "record-item";
         item.innerHTML = `
           <div class="record-top">
-            <div>${r.week || ""} · 星期${r.weekday || ""}</div>
-            <div>${formatTime(r.submitTime)}</div>
+            <div>${safe(r.week || "")} · 星期${safe(r.weekday || "")}</div>
+            <div>${safe(formatTime(r.submitTime))}</div>
           </div>
           <div class="record-main">
-            ${safe(r.task)} ｜ ${safe(r.project)} ｜ ${safe(r.unit)}<br>
-            正常工时：${num(r.regularHours)} ｜ 工作日加班：${num(r.otWeekday)} ｜ 周末加班：${num(r.otWeekend)}
+            ${safe(r.task || "")} ｜ ${safe(r.project || "")} ｜ ${safe(r.unit || "")}<br>
+            正常工时：${Number(r.regularHours || 0)} ｜ 工作日加班：${Number(r.otWeekday || 0)} ｜ 周末加班：${Number(r.otWeekend || 0)}
             ${r.remark ? `<br>备注：${safe(r.remark)}` : ""}
           </div>
         `;
@@ -807,36 +866,9 @@
       });
     }
 
-    function formatTime(v){
-      if(!v) return "--";
-      try{
-        const d = new Date(v);
-        if(isNaN(d.getTime())) return v;
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2,"0");
-        const day = String(d.getDate()).padStart(2,"0");
-        const hh = String(d.getHours()).padStart(2,"0");
-        const mm = String(d.getMinutes()).padStart(2,"0");
-        return `${y}-${m}-${day} ${hh}:${mm}`;
-      }catch{
-        return v;
-      }
-    }
-
-    function safe(v){
-      return String(v ?? "").replace(/[<>&"]/g, s => ({
-        "<":"&lt;", ">":"&gt;", "&":"&amp;", "\"":"&quot;"
-      }[s]));
-    }
-
-    function num(v){
-      if(v === null || v === undefined || v === "") return 0;
-      return Number(v);
-    }
-
     /***********************
-     * 防重复提交
-     * 允许一天多次提交，但阻止“完全相同的一条记录”重复提交
+     * 8) 防重复提交（允许每天多次）
+     *    只阻止：完全相同的一条记录再次提交
      ***********************/
     function buildSubmitSignature(payload){
       return JSON.stringify({
@@ -890,7 +922,7 @@
     }
 
     /***********************
-     * 校验
+     * 9) 校验
      ***********************/
     function validate(){
       if(!empId || !empName){
@@ -910,7 +942,7 @@
     }
 
     /***********************
-     * 提交
+     * 10) 提交
      ***********************/
     async function submitForm(){
       if(isSubmitting){
@@ -921,6 +953,11 @@
       const err = validate();
       if (err){
         showMsg(err, false);
+        return;
+      }
+
+      if (!API_TOKEN || API_TOKEN.includes("请替换成你自己的Baserow Token")) {
+        showMsg("请先把代码里的 API_TOKEN 替换成你自己的 Baserow token。", false);
         return;
       }
 
@@ -936,3 +973,88 @@
         regularHours: Number(state.regularHours),
         otWeekday: Number(state.otWeekday),
         otWeekend: Number(state.otWeekend),
+        remark: $("remark").value || ""
+      };
+
+      const signature = buildSubmitSignature(payload);
+
+      if (isFastRepeat(signature)) {
+        showMsg("请勿连续重复提交完全相同的数据。", false);
+        return;
+      }
+
+      if (existsExactDuplicate(signature)) {
+        showMsg("本周已存在一条完全相同的记录，无需重复提交。", false);
+        return;
+      }
+
+      try {
+        isSubmitting = true;
+        $("submitBtn").disabled = true;
+        showMsg("正在提交，请稍候…", true);
+
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Authorization": "Token " + API_TOKEN,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error("接口返回失败状态：" + res.status);
+        }
+
+        saveLastSubmit(signature);
+        showMsg("✅ 提交成功。", true);
+
+        // 清空本次填写，但保留身份
+        state.weekday = "";
+        state.task = "";
+        state.regularHours = 8;
+        state.otWeekday = 0;
+        state.otWeekend = 0;
+
+        renderAllActiveChips();
+        refreshDisplays();
+
+        $("project").value = "";
+        fillUnits("");
+        $("remark").value = "";
+
+        // 重新读取本周记录
+        await loadWeekRecords();
+
+      } catch (e) {
+        showMsg("❌ 提交失败：" + e.message, false);
+      } finally {
+        isSubmitting = false;
+        $("submitBtn").disabled = !(empId && empName);
+      }
+    }
+
+    /***********************
+     * 11) 初始化
+     ***********************/
+    function init(){
+      initEmployee();
+
+      renderChips("weekChips", weekOptions, "week");
+      renderChips("weekdayChips", weekdayOptions, "weekday");
+      renderChips("taskChips", taskOptions, "task");
+      renderAllActiveChips();
+
+      fillProjects();
+      $("project").addEventListener("change", function(){
+        fillUnits(this.value);
+      });
+
+      refreshDisplays();
+      renderWeekRecords([]);
+    }
+
+    init();
+  </script>
+</body>
+</html>
