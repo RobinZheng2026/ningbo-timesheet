@@ -552,13 +552,14 @@ const API_TOKEN = "axAm9RgiyTLV2Bk3SEFcOM3arQv0BTQ7";
         $("submitBtn").disabled = true;
         showMsg("正在提交，请稍候…", true);
 
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload)
-        });
+const res = await fetch(API_URL, {
+  method: "POST",
+  headers: {
+    "Authorization": "Token " + API_TOKEN,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(payload)
+});
 
         if (!res.ok) {
           throw new Error("接口返回失败状态：" + res.status);
