@@ -1504,11 +1504,10 @@
           return "提交后当天工作日加班汇总为 " + afterOtWeekday + "h，超过 4h，禁止提交。";
         }
 
-        if(!weekend){
-  if(afterOtWeekday > 4){
-    return "提交后当天工作日加班汇总为 " + afterOtWeekday + "h，超过 4h，禁止提交。";
-  }
-}
+        if(!(afterOtWeekday === 0 || afterOtWeekday === 4)){
+          return "工作日加班当天汇总必须是 0h 或 4h。当前提交后汇总为 " + afterOtWeekday + "h，请调整。";
+        }
+      }
 
       if(weekend){
         if(afterOtWeekend > 8){
