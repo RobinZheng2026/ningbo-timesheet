@@ -22,6 +22,8 @@
       --chip-border:#bfd7f5;
       --chip-active:#0078d4;
       --chip-text:#1f4b7a;
+      --soft-panel:#f3f4f6;
+      --soft-panel-border:#cfd6de;
     }
 
     *{ box-sizing:border-box; }
@@ -131,7 +133,7 @@
       margin-left:4px;
     }
 
-    select, textarea{
+    textarea{
       width:100%;
       padding:12px 12px;
       border:1px solid var(--border);
@@ -142,7 +144,7 @@
       outline:none;
     }
 
-    select:focus, textarea:focus{
+    textarea:focus{
       border-color:#93c5fd;
       box-shadow:0 0 0 3px rgba(59,130,246,.15);
     }
@@ -157,18 +159,23 @@
       gap:8px;
     }
 
-    /* Week 一行4个 */
     .week-grid{
       grid-template-columns: repeat(4, 1fr);
     }
 
-    /* 星期一行7个 */
     .weekday-grid{
       grid-template-columns: repeat(7, 1fr);
     }
 
-    /* 工时类别：桌面一行5个，窄屏自动缩 */
     .task-grid{
+      grid-template-columns: repeat(5, 1fr);
+    }
+
+    .project-grid{
+      grid-template-columns: repeat(6, 1fr);
+    }
+
+    .unit-grid{
       grid-template-columns: repeat(5, 1fr);
     }
 
@@ -189,6 +196,7 @@
       align-items:center;
       justify-content:center;
       line-height:1.2;
+      word-break:break-word;
     }
 
     .chip:active{ transform:scale(.98); }
@@ -198,6 +206,14 @@
       color:#fff;
       border-color:var(--chip-active);
       box-shadow:0 6px 16px rgba(0,120,212,.22);
+    }
+
+    .chip.disabled{
+      background:#f3f4f6;
+      color:#9ca3af;
+      border-color:#e5e7eb;
+      cursor:not-allowed;
+      box-shadow:none;
     }
 
     .hours-box{
@@ -338,28 +354,46 @@
     .record-list{
       display:flex;
       flex-direction:column;
-      gap:10px;
+      gap:12px;
     }
 
     .record-item{
-      border:1px solid var(--border);
+      border:1px solid var(--soft-panel-border);
       border-radius:14px;
-      padding:10px 12px;
-      background:#fcfcfd;
+      padding:12px 14px;
+      background:var(--soft-panel);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
     }
 
     .record-top{
       display:flex;
       justify-content:space-between;
+      align-items:flex-start;
       gap:8px;
-      margin-bottom:6px;
-      font-size:14px;
-      font-weight:700;
+      margin-bottom:8px;
     }
 
-    .record-main{
+    .record-title{
+      font-size:15px;
+      font-weight:800;
+      color:#111827;
+    }
+
+    .record-time{
       font-size:14px;
-      line-height:1.7;
+      font-weight:800;
+      color:#111827;
+      white-space:nowrap;
+    }
+
+    .record-line{
+      font-size:14px;
+      line-height:1.75;
+      color:#1f2937;
+      word-break:break-word;
+    }
+
+    .record-line.light{
       color:#374151;
     }
 
@@ -381,30 +415,22 @@
     }
 
     @media (max-width: 680px){
-      .task-grid{
-        grid-template-columns: repeat(4, 1fr);
-      }
+      .task-grid{ grid-template-columns: repeat(4, 1fr); }
+      .project-grid{ grid-template-columns: repeat(3, 1fr); }
+      .unit-grid{ grid-template-columns: repeat(3, 1fr); }
     }
 
     @media (max-width: 560px){
-      .id-row{
-        grid-template-columns: 1fr;
-      }
-      .week-grid{
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .weekday-grid{
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .task-grid{
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .hours-box{
-        grid-template-columns:1fr;
-      }
-      .id-value{
-        font-size:18px;
-      }
+      .id-row{ grid-template-columns: 1fr; }
+      .week-grid{ grid-template-columns: repeat(2, 1fr); }
+      .weekday-grid{ grid-template-columns: repeat(4, 1fr); }
+      .task-grid{ grid-template-columns: repeat(2, 1fr); }
+      .project-grid{ grid-template-columns: repeat(2, 1fr); }
+      .unit-grid{ grid-template-columns: repeat(2, 1fr); }
+      .hours-box{ grid-template-columns:1fr; }
+      .id-value{ font-size:18px; }
+      .record-top{ flex-direction:column; align-items:flex-start; }
+      .record-time{ white-space:normal; }
     }
   </style>
 </head>
@@ -438,41 +464,31 @@
 
       <div class="sec-title">填写工时</div>
 
-      <!-- Week -->
       <div class="field">
         <label>Week<span class="req">*</span></label>
         <div class="chip-grid week-grid" id="weekChips"></div>
       </div>
 
-      <!-- weekday -->
       <div class="field">
         <label>星期<span class="req">*</span></label>
         <div class="chip-grid weekday-grid" id="weekdayChips"></div>
       </div>
 
-      <!-- task -->
       <div class="field">
         <label>工时类别<span class="req">*</span></label>
         <div class="chip-grid task-grid" id="taskChips"></div>
       </div>
 
-      <!-- project -->
       <div class="field">
-        <label for="project">项目号<span class="req">*</span></label>
-        <select id="project">
-          <option value="">请选择项目号</option>
-        </select>
+        <label>项目号<span class="req">*</span></label>
+        <div class="chip-grid project-grid" id="projectChips"></div>
       </div>
 
-      <!-- unit -->
       <div class="field">
-        <label for="unit">单元号<span class="req">*</span></label>
-        <select id="unit">
-          <option value="">请先选择项目号</option>
-        </select>
+        <label>单元号<span class="req">*</span></label>
+        <div class="chip-grid unit-grid" id="unitChips"></div>
       </div>
 
-      <!-- hours -->
       <div class="hours-box">
         <div class="hour-card">
           <div class="hour-title">正常工时（小时）<span class="req">*</span></div>
@@ -481,11 +497,7 @@
             <div class="count-value" id="regularHoursDisplay">8</div>
             <button class="count-btn" type="button" onclick="changeNumber('regularHours', 0.5)">+</button>
           </div>
-          <div class="quick-row">
-            <button class="quick-btn" type="button" onclick="setNumber('regularHours', 8)">8小时</button>
-            <button class="quick-btn" type="button" onclick="setNumber('regularHours', 4)">4小时</button>
-            <button class="quick-btn" type="button" onclick="setNumber('regularHours', 0)">0小时</button>
-          </div>
+          <div class="quick-row" id="regularHoursQuick"></div>
         </div>
 
         <div class="hour-card">
@@ -495,11 +507,7 @@
             <div class="count-value" id="otWeekdayDisplay">0</div>
             <button class="count-btn" type="button" onclick="changeNumber('otWeekday', 0.5)">+</button>
           </div>
-          <div class="quick-row">
-            <button class="quick-btn" type="button" onclick="setNumber('otWeekday', 0)">清零</button>
-            <button class="quick-btn" type="button" onclick="setNumber('otWeekday', 2)">2小时</button>
-            <button class="quick-btn" type="button" onclick="setNumber('otWeekday', 4)">4小时</button>
-          </div>
+          <div class="quick-row" id="otWeekdayQuick"></div>
         </div>
       </div>
 
@@ -510,11 +518,7 @@
           <div class="count-value" id="otWeekendDisplay">0</div>
           <button class="count-btn" type="button" onclick="changeNumber('otWeekend', 0.5)">+</button>
         </div>
-        <div class="quick-row">
-          <button class="quick-btn" type="button" onclick="setNumber('otWeekend', 0)">清零</button>
-          <button class="quick-btn" type="button" onclick="setNumber('otWeekend', 4)">4小时</button>
-          <button class="quick-btn" type="button" onclick="setNumber('otWeekend', 8)">8小时</button>
-        </div>
+        <div class="quick-row" id="otWeekendQuick"></div>
       </div>
 
       <div class="field" style="margin-top:14px;">
@@ -621,6 +625,12 @@
       "仓库帮忙","车间管理","其它工作","额外工时","请假"
     ];
 
+    const quickHoursMap = {
+      regularHours: [0,1,2,3,4,8],
+      otWeekday: [0,1,2,3,4,8],
+      otWeekend: [0,1,2,3,4,8]
+    };
+
     /***********************
      * 5) 页面状态
      ***********************/
@@ -628,6 +638,8 @@
       week: "",
       weekday: "",
       task: "",
+      project: "",
+      unit: "",
       regularHours: 8,
       otWeekday: 0,
       otWeekend: 0
@@ -650,12 +662,14 @@
     }
 
     function safe(v){
-      return String(v ?? "").replace(/[<>&"]/g, s => ({
-        "<":"&lt;",
-        ">":"&gt;",
-        "&":"&amp;",
-        "\"":"&quot;"
-      }[s]));
+      return String(v ?? "").replace(/[<>&"]/g, function(s){
+        return {
+          '<':'&lt;',
+          '>':'&gt;',
+          '&':'&amp;',
+          '"':'&quot;'
+        }[s];
+      });
     }
 
     function formatTime(v){
@@ -674,9 +688,18 @@
       }
     }
 
-    function renderChips(containerId, values, fieldName){
+    function renderChips(containerId, values, fieldName, onClick){
       const container = $(containerId);
       container.innerHTML = "";
+
+      if(!values || values.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "chip disabled";
+        empty.innerText = fieldName === "unit" ? "请先选项目" : "暂无数据";
+        container.appendChild(empty);
+        return;
+      }
+
       values.forEach(v => {
         const chip = document.createElement("div");
         chip.className = "chip";
@@ -684,10 +707,11 @@
         chip.dataset.value = v;
         chip.dataset.field = fieldName;
         chip.onclick = async () => {
-          state[fieldName] = v;
-          renderAllActiveChips();
-          if (fieldName === "week") {
-            await loadWeekRecords();
+          if(typeof onClick === "function"){
+            await onClick(v);
+          }else{
+            state[fieldName] = v;
+            renderAllActiveChips();
           }
         };
         container.appendChild(chip);
@@ -698,37 +722,46 @@
       document.querySelectorAll(".chip").forEach(chip => {
         const field = chip.dataset.field;
         const value = chip.dataset.value;
+        if(!field) return;
         chip.classList.toggle("active", state[field] === value);
       });
     }
 
-    function fillProjects(){
-      const projectSelect = $("project");
-      projectSelect.innerHTML = '<option value="">请选择项目号</option>';
-      Object.keys(projectUnits).forEach(p => {
-        const opt = document.createElement("option");
-        opt.value = p;
-        opt.textContent = p;
-        projectSelect.appendChild(opt);
+    function renderProjectChips(){
+      const projects = Object.keys(projectUnits);
+      renderChips("projectChips", projects, "project", function(v){
+        state.project = v;
+        state.unit = "";
+        renderUnitChips();
+        renderAllActiveChips();
       });
     }
 
-    function fillUnits(project){
-      const unitSelect = $("unit");
-      unitSelect.innerHTML = "";
+    function renderUnitChips(){
+      const units = state.project && projectUnits[state.project] ? projectUnits[state.project] : [];
+      renderChips("unitChips", units, "unit", function(v){
+        state.unit = v;
+        renderAllActiveChips();
+      });
+      renderAllActiveChips();
+    }
 
-      const first = document.createElement("option");
-      first.value = "";
-      first.textContent = project ? "请选择单元号" : "请先选择项目号";
-      unitSelect.appendChild(first);
+    function renderQuickButtons(){
+      renderQuickRow("regularHoursQuick", "regularHours", quickHoursMap.regularHours, true);
+      renderQuickRow("otWeekdayQuick", "otWeekday", quickHoursMap.otWeekday, false);
+      renderQuickRow("otWeekendQuick", "otWeekend", quickHoursMap.otWeekend, false);
+    }
 
-      if(!project || !projectUnits[project]) return;
-
-      projectUnits[project].forEach(u => {
-        const opt = document.createElement("option");
-        opt.value = u;
-        opt.textContent = u;
-        unitSelect.appendChild(opt);
+    function renderQuickRow(containerId, field, values, regular){
+      const box = $(containerId);
+      box.innerHTML = "";
+      values.forEach(v => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "quick-btn";
+        btn.textContent = v === 0 ? (regular ? "0小时" : "清零") : `${v}小时`;
+        btn.onclick = function(){ setNumber(field, v); };
+        box.appendChild(btn);
       });
     }
 
@@ -853,14 +886,12 @@
         item.className = "record-item";
         item.innerHTML = `
           <div class="record-top">
-            <div>${safe(r.week || "")} · 星期${safe(r.weekday || "")}</div>
-            <div>${safe(formatTime(r.submitTime))}</div>
+            <div class="record-title">${safe(r.week || "")} · 星期${safe(r.weekday || "")}</div>
+            <div class="record-time">${safe(formatTime(r.submitTime))}</div>
           </div>
-          <div class="record-main">
-            ${safe(r.task || "")} ｜ ${safe(r.project || "")} ｜ ${safe(r.unit || "")}<br>
-            正常工时：${Number(r.regularHours || 0)} ｜ 工作日加班：${Number(r.otWeekday || 0)} ｜ 周末加班：${Number(r.otWeekend || 0)}
-            ${r.remark ? `<br>备注：${safe(r.remark)}` : ""}
-          </div>
+          <div class="record-line">${safe(r.task || "")} ｜ ${safe(r.project || "")} ｜ ${safe(r.unit || "")}</div>
+          <div class="record-line light">正常工时：${Number(r.regularHours || 0)} ｜ 工作日加班：${Number(r.otWeekday || 0)} ｜ 周末加班：${Number(r.otWeekend || 0)}</div>
+          ${r.remark ? `<div class="record-line light">备注：${safe(r.remark)}</div>` : ""}
         `;
         box.appendChild(item);
       });
@@ -931,8 +962,8 @@
       if(!state.week) return "请选择 Week。";
       if(!state.weekday) return "请选择星期。";
       if(!state.task) return "请选择工时类别。";
-      if(!$("project").value) return "请选择项目号。";
-      if(!$("unit").value) return "请选择单元号。";
+      if(!state.project) return "请选择项目号。";
+      if(!state.unit) return "请选择单元号。";
 
       if (state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~12 之间。";
       if (state.otWeekday < 0 || state.otWeekday > 12) return "工作日加班必须在 0~12 之间。";
@@ -968,8 +999,8 @@
         week: state.week,
         weekday: state.weekday,
         task: state.task,
-        project: $("project").value,
-        unit: $("unit").value,
+        project: state.project,
+        unit: state.unit,
         regularHours: Number(state.regularHours),
         otWeekday: Number(state.otWeekday),
         otWeekend: Number(state.otWeekend),
@@ -1009,21 +1040,21 @@
         saveLastSubmit(signature);
         showMsg("✅ 提交成功。", true);
 
-        // 清空本次填写，但保留身份
         state.weekday = "";
         state.task = "";
+        state.project = "";
+        state.unit = "";
         state.regularHours = 8;
         state.otWeekday = 0;
         state.otWeekend = 0;
 
         renderAllActiveChips();
         refreshDisplays();
+        renderProjectChips();
+        renderUnitChips();
 
-        $("project").value = "";
-        fillUnits("");
         $("remark").value = "";
 
-        // 重新读取本周记录
         await loadWeekRecords();
 
       } catch (e) {
@@ -1040,16 +1071,17 @@
     function init(){
       initEmployee();
 
-      renderChips("weekChips", weekOptions, "week");
+      renderChips("weekChips", weekOptions, "week", async function(v){
+        state.week = v;
+        renderAllActiveChips();
+        await loadWeekRecords();
+      });
       renderChips("weekdayChips", weekdayOptions, "weekday");
       renderChips("taskChips", taskOptions, "task");
+      renderProjectChips();
+      renderUnitChips();
+      renderQuickButtons();
       renderAllActiveChips();
-
-      fillProjects();
-      $("project").addEventListener("change", function(){
-        fillUnits(this.value);
-      });
-
       refreshDisplays();
       renderWeekRecords([]);
     }
