@@ -320,28 +320,6 @@
       color:#fff;
       font-weight:800;
     }
-    .record-table .selected-row td{ background:#e8f1fb; }
-    .record-table .w-action{ min-width:84px; }
-    .op-btn{
-      border:1px solid #dbeafe;
-      background:#fff;
-      color:#2563eb;
-      border-radius:8px;
-      padding:4px 8px;
-      font-size:12px;
-      font-weight:700;
-      cursor:pointer;
-      margin:0 2px;
-      white-space:nowrap;
-    }
-    .op-btn.danger{ border-color:#fecaca; color:#b91c1c; }
-    .op-btn.active{ background:#0078d4; color:#fff; border-color:#0078d4; }
-    .record-actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      margin:0 0 10px;
-    }
     .record-empty{
       padding:14px;
       border:1px dashed #cbd5e1;
@@ -420,18 +398,12 @@
 
       <div class="tip">
         选择 Week 后，会在上方自动显示该员工本周已提交的工时表格。<br>
-        红色格表示该天汇总异常：工作日正常工时合计必须为 8h；工作日加班合计只能是 0h 或 4h。
+        红色格表示该天汇总异常：工作日正常工时应为 8h；工作日加班只能是 0h 或 4h。
       </div>
 
       <div class="records-wrap">
         <div class="sec-title">本周已提交工时明细</div>
         <div class="record-tip">显示格式按台账表格样式：上方明细、底部汇总。左右滑动可查看完整表格。</div>
-        <div class="record-actions">
-          <button type="button" class="op-btn" id="editSelectedBtn" onclick="editSelectedRecord()" disabled>修改选中</button>
-          <button type="button" class="op-btn danger" id="deleteSelectedBtn" onclick="deleteSelectedRecord()" disabled>删除选中</button>
-          <button type="button" class="op-btn" id="resubmitSelectedBtn" onclick="resubmitSelectedRecord()" disabled>重新提交</button>
-          <button type="button" class="op-btn hidden" id="cancelEditBtn" onclick="cancelEditMode()">取消修改</button>
-        </div>
         <div id="recordList">
           <div class="record-empty">请选择 Week 查看本周记录</div>
         </div>
@@ -545,117 +517,12 @@
     const state = { week:"", weekday:"", task:"", project:"", unit:"", regularHours:8, otWeekday:0, otWeekend:0 };
     let isSubmitting = false;
     let currentWeekRecords = [];
-    let selectedRecordId = null;
-    let editingRecordId = null;
 
     function $(id){ return document.getElementById(id); }
     function getParam(name){ return new URL(window.location.href).searchParams.get(name); }
     function showMsg(text, ok=true){ const el=$("msg"); el.className="msg "+(ok?"ok":"err"); el.innerHTML=text; }
     function safe(v){ return String(v ?? "").replace(/[<>&"]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[s])); }
     function isWeekendDay(day){ return day === "六" || day === "日"; }
-    function getRowUrl(rowId){ return `https://api.baserow.io/api/database/rows/table/1030254/${rowId}/?user_field_names=true`; }
-    function num(v){ return Number(v || 0); }
-    function getWeekdayTotals(weekday, excludeRowId=null){
-      const totals = { regular:0, otWeekday:0, otWeekend:0 };
-      currentWeekRecords.forEach(r => {
-        if(String(r.weekday || "") !== String(weekday || "")) return;
-        if(excludeRowId !== null && String(r.id) === String(excludeRowId)) return;
-        totals.regular += num(r.regularHours);
-        totals.otWeekday += num(r.otWeekday);
-        totals.otWeekend += num(r.otWeekend);
-      });
-      return totals;
-    }
-    function updateRecordActionButtons(){
-      const hasSelected = !!selectedRecordId;
-      $("editSelectedBtn").disabled = !hasSelected;
-      $("deleteSelectedBtn").disabled = !hasSelected;
-      $("resubmitSelectedBtn").disabled = !hasSelected;
-      $("cancelEditBtn").classList.toggle("hidden", !editingRecordId);
-      $("submitBtn").textContent = editingRecordId ? "保存修改" : "提交工时";
-    }
-    function findSelectedRecord(){
-      return currentWeekRecords.find(r => String(r.id) === String(selectedRecordId));
-    }
-    function fillFormByRecord(record){
-      if(!record) return;
-      state.week = String(record.week || "");
-      state.weekday = String(record.weekday || "");
-      state.task = String(record.task || "");
-      state.project = String(record.project || "");
-      state.unit = String(record.unit || "");
-      state.regularHours = num(record.regularHours);
-      state.otWeekday = num(record.otWeekday);
-      state.otWeekend = num(record.otWeekend);
-      $("remark").value = String(record.remark || "");
-      applyTaskRules();
-      renderAllActiveChips();
-      syncHourSectionByWeekday();
-      refreshDisplays();
-    }
-    function selectRecord(rowId){
-      selectedRecordId = String(rowId);
-      renderWeekRecords(currentWeekRecords);
-      updateRecordActionButtons();
-    }
-    function editSelectedRecord(){
-      const row = findSelectedRecord();
-      if(!row){ showMsg("请先选中一条记录。", false); return; }
-      editingRecordId = row.id;
-      fillFormByRecord(row);
-      updateRecordActionButtons();
-      showMsg("已加载选中记录，请修改后点击“保存修改”。", true);
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-    }
-    function resubmitSelectedRecord(){
-      const row = findSelectedRecord();
-      if(!row){ showMsg("请先选中一条记录。", false); return; }
-      editingRecordId = null;
-      fillFormByRecord(row);
-      const remarkEl = $("remark");
-      if(!String(remarkEl.value || "").includes("重新提交")) remarkEl.value = (remarkEl.value ? remarkEl.value + " | " : "") + "重新提交";
-      updateRecordActionButtons();
-      showMsg("已将选中记录带回表单，可直接调整后重新提交为新记录。", true);
-      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
-    }
-    async function deleteSelectedRecord(){
-      const row = findSelectedRecord();
-      if(!row){ showMsg("请先选中一条记录。", false); return; }
-      try{
-        $("deleteSelectedBtn").disabled = true;
-        const res = await fetch(getRowUrl(row.id), {
-          method: "DELETE",
-          headers: {"Authorization": "Token " + API_TOKEN, "Content-Type": "application/json"}
-        });
-        if(!res.ok) throw new Error("删除失败：" + res.status);
-        if(String(editingRecordId) === String(row.id)) editingRecordId = null;
-        selectedRecordId = null;
-        showMsg("✅ 已删除选中记录。", true);
-        await loadWeekRecords();
-        updateRecordActionButtons();
-      }catch(e){
-        showMsg("❌ 删除失败：" + e.message, false);
-      }finally{
-        updateRecordActionButtons();
-      }
-    }
-    function cancelEditMode(){
-      editingRecordId = null;
-      state.weekday = "";
-      state.task = "";
-      state.project = "";
-      state.unit = "";
-      state.regularHours = 8;
-      state.otWeekday = 0;
-      state.otWeekend = 0;
-      $("remark").value = "";
-      applyTaskRules();
-      renderAllActiveChips();
-      refreshDisplays();
-      syncHourSectionByWeekday();
-      updateRecordActionButtons();
-      showMsg("已取消修改，表单恢复为新增模式。", true);
-    }
     function needsProject(){ return !TASKS_NO_PROJECT.includes(state.task || ""); }
     function needsUnit(){ return !(TASKS_NO_PROJECT.includes(state.task || "") || TASKS_PROJECT_ONLY.includes(state.task || "")); }
 
@@ -813,12 +680,10 @@
       }
       if(weekend){
         state.otWeekday = 0;
-        state.regularHours = 0;
         $("weekdayOTCard").classList.add("hidden");
         $("weekendOTCard").classList.remove("hidden");
       }else{
         state.otWeekend = 0;
-        if(state.regularHours === 0) state.regularHours = 8;
         if(state.otWeekday > 4) state.otWeekday = 4;
         $("weekdayOTCard").classList.remove("hidden");
         $("weekendOTCard").classList.add("hidden");
@@ -863,10 +728,7 @@
         rows = rows.filter(r => String(r.employeeId || "") === String(empId) && String(r.week || "") === String(state.week));
         rows.sort((a,b)=> new Date(a.submitTime || 0).getTime() - new Date(b.submitTime || 0).getTime());
         currentWeekRecords = rows;
-        if(selectedRecordId && !rows.some(r => String(r.id) === String(selectedRecordId))) selectedRecordId = null;
-        if(editingRecordId && !rows.some(r => String(r.id) === String(editingRecordId))) editingRecordId = null;
         renderWeekRecords(rows);
-        updateRecordActionButtons();
       } catch(e){
         renderWeekRecords([], "本周记录读取失败：" + e.message);
       }
@@ -883,22 +745,46 @@
       if(!state.week){ box.innerHTML = `<div class="record-empty">请选择 Week 查看本周记录</div>`; return; }
       if(!rows || rows.length === 0){ box.innerHTML = `<div class="record-empty">当前员工在 ${safe(state.week)} 还没有提交记录</div>`; return; }
 
+      const rowMap = new Map();
+      rows.forEach(r => {
+        const key = rowKey(r);
+        if(!rowMap.has(key)){
+          rowMap.set(key, {
+            task: String(r.task||""),
+            project: String(r.project||""),
+            unit: String(r.unit||""),
+            remark: String(r.remark||"").trim(),
+            days: {"一":{regular:0,overtime:0},"二":{regular:0,overtime:0},"三":{regular:0,overtime:0},"四":{regular:0,overtime:0},"五":{regular:0,overtime:0},"六":{regular:0,overtime:0},"日":{regular:0,overtime:0}},
+            totalRegular:0,
+            totalEveningOt:0,
+            totalWeekendOt:0
+          });
+        }
+        const row = rowMap.get(key);
+        const day = String(r.weekday || "");
+        const regular = Number(r.regularHours || 0);
+        const overtime = Number(r.otWeekday || 0) + Number(r.otWeekend || 0);
+        if(row.days[day]){
+          row.days[day].regular += regular;
+          row.days[day].overtime += overtime;
+        }
+        row.totalRegular += regular;
+        row.totalEveningOt += Number(r.otWeekday || 0);
+        row.totalWeekendOt += Number(r.otWeekend || 0);
+      });
+
       const summary = {
         "一":{regular:0,overtime:0},"二":{regular:0,overtime:0},"三":{regular:0,overtime:0},"四":{regular:0,overtime:0},"五":{regular:0,overtime:0},"六":{regular:0,overtime:0},"日":{regular:0,overtime:0},
         totalRegular:0,totalEveningOt:0,totalWeekendOt:0
       };
-
-      rows.forEach(r => {
-        const day = String(r.weekday || "");
-        const regular = Number(r.regularHours || 0);
-        const overtime = Number(r.otWeekday || 0) + Number(r.otWeekend || 0);
-        if(summary[day]){
-          summary[day].regular += regular;
-          summary[day].overtime += overtime;
-        }
-        summary.totalRegular += regular;
-        summary.totalEveningOt += Number(r.otWeekday || 0);
-        summary.totalWeekendOt += Number(r.otWeekend || 0);
+      Array.from(rowMap.values()).forEach(r => {
+        dayConfigs.forEach(dc => {
+          summary[dc.key].regular += r.days[dc.key].regular;
+          summary[dc.key].overtime += r.days[dc.key].overtime;
+        });
+        summary.totalRegular += r.totalRegular;
+        summary.totalEveningOt += r.totalEveningOt;
+        summary.totalWeekendOt += r.totalWeekendOt;
       });
 
       function warnWeekdayRegular(v){ return v !== 8; }
@@ -907,7 +793,6 @@
       let thead = `
         <thead>
           <tr>
-            <th class="w-action" rowspan="2">操作</th>
             <th class="w-job" rowspan="2">工时类别</th>
             <th class="w-project" rowspan="2">项目号</th>
             <th class="w-unit" rowspan="2">单元号</th>
@@ -936,40 +821,29 @@
         </thead>`;
 
       let bodyRows = "";
-      rows.forEach(r => {
-        const day = String(r.weekday || "");
-        const regular = Number(r.regularHours || 0);
-        const overtime = Number(r.otWeekday || 0) + Number(r.otWeekend || 0);
-        const days = {"一":{regular:"",overtime:""},"二":{regular:"",overtime:""},"三":{regular:"",overtime:""},"四":{regular:"",overtime:""},"五":{regular:"",overtime:""},"六":{regular:"",overtime:""},"日":{regular:"",overtime:""}};
-        if(days[day]){
-          days[day].regular = regular || "";
-          days[day].overtime = overtime || "";
-        }
-        const isSelected = String(selectedRecordId) === String(r.id);
+      Array.from(rowMap.values()).forEach(r => {
         bodyRows += `
-          <tr class="${isSelected ? 'selected-row' : ''}">
-            <td class="w-action"><button type="button" class="op-btn ${isSelected ? 'active' : ''}" onclick="selectRecord('${safe(r.id)}')">${isSelected ? '已选中' : '选中'}</button></td>
+          <tr>
             <td class="cell-left w-job">${safe(r.task)}</td>
             <td class="w-project">${safe(r.project)}</td>
             <td class="w-unit">${safe(r.unit)}</td>
             <td class="w-remark">${safe(r.remark)}</td>
-            <td>${days["一"].regular}</td><td>${days["一"].overtime}</td>
-            <td>${days["二"].regular}</td><td>${days["二"].overtime}</td>
-            <td>${days["三"].regular}</td><td>${days["三"].overtime}</td>
-            <td>${days["四"].regular}</td><td>${days["四"].overtime}</td>
-            <td>${days["五"].regular}</td><td>${days["五"].overtime}</td>
-            <td>${days["六"].overtime}</td>
-            <td>${days["日"].overtime}</td>
-            <td>${regular || ""}</td>
-            <td>${Number(r.otWeekday || 0) || ""}</td>
-            <td>${Number(r.otWeekend || 0) || ""}</td>
+            <td>${r.days["一"].regular || ""}</td><td>${r.days["一"].overtime || ""}</td>
+            <td>${r.days["二"].regular || ""}</td><td>${r.days["二"].overtime || ""}</td>
+            <td>${r.days["三"].regular || ""}</td><td>${r.days["三"].overtime || ""}</td>
+            <td>${r.days["四"].regular || ""}</td><td>${r.days["四"].overtime || ""}</td>
+            <td>${r.days["五"].regular || ""}</td><td>${r.days["五"].overtime || ""}</td>
+            <td>${r.days["六"].overtime || ""}</td>
+            <td>${r.days["日"].overtime || ""}</td>
+            <td>${r.totalRegular || ""}</td>
+            <td>${r.totalEveningOt || ""}</td>
+            <td>${r.totalWeekendOt || ""}</td>
           </tr>`;
       });
 
       const tdClass = (warn) => warn ? ' class="warn-cell"' : '';
       const sumRow = `
         <tr>
-          <td></td>
           <td></td>
           <td></td>
           <td></td>
@@ -1003,7 +877,7 @@
         </div>`;
     }
 
-    function buildSubmitSignature(payload){    function buildSubmitSignature(payload){
+    function buildSubmitSignature(payload){
       return JSON.stringify({
         employeeId: payload.employeeId,
         week: payload.week,
@@ -1018,23 +892,20 @@
       });
     }
     function existsExactDuplicate(signature){
-      return currentWeekRecords.some(r => {
-        if(editingRecordId && String(r.id) === String(editingRecordId)) return false;
-        return JSON.stringify({
-          employeeId: r.employeeId,
-          week: r.week,
-          weekday: r.weekday,
-          task: r.task,
-          project: r.project,
-          unit: r.unit,
-          regularHours: Number(r.regularHours || 0),
-          otWeekday: Number(r.otWeekday || 0),
-          otWeekend: Number(r.otWeekend || 0),
-          remark: String(r.remark || "").trim()
-        }) === signature;
-      });
+      return currentWeekRecords.some(r => JSON.stringify({
+        employeeId: r.employeeId,
+        week: r.week,
+        weekday: r.weekday,
+        task: r.task,
+        project: r.project,
+        unit: r.unit,
+        regularHours: Number(r.regularHours || 0),
+        otWeekday: Number(r.otWeekday || 0),
+        otWeekend: Number(r.otWeekend || 0),
+        remark: String(r.remark || "").trim()
+      }) === signature);
     }
-    function isFastRepeat(signature){    function isFastRepeat(signature){
+    function isFastRepeat(signature){
       const prevSig = localStorage.getItem("last_submit_signature");
       const prevTs = Number(localStorage.getItem("last_submit_time") || 0);
       return prevSig === signature && (Date.now() - prevTs) < 15000;
@@ -1055,27 +926,9 @@
       if(isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
       if(!isWeekendDay(state.weekday) && state.otWeekend !== 0) return "工作日不能填写周末加班。";
       if(state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~12 之间。";
-
-      const totals = getWeekdayTotals(state.weekday, editingRecordId);
-      if(isWeekendDay(state.weekday)) {
-        if(state.regularHours !== 0) return "周末正常工时必须为 0。";
-        const totalWeekendAfter = totals.otWeekend + Number(state.otWeekend);
-        if(totalWeekendAfter < 0 || totalWeekendAfter > 24) return `周末加班（本次录入 + 已提交）累计后必须在 0~24h 之间，当前将变成 ${totalWeekendAfter}h。`;
-        return "";
-      }
-
-      const totalRegularAfter = totals.regular + Number(state.regularHours);
-      if(totalRegularAfter !== 8) return `工作日正常工时（本次录入 + 已提交）合计必须等于 8h，当前将变成 ${totalRegularAfter}h。`;
-
-      const singleWeekdayOt = Number(state.otWeekday);
-      if(!(singleWeekdayOt === 0 || singleWeekdayOt === 4)) return "工作日加班单次只能填写 0h 或 4h。";
-      const totalWeekdayOtAfter = totals.otWeekday + singleWeekdayOt;
-      if(!(totalWeekdayOtAfter === 0 || totalWeekdayOtAfter === 4)) return `工作日加班（本次录入 + 已提交）累计后只能是 0h 或 4h，当前将变成 ${totalWeekdayOtAfter}h。`;
-
       return "";
     }
-
-    async function submitForm(){    async function submitForm(){
+    async function submitForm(){
       if(isSubmitting){ showMsg("正在提交中，请勿重复点击。", false); return; }
       const err = validate();
       if(err){ showMsg(err, false); return; }
@@ -1103,18 +956,14 @@
         isSubmitting = true;
         $("submitBtn").disabled = true;
         showMsg("正在提交，请稍候…", true);
-        const submitUrl = editingRecordId ? getRowUrl(editingRecordId) : API_URL;
-        const submitMethod = editingRecordId ? "PATCH" : "POST";
-        const res = await fetch(submitUrl, {
-          method: submitMethod,
+        const res = await fetch(API_URL, {
+          method: "POST",
           headers: {"Authorization": "Token " + API_TOKEN, "Content-Type": "application/json"},
           body: JSON.stringify(payload)
         });
         if(!res.ok) throw new Error("接口返回失败状态：" + res.status);
         saveLastSubmit(signature);
-        showMsg(editingRecordId ? "✅ 修改成功。" : "✅ 提交成功。", true);
-        editingRecordId = null;
-        selectedRecordId = null;
+        showMsg("✅ 提交成功。", true);
         state.weekday = "";
         state.task = "";
         state.project = "";
@@ -1146,7 +995,6 @@
       refreshDisplays();
       syncHourSectionByWeekday();
       renderWeekRecords([]);
-      updateRecordActionButtons();
     }
     init();
   </script>
