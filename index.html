@@ -111,6 +111,12 @@
       color:#374151;
     }
     .field .req{ color:#d97706; margin-left:4px; }
+    .field.disabled-field label{ color:#9ca3af; }
+    .field-note{
+      margin-top:4px;
+      font-size:12px;
+      color:#6b7280;
+    }
     textarea{
       width:100%;
       padding:10px 12px;
@@ -130,7 +136,7 @@
     .chip-grid{ display:grid; gap:6px; }
     .week-grid{ grid-template-columns: repeat(4, 1fr); }
     .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
-    .task-grid{ grid-template-columns: repeat(5, 1fr); }
+    .task-grid{ grid-template-columns: repeat(4, 1fr); }
     .project-grid{ grid-template-columns: repeat(6, 1fr); }
     .unit-grid{ grid-template-columns: repeat(5, 1fr); }
     .chip{
@@ -290,6 +296,7 @@
       vertical-align:middle;
       min-width:58px;
       height:32px;
+      line-height:1.15;
     }
     .record-table th{
       background:var(--table-head);
@@ -351,13 +358,21 @@
       .count-btn{ width:40px; height:40px; flex-basis:40px; }
       .count-value{ font-size:22px; }
       .quick-btn{ padding:4px 7px; font-size:12px; min-width:38px; }
-      table.record-table{ font-size:12px; }
+
+      /* 手机端表格压缩版 */
+      table.record-table{ font-size:11px; }
       .record-table th,
-      .record-table td{ min-width:50px; height:40px; padding:4px 3px; }
-      .record-table .w-job{ min-width:100px; }
-      .record-table .w-project{ min-width:200px; }
-      .record-table .w-unit{ min-width:70px; }
-      .record-table .w-remark{ min-width:92px; }
+      .record-table td{
+        min-width:42px;
+        height:28px;
+        padding:2px 2px;
+        line-height:1.05;
+      }
+      .record-table .w-job{ min-width:70px; }
+      .record-table .w-project{ min-width:98px; }
+      .record-table .w-unit{ min-width:54px; }
+      .record-table .w-remark{ min-width:70px; }
+      .record-table .cell-left{ padding-left:4px; }
     }
   </style>
 </head>
@@ -407,13 +422,15 @@
         <label>工时类别<span class="req">*</span></label>
         <div class="chip-grid task-grid" id="taskChips"></div>
       </div>
-      <div class="field">
-        <label>项目号<span class="req">*</span></label>
+      <div class="field" id="projectField">
+        <label id="projectLabel">项目号<span class="req">*</span></label>
         <div class="chip-grid project-grid" id="projectChips"></div>
+        <div class="field-note hidden" id="projectNote"></div>
       </div>
-      <div class="field">
-        <label>单元号<span class="req">*</span></label>
+      <div class="field" id="unitField">
+        <label id="unitLabel">单元号<span class="req">*</span></label>
         <div class="chip-grid unit-grid" id="unitChips"></div>
+        <div class="field-note hidden" id="unitNote"></div>
       </div>
 
       <div class="hours-box">
@@ -494,6 +511,9 @@
       otWeekday: [0,1,2,3,4],
       otWeekend: [0,1,2,3,4,8]
     };
+    const TASKS_NO_PROJECT = ["仓库作业","其它工作","请假"];
+    const TASKS_PROJECT_ONLY = ["车间管理"];
+
     const state = { week:"", weekday:"", task:"", project:"", unit:"", regularHours:8, otWeekday:0, otWeekend:0 };
     let isSubmitting = false;
     let currentWeekRecords = [];
@@ -503,6 +523,17 @@
     function showMsg(text, ok=true){ const el=$("msg"); el.className="msg "+(ok?"ok":"err"); el.innerHTML=text; }
     function safe(v){ return String(v ?? "").replace(/[<>&"]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[s])); }
     function isWeekendDay(day){ return day === "六" || day === "日"; }
+    function needsProject(){ return !TASKS_NO_PROJECT.includes(state.task || ""); }
+    function needsUnit(){ return !(TASKS_NO_PROJECT.includes(state.task || "") || TASKS_PROJECT_ONLY.includes(state.task || "")); }
+
+    function setDisabledPlaceholder(containerId, text){
+      const container = $(containerId);
+      container.innerHTML = "";
+      const item = document.createElement("div");
+      item.className = "chip disabled";
+      item.innerText = text;
+      container.appendChild(item);
+    }
 
     function renderChips(containerId, values, fieldName, onClick){
       const container = $(containerId);
@@ -521,16 +552,19 @@
         chip.dataset.value = v;
         chip.dataset.field = fieldName;
         chip.onclick = async () => {
+          if(chip.classList.contains("disabled")) return;
           if(typeof onClick === "function") await onClick(v);
           else {
             state[fieldName] = v;
             if(fieldName === "weekday") syncHourSectionByWeekday();
+            if(fieldName === "task") applyTaskRules();
             renderAllActiveChips();
           }
         };
         container.appendChild(chip);
       });
     }
+
     function renderAllActiveChips(){
       document.querySelectorAll(".chip").forEach(chip => {
         const field = chip.dataset.field;
@@ -539,15 +573,65 @@
         chip.classList.toggle("active", state[field] === value);
       });
     }
-    function renderProjectChips(){
-      const projects = Object.keys(projectUnits);
-      renderChips("projectChips", projects, "project", function(v){ state.project=v; state.unit=""; renderUnitChips(); renderAllActiveChips(); });
+
+    function toggleFieldState(fieldId, labelId, noteId, disabled, noteText){
+      const field = $(fieldId);
+      const note = $(noteId);
+      if(disabled){
+        field.classList.add("disabled-field");
+        note.classList.remove("hidden");
+        note.textContent = noteText || "";
+      }else{
+        field.classList.remove("disabled-field");
+        note.classList.add("hidden");
+        note.textContent = "";
+      }
     }
+
+    function renderProjectChips(){
+      if(!needsProject()){
+        setDisabledPlaceholder("projectChips", "该类别无需项目号");
+        return;
+      }
+      const projects = Object.keys(projectUnits);
+      renderChips("projectChips", projects, "project", function(v){
+        state.project = v;
+        if(needsUnit()) state.unit = "";
+        renderUnitChips();
+        renderAllActiveChips();
+      });
+    }
+
     function renderUnitChips(){
+      if(!needsUnit()){
+        const text = TASKS_NO_PROJECT.includes(state.task || "") ? "该类别无需单元号" : "车间管理无需单元号";
+        setDisabledPlaceholder("unitChips", text);
+        return;
+      }
       const units = state.project && projectUnits[state.project] ? projectUnits[state.project] : [];
       renderChips("unitChips", units, "unit", function(v){ state.unit=v; renderAllActiveChips(); });
       renderAllActiveChips();
     }
+
+    function applyTaskRules(){
+      if(!needsProject()){
+        state.project = "";
+        state.unit = "";
+        toggleFieldState("projectField", "projectLabel", "projectNote", true, "当前工时类别不涉及项目信息");
+        toggleFieldState("unitField", "unitLabel", "unitNote", true, "当前工时类别不涉及单元信息");
+      }else if(!needsUnit()){
+        state.unit = "";
+        toggleFieldState("projectField", "projectLabel", "projectNote", false, "");
+        toggleFieldState("unitField", "unitLabel", "unitNote", true, "车间管理只需选择项目号");
+      }else{
+        toggleFieldState("projectField", "projectLabel", "projectNote", false, "");
+        toggleFieldState("unitField", "unitLabel", "unitNote", false, "");
+      }
+      renderProjectChips();
+      renderUnitChips();
+      renderAllActiveChips();
+    }
+
     function renderQuickButtons(){
       renderQuickRow("regularHoursQuick", "regularHours", quickHoursMap.regularHours, true);
       renderQuickRow("otWeekdayQuick", "otWeekday", quickHoursMap.otWeekday, false);
@@ -835,8 +919,8 @@
       if(!state.week) return "请选择 Week。";
       if(!state.weekday) return "请选择星期。";
       if(!state.task) return "请选择工时类别。";
-      if(!state.project) return "请选择项目号。";
-      if(!state.unit) return "请选择单元号。";
+      if(needsProject() && !state.project) return "请选择项目号。";
+      if(needsUnit() && !state.unit) return "请选择单元号。";
       if(state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~12 之间。";
       if(!isWeekendDay(state.weekday) && (state.otWeekday < 0 || state.otWeekday > 4)) return "工作日加班必须在 0~4 小时之间。";
       if(isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
@@ -858,8 +942,8 @@
         week: state.week,
         weekday: state.weekday,
         task: state.task,
-        project: state.project,
-        unit: state.unit,
+        project: needsProject() ? state.project : "",
+        unit: needsUnit() ? state.unit : "",
         regularHours: Number(state.regularHours),
         otWeekday: Number(state.otWeekday),
         otWeekend: Number(state.otWeekend),
@@ -880,9 +964,19 @@
         if(!res.ok) throw new Error("接口返回失败状态：" + res.status);
         saveLastSubmit(signature);
         showMsg("✅ 提交成功。", true);
-        state.weekday = ""; state.task = ""; state.project = ""; state.unit = ""; state.regularHours = 8; state.otWeekday = 0; state.otWeekend = 0;
+        state.weekday = "";
+        state.task = "";
+        state.project = "";
+        state.unit = "";
+        state.regularHours = 8;
+        state.otWeekday = 0;
+        state.otWeekend = 0;
         $("remark").value = "";
-        renderAllActiveChips(); refreshDisplays(); renderProjectChips(); renderUnitChips(); syncHourSectionByWeekday(); await loadWeekRecords();
+        applyTaskRules();
+        renderAllActiveChips();
+        refreshDisplays();
+        syncHourSectionByWeekday();
+        await loadWeekRecords();
       }catch(e){
         showMsg("❌ 提交失败：" + e.message, false);
       }finally{
@@ -894,9 +988,8 @@
       initEmployee();
       renderChips("weekChips", weekOptions, "week", async function(v){ state.week = v; renderAllActiveChips(); await loadWeekRecords(); });
       renderChips("weekdayChips", weekdayOptions, "weekday", function(v){ state.weekday = v; syncHourSectionByWeekday(); renderAllActiveChips(); });
-      renderChips("taskChips", taskOptions, "task");
-      renderProjectChips();
-      renderUnitChips();
+      renderChips("taskChips", taskOptions, "task", function(v){ state.task = v; applyTaskRules(); renderAllActiveChips(); });
+      applyTaskRules();
       renderQuickButtons();
       renderAllActiveChips();
       refreshDisplays();
