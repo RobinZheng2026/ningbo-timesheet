@@ -494,7 +494,7 @@
       "P0384374": ["U120","U126","U126-1","U335","U343","U361","U368","U368-1","U368-3","U371","U373","U381","U387","U451","U641A","U641B","U641C","U641D"],
       "P0384374_V": ["536474"]
     };
-    const weekOptions = ["W25","W26","W27","W28"];
+    const weekOptions = ["W25","W26","W27","W28","W29","W30"];
     const weekdayOptions = ["一","二","三","四","五","六","日"];
     const taskOptions = ["机械组装","保温作业","电气安装","额外工时","车间管理","其它工作","仓库作业","请假"];
     const dayConfigs = [
@@ -915,18 +915,55 @@
       localStorage.setItem("last_submit_time", String(Date.now()));
     }
     function validate(){
-      if(!empId || !empName) return "未识别到有效员工信息，请使用员工专属二维码扫码。";
-      if(!state.week) return "请选择 Week。";
-      if(!state.weekday) return "请选择星期。";
-      if(!state.task) return "请选择工时类别。";
-      if(needsProject() && !state.project) return "请选择项目号。";
-      if(needsUnit() && !state.unit) return "请选择单元号。";
-      if(state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~8 之间。";
-      if(!isWeekendDay(state.weekday) && (state.otWeekday < 0 || state.otWeekday > 4)) return "工作日加班必须在 0~4 小时之间。";
-      if(isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
-      if(!isWeekendDay(state.weekday) && state.otWeekend !== 0) return "工作日不能填写周末加班。";
-      if(state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~8 之间。";
-      return "";
+  if(!empId || !empName) return "未识别员工";
+  if(!state.week) return "请选择Week";
+  if(!state.weekday) return "请选择星期";
+  if(!state.task) return "请选择工时类别";
+
+  if(needsProject() && !state.project) return "请选择项目号";
+  if(needsUnit() && !state.unit) return "请选择单元号";
+
+  // ✅ 正常工时
+  if(state.regularHours < 0 || state.regularHours > 8)
+    return "正常工时必须0~8";
+
+  // ✅ 汇总校验
+  let dayRecords = currentWeekRecords.filter(r =>
+    r.weekday === state.weekday
+  );
+
+  let totalRegular = state.regularHours +
+    dayRecords.reduce((s,r)=>s+Number(r.regularHours||0),0);
+
+  // 编辑时排除自身
+  if(editingId){
+    dayRecords = dayRecords.filter(r=>r.id!==editingId);
+  }
+
+  totalRegular = state.regularHours +
+    dayRecords.reduce((s,r)=>s+Number(r.regularHours||0),0);
+
+  if(totalRegular > 8)
+    return "当天正常工时累计不能超过8小时";
+
+  if(totalRegular !== 8)
+    return "当天正常工时总和必须=8";
+
+  // ✅ 工作日加班
+  if(!isWeekendDay(state.weekday)){
+    if(state.otWeekday < 0 || state.otWeekday > 4)
+      return "工作日加班0~4";
+
+    let totalOT = state.otWeekday +
+      dayRecords.reduce((s,r)=>s+Number(r.otWeekday||0),0);
+
+    if(totalOT !== 0 && totalOT !== 4)
+      return "工作日加班总和必须是0或4";
+  }
+
+  return "";
+}
+
     }
     async function submitForm(){
       if(isSubmitting){ showMsg("正在提交中，请勿重复点击。", false); return; }
