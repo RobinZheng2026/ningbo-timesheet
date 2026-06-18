@@ -921,11 +921,11 @@
       if(!state.task) return "请选择工时类别。";
       if(needsProject() && !state.project) return "请选择项目号。";
       if(needsUnit() && !state.unit) return "请选择单元号。";
-      if(state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~12 之间。";
+      if(state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~8 之间。";
       if(!isWeekendDay(state.weekday) && (state.otWeekday < 0 || state.otWeekday > 4)) return "工作日加班必须在 0~4 小时之间。";
       if(isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
       if(!isWeekendDay(state.weekday) && state.otWeekend !== 0) return "工作日不能填写周末加班。";
-      if(state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~12 之间。";
+      if(state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~8 之间。";
       return "";
     }
     async function submitForm(){
