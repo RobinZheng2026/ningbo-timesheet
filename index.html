@@ -36,7 +36,7 @@
     }
 
     .header{
-      background: var(--brand);
+      background:var(--brand);
       color:#fff;
       text-align:center;
       padding:14px 12px;
@@ -55,7 +55,7 @@
     .card{
       background:#fff;
       border-radius:18px;
-      box-shadow: var(--shadow);
+      box-shadow:var(--shadow);
       padding:12px 10px 16px;
       border:1px solid rgba(0,0,0,.04);
     }
@@ -156,12 +156,16 @@
       box-shadow:0 0 0 3px rgba(59,130,246,.15);
     }
 
-    .chip-grid{ display:grid; gap:6px; }
-    .week-grid{ grid-template-columns: repeat(4, 1fr); }
-    .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
-    .task-grid{ grid-template-columns: repeat(4, 1fr); }
-    .project-grid{ grid-template-columns: repeat(6, 1fr); }
-    .unit-grid{ grid-template-columns: repeat(5, 1fr); }
+    .chip-grid{
+      display:grid;
+      gap:6px;
+    }
+
+    .week-grid{ grid-template-columns:repeat(4, 1fr); }
+    .weekday-grid{ grid-template-columns:repeat(7, 1fr); }
+    .task-grid{ grid-template-columns:repeat(4, 1fr); }
+    .project-grid{ grid-template-columns:repeat(6, 1fr); }
+    .unit-grid{ grid-template-columns:repeat(5, 1fr); }
 
     .chip{
       border:1px solid var(--chip-border);
@@ -307,12 +311,22 @@
       box-shadow:0 8px 18px rgba(0,120,212,.20);
     }
 
-    .btn-primary:hover{ background: var(--brand-dark); }
+    .btn-primary:hover{ background:var(--brand-dark); }
 
     .btn-primary:disabled{
       background:#9ca3af;
       box-shadow:none;
       cursor:not-allowed;
+    }
+
+    .btn-secondary{
+      background:#e5e7eb;
+      color:#111827;
+    }
+
+    .btn-danger{
+      background:#dc2626;
+      color:#fff;
     }
 
     .msg{
@@ -386,10 +400,11 @@
       font-weight:700;
     }
 
-    .record-table .w-job{ min-width:80px; }
+    .record-table .w-job{ min-width:82px; }
     .record-table .w-project{ min-width:120px; }
     .record-table .w-unit{ min-width:76px; }
     .record-table .w-remark{ min-width:106px; }
+    .record-table .w-action{ min-width:96px; }
 
     .record-table .cell-left{
       text-align:left;
@@ -429,8 +444,15 @@
       white-space:nowrap;
     }
 
-    .edit-btn{ background:#e0f2fe; color:#075985; }
-    .delete-btn{ background:#fee2e2; color:#991b1b; }
+    .edit-btn{
+      background:#e0f2fe;
+      color:#075985;
+    }
+
+    .delete-btn{
+      background:#fee2e2;
+      color:#991b1b;
+    }
 
     .modal-mask{
       position:fixed;
@@ -473,16 +495,6 @@
       margin-top:14px;
     }
 
-    .btn-secondary{
-      background:#e5e7eb;
-      color:#111827;
-    }
-
-    .btn-danger{
-      background:#dc2626;
-      color:#fff;
-    }
-
     .foot{
       margin-top:16px;
       text-align:center;
@@ -490,22 +502,22 @@
       font-size:12px;
     }
 
-    @media (max-width: 680px){
-      .task-grid{ grid-template-columns: repeat(4, 1fr); }
-      .project-grid{ grid-template-columns: repeat(4, 1fr); }
-      .unit-grid{ grid-template-columns: repeat(4, 1fr); }
-      .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
+    @media (max-width:680px){
+      .task-grid{ grid-template-columns:repeat(4, 1fr); }
+      .project-grid{ grid-template-columns:repeat(4, 1fr); }
+      .unit-grid{ grid-template-columns:repeat(4, 1fr); }
+      .weekday-grid{ grid-template-columns:repeat(7, 1fr); }
       .chip{ font-size:13px; min-height:40px; padding:7px 4px; }
     }
 
-    @media (max-width: 560px){
+    @media (max-width:560px){
       .wrap{ padding:0 8px 18px; }
       .card{ padding:10px 8px 14px; }
-      .week-grid{ grid-template-columns: repeat(4, 1fr); }
-      .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
-      .task-grid{ grid-template-columns: repeat(3, 1fr); }
-      .project-grid{ grid-template-columns: repeat(3, 1fr); }
-      .unit-grid{ grid-template-columns: repeat(3, 1fr); }
+      .week-grid{ grid-template-columns:repeat(4, 1fr); }
+      .weekday-grid{ grid-template-columns:repeat(7, 1fr); }
+      .task-grid{ grid-template-columns:repeat(3, 1fr); }
+      .project-grid{ grid-template-columns:repeat(3, 1fr); }
+      .unit-grid{ grid-template-columns:repeat(3, 1fr); }
       .hours-box{ grid-template-columns:1fr 1fr; gap:8px; }
       .id-row{ grid-template-columns:repeat(3, minmax(0,1fr)); }
       .id-card{ padding:7px 8px; min-height:60px; }
@@ -520,6 +532,7 @@
       .quick-btn{ padding:4px 7px; font-size:12px; min-width:38px; }
 
       table.record-table{ font-size:11px; }
+
       .record-table th,
       .record-table td{
         min-width:42px;
@@ -527,10 +540,14 @@
         padding:2px 2px;
         line-height:1.05;
       }
+
       .record-table .w-job{ min-width:70px; }
       .record-table .w-project{ min-width:98px; }
       .record-table .w-unit{ min-width:54px; }
       .record-table .w-remark{ min-width:70px; }
+      .record-table .w-action{ min-width:86px; }
+
+      .record-table .cell-left{ padding-left:4px; }
 
       .modal-grid{
         grid-template-columns:1fr;
@@ -565,14 +582,14 @@
 
       <div class="tip">
         选择 Week 后，会自动显示该员工本周已提交的工时表格和原始记录。<br>
-        校验规则：工作日正常工时当天汇总不能超过 8h；工作日加班当天汇总只能是 0h 或 4h；周末加班当天汇总不能超过 8h。<br>
-        如需修正已提交记录，请在“原始记录管理”中点击修改或删除。
+        校验规则：工作日正常工时当天汇总不能超过 8h；工作日加班当天汇总不能超过 4h；周末加班当天汇总不能超过 8h。<br>
+        工作日加班允许分多条记录提交，汇总表会提示当天最终加班是否为 0h 或 4h。
       </div>
 
       <div class="records-wrap">
         <div class="sec-title">本周已提交工时明细</div>
         <div class="record-tip">
-          上方为汇总表格，底部为原始记录管理。红色格表示异常：工作日正常工时不是 8h；工作日加班不是 0h 或 4h。
+          上方为汇总表，底部为原始记录管理。红色格表示异常：工作日正常工时不是 8h；工作日加班汇总不是 0h 或 4h。
         </div>
         <div id="recordList">
           <div class="record-empty">请选择 Week 查看本周记录</div>
@@ -662,7 +679,7 @@
       <div class="modal-grid">
         <div class="field">
           <label>Week</label>
-          <select id="editWeek"></select>
+          <select id="editWeek" disabled></select>
         </div>
 
         <div class="field">
@@ -715,8 +732,13 @@
 
   <script>
     const TABLE_ID = "1030254";
-    const API_URL = "https://api.baserow.io/api/database/rows/table/" + TABLE_ID + "/?user_field_names=true";
-    const API_TOKEN = "vHwFROkQHYBYJck1Lv4i6kqitbbJI8e1";
+
+    const API_URL =
+      "https://api.baserow.io/api/database/rows/table/" +
+      TABLE_ID +
+      "/?user_field_names=true&size=200";
+
+    const API_TOKEN = "PASTE_YOUR_BASEROW_TOKEN_HERE";
 
     const employeeMap = {
       "1237794":"郑",
@@ -766,8 +788,9 @@
     const weekOptions = ["W25","W26","W27","W28"];
     const weekdayOptions = ["一","二","三","四","五","六","日"];
     const taskOptions = ["机械组装","保温作业","电气安装","额外工时","其它工作","仓库作业","请假"];
-    const taskNoProject = ["仓库作业","其它工作","请假"];
-    const taskProjectOnly = ["车间管理"];
+
+    const TASKS_NO_PROJECT = ["仓库作业","其它工作","请假"];
+    const TASKS_PROJECT_ONLY = ["车间管理"];
 
     const dayConfigs = [
       { key:"一", label:"周一", type:"weekday" },
@@ -780,9 +803,9 @@
     ];
 
     const quickHoursMap = {
-      regularHours: [0,1,2,3,4,8],
-      otWeekday: [0,1,2,3,4],
-      otWeekend: [0,1,2,3,4,8]
+      regularHours:[0,1,2,3,4,8],
+      otWeekday:[0,1,2,3,4],
+      otWeekend:[0,1,2,3,4,8]
     };
 
     const state = {
@@ -800,14 +823,20 @@
     let currentWeekRecords = [];
     let editingRowId = "";
 
-    function $(id){ return document.getElementById(id); }
+    function $(id){
+      return document.getElementById(id);
+    }
 
     function getParam(name){
       return new URL(window.location.href).searchParams.get(name);
     }
 
     function rowUrl(id){
-      return "https://api.baserow.io/api/database/rows/table/" + TABLE_ID + "/" + id + "/?user_field_names=true";
+      return "https://api.baserow.io/api/database/rows/table/" +
+        TABLE_ID +
+        "/" +
+        id +
+        "/?user_field_names=true";
     }
 
     function showMsg(text, ok=true){
@@ -818,7 +847,12 @@
 
     function safe(v){
       return String(v ?? "").replace(/[<>&"]/g, function(s){
-        return {"<":"&lt;",">":"&gt;","&":"&amp;",'"':"&quot;"}[s];
+        return {
+          "<":"&lt;",
+          ">":"&gt;",
+          "&":"&amp;",
+          '"':"&quot;"
+        }[s];
       });
     }
 
@@ -832,11 +866,14 @@
     }
 
     function needsProjectByTask(task){
-      return !taskNoProject.includes(task || "");
+      return !TASKS_NO_PROJECT.includes(task || "");
     }
 
     function needsUnitByTask(task){
-      return !(taskNoProject.includes(task || "") || taskProjectOnly.includes(task || ""));
+      return !(
+        TASKS_NO_PROJECT.includes(task || "") ||
+        TASKS_PROJECT_ONLY.includes(task || "")
+      );
     }
 
     function needsProject(){
@@ -874,9 +911,11 @@
     function setDisabledPlaceholder(containerId, text){
       const container = $(containerId);
       container.innerHTML = "";
+
       const item = document.createElement("div");
       item.className = "chip disabled";
       item.innerText = text;
+
       container.appendChild(item);
     }
 
@@ -922,7 +961,9 @@
       document.querySelectorAll(".chip").forEach(function(chip){
         const field = chip.dataset.field;
         const value = chip.dataset.value;
+
         if(!field) return;
+
         chip.classList.toggle("active", state[field] === value);
       });
     }
@@ -952,7 +993,9 @@
 
       renderChips("projectChips", projects, "project", function(v){
         state.project = v;
+
         if(needsUnit()) state.unit = "";
+
         renderUnitChips();
         renderAllActiveChips();
       });
@@ -960,12 +1003,19 @@
 
     function renderUnitChips(){
       if(!needsUnit()){
-        const text = taskNoProject.includes(state.task || "") ? "该类别无需单元号" : "车间管理无需单元号";
+        const text = TASKS_NO_PROJECT.includes(state.task || "")
+          ? "该类别无需单元号"
+          : "车间管理无需单元号";
+
         setDisabledPlaceholder("unitChips", text);
         return;
       }
 
-      const units = state.project && projectUnits[state.project] ? projectUnits[state.project] : [];
+      const units =
+        state.project && projectUnits[state.project]
+          ? projectUnits[state.project]
+          : [];
+
       renderChips("unitChips", units, "unit", function(v){
         state.unit = v;
         renderAllActiveChips();
@@ -978,10 +1028,12 @@
       if(!needsProject()){
         state.project = "";
         state.unit = "";
+
         toggleFieldState("projectField", "projectNote", true, "当前工时类别不涉及项目信息");
         toggleFieldState("unitField", "unitNote", true, "当前工时类别不涉及单元信息");
       }else if(!needsUnit()){
         state.unit = "";
+
         toggleFieldState("projectField", "projectNote", false, "");
         toggleFieldState("unitField", "unitNote", true, "当前工时类别只需选择项目号");
       }else{
@@ -1008,7 +1060,9 @@
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "quick-btn";
-        btn.textContent = v === 0 ? (regular ? "0小时" : "清零") : v + "小时";
+        btn.textContent = v === 0
+          ? regular ? "0小时" : "清零"
+          : v + "小时";
 
         btn.onclick = function(){
           setNumber(field, v);
@@ -1037,6 +1091,7 @@
       if(next < 0) next = 0;
 
       const max = getMaxHours(field);
+
       if(next > max) next = max;
 
       state[field] = next;
@@ -1073,17 +1128,21 @@
       if(weekend){
         state.regularHours = 0;
         state.otWeekday = 0;
+
         $("weekdayOTCard").classList.add("hidden");
         $("weekendOTCard").classList.remove("hidden");
+
         setRegularInputsDisabled(true);
       }else{
         if(state.regularHours === 0) state.regularHours = 8;
+
         state.otWeekend = 0;
 
         if(state.otWeekday > 4) state.otWeekday = 4;
 
         $("weekdayOTCard").classList.remove("hidden");
         $("weekendOTCard").classList.add("hidden");
+
         setRegularInputsDisabled(false);
       }
 
@@ -1111,6 +1170,7 @@
         const data = await res.json();
 
         let rows = [];
+
         if(Array.isArray(data)) rows = data;
         else if(Array.isArray(data.results)) rows = data.results;
 
@@ -1120,7 +1180,8 @@
         });
 
         rows.sort(function(a,b){
-          return new Date(a.submitTime || 0).getTime() - new Date(b.submitTime || 0).getTime();
+          return new Date(a.submitTime || 0).getTime() -
+                 new Date(b.submitTime || 0).getTime();
         });
 
         currentWeekRecords = rows;
@@ -1156,7 +1217,10 @@
       }
 
       if(!rows || rows.length === 0){
-        box.innerHTML = '<div class="record-empty">当前员工在 ' + safe(state.week) + ' 还没有提交记录</div>';
+        box.innerHTML =
+          '<div class="record-empty">当前员工在 ' +
+          safe(state.week) +
+          ' 还没有提交记录</div>';
         return;
       }
 
@@ -1233,6 +1297,10 @@
         return !(v === 0 || v === 4);
       }
 
+      function tdClass(warn){
+        return warn ? ' class="warn-cell"' : "";
+      }
+
       const thead =
         '<thead>' +
           '<tr>' +
@@ -1285,10 +1353,6 @@
           '</tr>';
       });
 
-      function tdClass(warn){
-        return warn ? ' class="warn-cell"' : '';
-      }
-
       const sumRow =
         '<tr>' +
           '<td></td>' +
@@ -1318,14 +1382,14 @@
         rawRows +=
           '<tr>' +
             '<td>' + safe(r.weekday || "") + '</td>' +
-            '<td class="cell-left">' + safe(r.task || "") + '</td>' +
-            '<td>' + safe(r.project || "") + '</td>' +
-            '<td>' + safe(r.unit || "") + '</td>' +
+            '<td class="cell-left w-job">' + safe(r.task || "") + '</td>' +
+            '<td class="w-project">' + safe(r.project || "") + '</td>' +
+            '<td class="w-unit">' + safe(r.unit || "") + '</td>' +
             '<td>' + num(r.regularHours) + '</td>' +
             '<td>' + num(r.otWeekday) + '</td>' +
             '<td>' + num(r.otWeekend) + '</td>' +
-            '<td class="cell-left">' + safe(r.remark || "") + '</td>' +
-            '<td>' +
+            '<td class="w-remark">' + safe(r.remark || "") + '</td>' +
+            '<td class="w-action">' +
               '<button class="small-btn edit-btn" data-id="' + safe(r.id) + '">修改</button>' +
               '<button class="small-btn delete-btn" data-id="' + safe(r.id) + '">删除</button>' +
             '</td>' +
@@ -1357,7 +1421,7 @@
                 '<th>工作日<br>加班</th>' +
                 '<th>周末<br>加班</th>' +
                 '<th class="w-remark">备注</th>' +
-                '<th>操作</th>' +
+                '<th class="w-action">操作</th>' +
               '</tr>' +
             '</thead>' +
             '<tbody>' + rawRows + '</tbody>' +
@@ -1436,7 +1500,8 @@
     function isFastRepeat(signature){
       const prevSig = localStorage.getItem("last_submit_signature");
       const prevTs = Number(localStorage.getItem("last_submit_time") || 0);
-      return prevSig === signature && (Date.now() - prevTs) < 15000;
+
+      return prevSig === signature && Date.now() - prevTs < 15000;
     }
 
     function saveLastSubmit(signature){
@@ -1465,15 +1530,15 @@
       const weekend = isWeekendDay(payload.weekday);
 
       if(regular < 0 || regular > 8){
-        return "正常工时必须在 0~8 小时之间。";
+        return "正常工时单条记录必须在 0~8 小时之间。";
       }
 
       if(otWeekday < 0 || otWeekday > 4){
-        return "工作日加班必须在 0~4 小时之间。";
+        return "工作日加班单条记录必须在 0~4 小时之间。";
       }
 
       if(otWeekend < 0 || otWeekend > 8){
-        return "周末加班必须在 0~8 小时之间。";
+        return "周末加班单条记录必须在 0~8 小时之间。";
       }
 
       if(weekend){
@@ -1491,6 +1556,7 @@
       }
 
       const totals = getDayTotals(payload.week, payload.weekday, excludeRowId);
+
       const afterRegular = totals.regular + regular;
       const afterOtWeekday = totals.otWeekday + otWeekday;
       const afterOtWeekend = totals.otWeekend + otWeekend;
@@ -1499,20 +1565,12 @@
         return "提交后当天正常工时汇总为 " + afterRegular + "h，超过 8h，禁止提交。";
       }
 
-      if(!weekend){
-        if(afterOtWeekday > 4){
-          return "提交后当天工作日加班汇总为 " + afterOtWeekday + "h，超过 4h，禁止提交。";
-        }
-
-        if(!(afterOtWeekday === 0 || afterOtWeekday === 4)){
-          return "工作日加班当天汇总必须是 0h 或 4h。当前提交后汇总为 " + afterOtWeekday + "h，请调整。";
-        }
+      if(!weekend && afterOtWeekday > 4){
+        return "提交后当天工作日加班汇总为 " + afterOtWeekday + "h，超过 4h，禁止提交。";
       }
 
-      if(weekend){
-        if(afterOtWeekend > 8){
-          return "提交后当天周末加班汇总为 " + afterOtWeekend + "h，超过 8h，禁止提交。";
-        }
+      if(weekend && afterOtWeekend > 8){
+        return "提交后当天周末加班汇总为 " + afterOtWeekend + "h，超过 8h，禁止提交。";
       }
 
       const signature = buildSubmitSignature(payload);
@@ -1530,7 +1588,7 @@
         return;
       }
 
-      if(!API_TOKEN || API_TOKEN === "PASTE_YOUR_BASEROW_TOKEN_HERE"){
+      if(!API_TOKEN || API_TOKEN === "vHwFROkQHYBYJck1Lv4i6kqitbbJI8e1"){
         showMsg("请先把代码里的 API_TOKEN 替换成你自己的 Baserow Token。", false);
         return;
       }
@@ -1610,8 +1668,22 @@
 
     function optionHtml(values, selected){
       return values.map(function(v){
-        return '<option value="' + safe(v) + '"' + (String(v) === String(selected) ? " selected" : "") + '>' + safe(v) + '</option>';
+        return '<option value="' +
+          safe(v) +
+          '"' +
+          (String(v) === String(selected) ? " selected" : "") +
+          '>' +
+          safe(v) +
+          '</option>';
       }).join("");
+    }
+
+    function refreshEditUnitOptions(project, selectedUnit){
+      const units = project && projectUnits[project]
+        ? ["", ...projectUnits[project]]
+        : [""];
+
+      $("editUnit").innerHTML = optionHtml(units, selectedUnit || "");
     }
 
     function initEditOptions(row){
@@ -1625,11 +1697,6 @@
       refreshEditUnitOptions(row.project || "", row.unit || "");
       applyEditTaskRules();
       onEditWeekdayChange();
-    }
-
-    function refreshEditUnitOptions(project, selectedUnit){
-      const units = project && projectUnits[project] ? ["", ...projectUnits[project]] : [""];
-      $("editUnit").innerHTML = optionHtml(units, selectedUnit || "");
     }
 
     function onEditProjectChange(){
@@ -1663,12 +1730,15 @@
       if(isWeekendDay(day)){
         $("editRegularHours").value = 0;
         $("editRegularHours").disabled = true;
+
         $("editOtWeekday").value = 0;
         $("editOtWeekday").disabled = true;
+
         $("editOtWeekend").disabled = false;
       }else{
         $("editRegularHours").disabled = false;
         $("editOtWeekday").disabled = false;
+
         $("editOtWeekend").value = 0;
         $("editOtWeekend").disabled = true;
       }
@@ -1703,18 +1773,19 @@
 
     async function saveEdit(){
       if(!editingRowId){
-        showMsg("未找到要修改的记录。", false);
+        alert("未找到要修改的记录。");
         return;
       }
 
       const task = $("editTask").value;
-      const weekend = isWeekendDay($("editWeekday").value);
+      const weekday = $("editWeekday").value;
+      const weekend = isWeekendDay(weekday);
 
       const payload = {
         employeeId:empId,
         employeeName:empName,
         week:$("editWeek").value,
-        weekday:$("editWeekday").value,
+        weekday:weekday,
         task:task,
         project:needsProjectByTask(task) ? $("editProject").value : "",
         unit:needsUnitByTask(task) ? $("editUnit").value : "",
@@ -1758,6 +1829,7 @@
         if(!res.ok) throw new Error("修改失败，接口状态：" + res.status);
 
         closeEditModal();
+
         showMsg("✅ 修改成功。", true);
 
         state.week = payload.week;
@@ -1808,6 +1880,7 @@
         if(!res.ok) throw new Error("删除失败，接口状态：" + res.status);
 
         showMsg("✅ 删除成功。", true);
+
         await loadWeekRecords();
 
       }catch(e){
