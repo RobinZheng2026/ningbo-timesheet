@@ -23,10 +23,11 @@
       --chip-text:#1f4b7a;
       --soft-panel:#f3f4f6;
       --soft-panel-border:#cfd6de;
+      --summary-bg:#f8fbff;
+      --summary-border:#cfe5fb;
     }
 
     *{ box-sizing:border-box; }
-
     body{
       margin:0;
       font-family: Arial, "Microsoft YaHei", sans-serif;
@@ -87,12 +88,7 @@
       gap:4px;
       min-width:0;
     }
-
-    .id-label{
-      font-size:12px;
-      color:var(--sub);
-    }
-
+    .id-label{ font-size:12px; color:var(--sub); }
     .id-value{
       font-size:19px;
       font-weight:800;
@@ -100,7 +96,6 @@
       word-break:break-all;
       line-height:1.15;
     }
-
     .id-value.ok{ color:var(--ok); }
     .id-value.warn{ color:var(--warn); }
     .id-value.err{ color:var(--danger); }
@@ -117,7 +112,6 @@
     }
 
     .field{ margin-bottom:12px; }
-
     .field label{
       display:block;
       font-size:14px;
@@ -125,7 +119,6 @@
       margin-bottom:6px;
       color:#374151;
     }
-
     .field .req{ color:#d97706; margin-left:4px; }
 
     textarea{
@@ -140,17 +133,12 @@
       min-height:84px;
       resize:vertical;
     }
-
     textarea:focus{
       border-color:#93c5fd;
       box-shadow:0 0 0 3px rgba(59,130,246,.15);
     }
 
-    .chip-grid{
-      display:grid;
-      gap:6px;
-    }
-
+    .chip-grid{ display:grid; gap:6px; }
     .week-grid{ grid-template-columns: repeat(4, 1fr); }
     .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
     .task-grid{ grid-template-columns: repeat(5, 1fr); }
@@ -176,16 +164,13 @@
       line-height:1.15;
       word-break:break-word;
     }
-
     .chip:active{ transform:scale(.98); }
-
     .chip.active{
       background:var(--chip-active);
       color:#fff;
       border-color:var(--chip-active);
       box-shadow:0 6px 16px rgba(0,120,212,.22);
     }
-
     .chip.disabled{
       background:#f3f4f6;
       color:#9ca3af;
@@ -199,28 +184,24 @@
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
-
     .hour-card{
       border:1px solid var(--border);
       border-radius:14px;
       padding:10px;
       background:#fcfcfd;
     }
-
     .hour-title{
       font-size:14px;
       font-weight:700;
       margin-bottom:8px;
       color:#374151;
     }
-
     .count-row{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:10px;
     }
-
     .count-btn{
       width:42px;
       height:42px;
@@ -233,7 +214,6 @@
       cursor:pointer;
       flex:0 0 42px;
     }
-
     .count-value{
       flex:1;
       text-align:center;
@@ -241,14 +221,12 @@
       font-weight:800;
       color:#111827;
     }
-
     .quick-row{
       display:flex;
       gap:6px;
       margin-top:8px;
       flex-wrap:wrap;
     }
-
     .quick-btn{
       border:1px solid #dbeafe;
       background:#fff;
@@ -269,7 +247,6 @@
       flex-direction:column;
       gap:12px;
     }
-
     .btn{
       width:100%;
       border:none;
@@ -280,22 +257,14 @@
       cursor:pointer;
       transition:.15s ease;
     }
-
     .btn:active{ transform:scale(.99); }
-
     .btn-primary{
       background:var(--brand);
       color:#fff;
       box-shadow:0 8px 18px rgba(0,120,212,.20);
     }
-
     .btn-primary:hover{ background: var(--brand-dark); }
-
-    .btn-primary:disabled{
-      background:#9ca3af;
-      box-shadow:none;
-      cursor:not-allowed;
-    }
+    .btn-primary:disabled{ background:#9ca3af; box-shadow:none; cursor:not-allowed; }
 
     .msg{
       margin-top:14px;
@@ -305,76 +274,73 @@
       line-height:1.6;
       display:none;
     }
-
-    .msg.ok{
-      display:block;
-      background:#ecfdf5;
-      border:1px solid #bbf7d0;
-      color:#166534;
-    }
-
-    .msg.err{
-      display:block;
-      background:#fef2f2;
-      border:1px solid #fecaca;
-      color:#991b1b;
-    }
+    .msg.ok{ display:block; background:#ecfdf5; border:1px solid #bbf7d0; color:#166534; }
+    .msg.err{ display:block; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
 
     .records-wrap{
       margin-top:18px;
       border-top:1px solid #e5e7eb;
       padding-top:14px;
     }
+    .record-tip{ font-size:13px; color:var(--sub); margin-bottom:10px; }
+    .record-list{ display:flex; flex-direction:column; gap:12px; }
 
-    .record-tip{
-      font-size:13px;
-      color:var(--sub);
-      margin-bottom:10px;
-    }
-
-    .record-list{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-    }
-
-    .record-item{
+    .record-day{
       border:1px solid var(--soft-panel-border);
       border-radius:14px;
-      padding:10px 12px;
       background:var(--soft-panel);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.7);
+      overflow:hidden;
     }
-
-    .record-top{
+    .record-day-top{
       display:flex;
       justify-content:space-between;
       align-items:flex-start;
       gap:8px;
-      margin-bottom:6px;
+      padding:10px 12px 8px;
+      border-bottom:1px solid #d9e0e7;
     }
+    .record-day-title{ font-size:16px; font-weight:800; color:#111827; }
+    .record-day-time{ font-size:13px; font-weight:700; color:#374151; }
 
-    .record-title{
-      font-size:15px;
-      font-weight:800;
-      color:#111827;
+    .detail-list{ padding:8px 10px 0; display:flex; flex-direction:column; gap:8px; }
+    .detail-item{
+      background:#fff;
+      border:1px solid #dde4eb;
+      border-radius:12px;
+      padding:8px 10px;
     }
-
-    .record-time{
-      font-size:14px;
-      font-weight:800;
-      color:#111827;
-      white-space:nowrap;
-    }
-
-    .record-line{
-      font-size:14px;
-      line-height:1.65;
+    .detail-line{
+      font-size:13px;
+      line-height:1.6;
       color:#1f2937;
       word-break:break-word;
     }
+    .detail-line.main{ font-weight:700; }
+    .detail-line.sub{ color:#4b5563; }
 
-    .record-line.light{ color:#374151; }
+    .summary-box{
+      margin:10px;
+      padding:10px 12px;
+      border:1px solid var(--summary-border);
+      border-radius:12px;
+      background:var(--summary-bg);
+    }
+    .summary-title{
+      font-size:13px;
+      font-weight:800;
+      color:#0f4c81;
+      margin-bottom:6px;
+    }
+    .summary-line{
+      font-size:13px;
+      line-height:1.7;
+      color:#1f2937;
+    }
+    .summary-line strong{ color:#111827; }
+    .summary-alert{ font-weight:800; }
+    .summary-alert.ok{ color:var(--ok); }
+    .summary-alert.warn{ color:var(--warn); }
+    .summary-alert.err{ color:var(--danger); }
 
     .record-empty{
       padding:14px;
@@ -386,12 +352,7 @@
       font-size:14px;
     }
 
-    .foot{
-      margin-top:16px;
-      text-align:center;
-      color:#9ca3af;
-      font-size:12px;
-    }
+    .foot{ margin-top:16px; text-align:center; color:#9ca3af; font-size:12px; }
 
     @media (max-width: 680px){
       .task-grid{ grid-template-columns: repeat(4, 1fr); }
@@ -409,25 +370,28 @@
       .task-grid{ grid-template-columns: repeat(3, 1fr); }
       .project-grid{ grid-template-columns: repeat(3, 1fr); }
       .unit-grid{ grid-template-columns: repeat(3, 1fr); }
-      .hours-box{ grid-template-columns:1fr; }
+      .hours-box{ grid-template-columns:1fr 1fr; gap:8px; }
       .id-row{ grid-template-columns:repeat(3, minmax(0,1fr)); }
       .id-card{ padding:7px 8px; min-height:60px; }
       .id-label{ font-size:11px; }
       .id-value{ font-size:15px; }
       .chip-grid{ gap:5px; }
       .chip{ font-size:12px; min-height:38px; padding:6px 3px; border-radius:9px; }
-      .record-top{ flex-direction:column; align-items:flex-start; }
-      .record-time{ white-space:normal; }
+      #projectChips .chip{ font-size:14px; font-weight:800; }
+      #unitChips .chip{ font-size:13px; }
+      .count-btn{ width:40px; height:40px; flex-basis:40px; }
+      .count-value{ font-size:22px; }
       .quick-btn{ padding:4px 7px; font-size:12px; min-width:38px; }
+      .record-day-top{ flex-direction:column; align-items:flex-start; }
+      .record-day-time{ white-space:normal; }
+      .detail-line, .summary-line{ font-size:12px; }
     }
   </style>
 </head>
 <body>
   <div class="header">车间工时填报系统</div>
-
   <div class="wrap">
     <div class="card">
-
       <div class="sec-title">身份确认</div>
       <div class="id-row">
         <div class="id-card">
@@ -447,31 +411,26 @@
       <div class="tip">
         请选择本周、星期、工时类别、项目、单元并填写工时。<br>
         工作日只显示“工作日加班”，周末只显示“周末加班”。<br>
-        允许一天内提交多次，但会自动拦截“完全重复的一条记录”。
+        选择 Week 后，下方会按“每天明细 + 每天汇总”显示已提交记录，并自动提示是否少填/多填。
       </div>
 
       <div class="sec-title">填写工时</div>
-
       <div class="field">
         <label>Week<span class="req">*</span></label>
         <div class="chip-grid week-grid" id="weekChips"></div>
       </div>
-
       <div class="field">
         <label>星期<span class="req">*</span></label>
         <div class="chip-grid weekday-grid" id="weekdayChips"></div>
       </div>
-
       <div class="field">
         <label>工时类别<span class="req">*</span></label>
         <div class="chip-grid task-grid" id="taskChips"></div>
       </div>
-
       <div class="field">
         <label>项目号<span class="req">*</span></label>
         <div class="chip-grid project-grid" id="projectChips"></div>
       </div>
-
       <div class="field">
         <label>单元号<span class="req">*</span></label>
         <div class="chip-grid unit-grid" id="unitChips"></div>
@@ -487,7 +446,6 @@
           </div>
           <div class="quick-row" id="regularHoursQuick"></div>
         </div>
-
         <div class="hour-card" id="weekdayOTCard">
           <div class="hour-title">工作日加班（小时）</div>
           <div class="count-row">
@@ -497,16 +455,15 @@
           </div>
           <div class="quick-row" id="otWeekdayQuick"></div>
         </div>
-      </div>
-
-      <div class="hour-card" id="weekendOTCard" style="margin-top:10px;">
-        <div class="hour-title">周末加班（小时）</div>
-        <div class="count-row">
-          <button class="count-btn" type="button" onclick="changeNumber('otWeekend', -0.5)">-</button>
-          <div class="count-value" id="otWeekendDisplay">0</div>
-          <button class="count-btn" type="button" onclick="changeNumber('otWeekend', 0.5)">+</button>
+        <div class="hour-card hidden" id="weekendOTCard">
+          <div class="hour-title">周末加班（小时）</div>
+          <div class="count-row">
+            <button class="count-btn" type="button" onclick="changeNumber('otWeekend', -0.5)">-</button>
+            <div class="count-value" id="otWeekendDisplay">0</div>
+            <button class="count-btn" type="button" onclick="changeNumber('otWeekend', 0.5)">+</button>
+          </div>
+          <div class="quick-row" id="otWeekendQuick"></div>
         </div>
-        <div class="quick-row" id="otWeekendQuick"></div>
       </div>
 
       <div class="field" style="margin-top:14px;">
@@ -522,7 +479,7 @@
 
       <div class="records-wrap">
         <div class="sec-title">本周已提交记录</div>
-        <div class="record-tip">选择 Week 后会自动显示当前员工本周已经提交的数据，方便查漏补缺。</div>
+        <div class="record-tip">选择 Week 后会自动显示当前员工本周已提交的数据，按“每天明细 + 每天汇总”展示，方便对照纸质台账格式查漏补缺。</div>
         <div id="recordList" class="record-list">
           <div class="record-empty">请选择 Week 查看本周记录</div>
         </div>
@@ -584,6 +541,7 @@
     const weekOptions = ["W25","W26","W27","W28"];
     const weekdayOptions = ["一","二","三","四","五","六","日"];
     const taskOptions = ["机械组装","保温作业","电气安装","收发料","物流发货","仓库帮忙","车间管理","其它工作","额外工时","请假"];
+    const weekdayOrder = ["一","二","三","四","五","六","日"];
 
     const quickHoursMap = {
       regularHours: [0,1,2,3,4,8],
@@ -607,18 +565,8 @@
 
     function $(id){ return document.getElementById(id); }
     function getParam(name) { return new URL(window.location.href).searchParams.get(name); }
-
-    function showMsg(text, ok = true){
-      const el = $("msg");
-      el.className = "msg " + (ok ? "ok" : "err");
-      el.innerHTML = text;
-    }
-
-    function safe(v){
-      return String(v ?? "").replace(/[<>&"]/g, function(s){
-        return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[s];
-      });
-    }
+    function showMsg(text, ok = true){ const el = $("msg"); el.className = "msg " + (ok ? "ok" : "err"); el.innerHTML = text; }
+    function safe(v){ return String(v ?? "").replace(/[<>&"]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[s])); }
 
     function formatTime(v){
       if(!v) return "--";
@@ -634,20 +582,17 @@
       }catch{ return v; }
     }
 
-    function isWeekendDay(day){
-      return day === "六" || day === "日";
-    }
+    function isWeekendDay(day){ return day === "六" || day === "日"; }
 
     function syncHourSectionByWeekday(){
       const hasDay = !!state.weekday;
       const weekend = isWeekendDay(state.weekday);
-
       if(!hasDay){
         $("weekdayOTCard").classList.remove("hidden");
-        $("weekendOTCard").classList.remove("hidden");
+        $("weekendOTCard").classList.add("hidden");
+        refreshDisplays();
         return;
       }
-
       if(weekend){
         state.otWeekday = 0;
         $("weekdayOTCard").classList.add("hidden");
@@ -678,9 +623,8 @@
         chip.dataset.value = v;
         chip.dataset.field = fieldName;
         chip.onclick = async () => {
-          if(typeof onClick === "function"){
-            await onClick(v);
-          }else{
+          if(typeof onClick === "function") await onClick(v);
+          else {
             state[fieldName] = v;
             if(fieldName === "weekday") syncHourSectionByWeekday();
             renderAllActiveChips();
@@ -702,19 +646,13 @@
     function renderProjectChips(){
       const projects = Object.keys(projectUnits);
       renderChips("projectChips", projects, "project", function(v){
-        state.project = v;
-        state.unit = "";
-        renderUnitChips();
-        renderAllActiveChips();
+        state.project = v; state.unit = ""; renderUnitChips(); renderAllActiveChips();
       });
     }
 
     function renderUnitChips(){
       const units = state.project && projectUnits[state.project] ? projectUnits[state.project] : [];
-      renderChips("unitChips", units, "unit", function(v){
-        state.unit = v;
-        renderAllActiveChips();
-      });
+      renderChips("unitChips", units, "unit", function(v){ state.unit = v; renderAllActiveChips(); });
       renderAllActiveChips();
     }
 
@@ -725,12 +663,10 @@
     }
 
     function renderQuickRow(containerId, field, values, regular){
-      const box = $(containerId);
-      box.innerHTML = "";
+      const box = $(containerId); box.innerHTML = "";
       values.forEach(v => {
         const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "quick-btn";
+        btn.type = "button"; btn.className = "quick-btn";
         btn.textContent = v === 0 ? (regular ? "0小时" : "清零") : `${v}小时`;
         btn.onclick = function(){ setNumber(field, v); };
         box.appendChild(btn);
@@ -749,8 +685,7 @@
     }
 
     function changeNumber(field, delta){
-      const now = Number(state[field] || 0);
-      let next = Math.round((now + delta) * 2) / 2;
+      let next = Math.round((Number(state[field] || 0) + delta) * 2) / 2;
       if(next < 0) next = 0;
       const max = getMaxHours(field);
       if(next > max) next = max;
@@ -797,15 +732,21 @@
         if(!res.ok) throw new Error("读取记录失败：" + res.status);
         const data = await res.json();
         let rows = [];
-        if (Array.isArray(data)) rows = data;
-        else if (Array.isArray(data.results)) rows = data.results;
+        if(Array.isArray(data)) rows = data;
+        else if(Array.isArray(data.results)) rows = data.results;
         rows = rows.filter(r => String(r.employeeId || "") === String(empId) && String(r.week || "") === String(state.week));
-        rows.sort((a, b) => new Date(b.submitTime || 0).getTime() - new Date(a.submitTime || 0).getTime());
+        rows.sort((a,b)=> new Date(b.submitTime || 0).getTime() - new Date(a.submitTime || 0).getTime());
         currentWeekRecords = rows;
         renderWeekRecords(rows);
       } catch(e){
         renderWeekRecords([], "本周记录读取失败：" + e.message);
       }
+    }
+
+    function getSummaryStatusText(actual, target, label){
+      if(actual === target) return `<span class="summary-alert ok">${label}已达标</span>`;
+      if(actual < target) return `<span class="summary-alert warn">${label}少填 ${Number((target - actual).toFixed(2))}h</span>`;
+      return `<span class="summary-alert err">${label}多填 ${Number((actual - target).toFixed(2))}h</span>`;
     }
 
     function renderWeekRecords(rows, errMsg = ""){
@@ -814,19 +755,60 @@
       if(errMsg){ box.innerHTML = `<div class="record-empty">${safe(errMsg)}</div>`; return; }
       if(!state.week){ box.innerHTML = `<div class="record-empty">请选择 Week 查看本周记录</div>`; return; }
       if(!rows || rows.length === 0){ box.innerHTML = `<div class="record-empty">当前员工在 ${safe(state.week)} 还没有提交记录</div>`; return; }
+
+      const groups = {};
       rows.forEach(r => {
-        const item = document.createElement("div");
-        item.className = "record-item";
-        item.innerHTML = `
-          <div class="record-top">
-            <div class="record-title">${safe(r.week || "")} · 星期${safe(r.weekday || "")}</div>
-            <div class="record-time">${safe(formatTime(r.submitTime))}</div>
+        const day = String(r.weekday || "");
+        if(!groups[day]) groups[day] = [];
+        groups[day].push(r);
+      });
+
+      weekdayOrder.forEach(day => {
+        const dayRows = groups[day];
+        if(!dayRows || !dayRows.length) return;
+
+        dayRows.sort((a,b)=> new Date(a.submitTime || 0).getTime() - new Date(b.submitTime || 0).getTime());
+        const latestTime = formatTime(dayRows[dayRows.length - 1].submitTime || "");
+        const regularTotal = dayRows.reduce((s,r)=> s + Number(r.regularHours || 0), 0);
+        const otWeekdayTotal = dayRows.reduce((s,r)=> s + Number(r.otWeekday || 0), 0);
+        const otWeekendTotal = dayRows.reduce((s,r)=> s + Number(r.otWeekend || 0), 0);
+        const overtimeTotal = otWeekdayTotal + otWeekendTotal;
+        const weekend = isWeekendDay(day);
+        const regularTarget = 8;
+        const overtimeTarget = 4;
+
+        let detailsHtml = "";
+        dayRows.forEach((r, idx) => {
+          const overtimeValue = Number(r.otWeekday || 0) + Number(r.otWeekend || 0);
+          detailsHtml += `
+            <div class="detail-item">
+              <div class="detail-line main">明细 ${idx + 1}：${safe(r.task || "")} ｜ ${safe(r.project || "")} ｜ ${safe(r.unit || "")}</div>
+              <div class="detail-line sub">正常工时：${Number(r.regularHours || 0)}h ｜ 加班工时：${overtimeValue}h ｜ 提交时间：${safe(formatTime(r.submitTime))}</div>
+              ${r.remark ? `<div class="detail-line sub">备注：${safe(r.remark)}</div>` : ""}
+            </div>
+          `;
+        });
+
+        const regularTip = getSummaryStatusText(regularTotal, regularTarget, "正常工时");
+        const overtimeTip = getSummaryStatusText(overtimeTotal, overtimeTarget, weekend ? "加班工时" : "加班工时");
+        const overtimeLabel = weekend ? `周末加班汇总：<strong>${otWeekendTotal}h / 目标 ${overtimeTarget}h</strong>` : `工作日加班汇总：<strong>${otWeekdayTotal}h / 目标 ${overtimeTarget}h</strong>`;
+
+        const section = document.createElement("div");
+        section.className = "record-day";
+        section.innerHTML = `
+          <div class="record-day-top">
+            <div class="record-day-title">${safe(state.week)} · 星期${safe(day)}</div>
+            <div class="record-day-time">最新提交：${safe(latestTime)}</div>
           </div>
-          <div class="record-line">${safe(r.task || "")} ｜ ${safe(r.project || "")} ｜ ${safe(r.unit || "")}</div>
-          <div class="record-line light">正常工时：${Number(r.regularHours || 0)} ｜ 工作日加班：${Number(r.otWeekday || 0)} ｜ 周末加班：${Number(r.otWeekend || 0)}</div>
-          ${r.remark ? `<div class="record-line light">备注：${safe(r.remark)}</div>` : ""}
+          <div class="detail-list">${detailsHtml}</div>
+          <div class="summary-box">
+            <div class="summary-title">当日汇总</div>
+            <div class="summary-line">正常工时汇总：<strong>${regularTotal}h / 目标 ${regularTarget}h</strong> ｜ ${regularTip}</div>
+            <div class="summary-line">${overtimeLabel} ｜ ${overtimeTip}</div>
+            <div class="summary-line">合计明细数：<strong>${dayRows.length}</strong> 条 ｜ ${weekend ? `周末加班明细 ${otWeekendTotal}h` : `工作日加班明细 ${otWeekdayTotal}h`}</div>
+          </div>
         `;
-        box.appendChild(item);
+        box.appendChild(section);
       });
     }
 
@@ -846,21 +828,18 @@
     }
 
     function existsExactDuplicate(signature){
-      return currentWeekRecords.some(r => {
-        const sig = JSON.stringify({
-          employeeId: r.employeeId,
-          week: r.week,
-          weekday: r.weekday,
-          task: r.task,
-          project: r.project,
-          unit: r.unit,
-          regularHours: Number(r.regularHours || 0),
-          otWeekday: Number(r.otWeekday || 0),
-          otWeekend: Number(r.otWeekend || 0),
-          remark: String(r.remark || "").trim()
-        });
-        return sig === signature;
-      });
+      return currentWeekRecords.some(r => JSON.stringify({
+        employeeId: r.employeeId,
+        week: r.week,
+        weekday: r.weekday,
+        task: r.task,
+        project: r.project,
+        unit: r.unit,
+        regularHours: Number(r.regularHours || 0),
+        otWeekday: Number(r.otWeekday || 0),
+        otWeekend: Number(r.otWeekend || 0),
+        remark: String(r.remark || "").trim()
+      }) === signature);
     }
 
     function isFastRepeat(signature){
@@ -881,21 +860,20 @@
       if(!state.task) return "请选择工时类别。";
       if(!state.project) return "请选择项目号。";
       if(!state.unit) return "请选择单元号。";
-      if (state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~12 之间。";
-      if (!isWeekendDay(state.weekday) && (state.otWeekday < 0 || state.otWeekday > 4)) return "工作日加班必须在 0~4 小时之间。";
-      if (isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
-      if (!isWeekendDay(state.weekday) && state.otWeekend !== 0) return "工作日不能填写周末加班。";
-      if (state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~12 之间。";
+      if(state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~12 之间。";
+      if(!isWeekendDay(state.weekday) && (state.otWeekday < 0 || state.otWeekday > 4)) return "工作日加班必须在 0~4 小时之间。";
+      if(isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
+      if(!isWeekendDay(state.weekday) && state.otWeekend !== 0) return "工作日不能填写周末加班。";
+      if(state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~12 之间。";
       return "";
     }
 
     async function submitForm(){
       if(isSubmitting){ showMsg("正在提交中，请勿重复点击。", false); return; }
       const err = validate();
-      if (err){ showMsg(err, false); return; }
-      if (!API_TOKEN || API_TOKEN.includes("请替换成你自己的Baserow Token")) {
-        showMsg("请先把代码里的 API_TOKEN 替换成你自己的 Baserow token。", false);
-        return;
+      if(err){ showMsg(err, false); return; }
+      if(!API_TOKEN || API_TOKEN.includes("请替换成你自己的Baserow Token")){
+        showMsg("请先把代码里的 API_TOKEN 替换成你自己的 Baserow token。", false); return;
       }
 
       const payload = {
@@ -914,10 +892,10 @@
       };
 
       const signature = buildSubmitSignature(payload);
-      if (isFastRepeat(signature)) { showMsg("请勿连续重复提交完全相同的数据。", false); return; }
-      if (existsExactDuplicate(signature)) { showMsg("本周已存在一条完全相同的记录，无需重复提交。", false); return; }
+      if(isFastRepeat(signature)){ showMsg("请勿连续重复提交完全相同的数据。", false); return; }
+      if(existsExactDuplicate(signature)){ showMsg("本周已存在一条完全相同的记录，无需重复提交。", false); return; }
 
-      try {
+      try{
         isSubmitting = true;
         $("submitBtn").disabled = true;
         showMsg("正在提交，请稍候…", true);
@@ -926,8 +904,7 @@
           headers: {"Authorization": "Token " + API_TOKEN, "Content-Type": "application/json"},
           body: JSON.stringify(payload)
         });
-        if (!res.ok) throw new Error("接口返回失败状态：" + res.status);
-
+        if(!res.ok) throw new Error("接口返回失败状态：" + res.status);
         saveLastSubmit(signature);
         showMsg("✅ 提交成功。", true);
 
@@ -938,17 +915,17 @@
         state.regularHours = 8;
         state.otWeekday = 0;
         state.otWeekend = 0;
+        $("remark").value = "";
 
         renderAllActiveChips();
         refreshDisplays();
         renderProjectChips();
         renderUnitChips();
         syncHourSectionByWeekday();
-        $("remark").value = "";
         await loadWeekRecords();
-      } catch (e) {
+      }catch(e){
         showMsg("❌ 提交失败：" + e.message, false);
-      } finally {
+      }finally{
         isSubmitting = false;
         $("submitBtn").disabled = !(empId && empName);
       }
@@ -956,16 +933,8 @@
 
     function init(){
       initEmployee();
-      renderChips("weekChips", weekOptions, "week", async function(v){
-        state.week = v;
-        renderAllActiveChips();
-        await loadWeekRecords();
-      });
-      renderChips("weekdayChips", weekdayOptions, "weekday", function(v){
-        state.weekday = v;
-        syncHourSectionByWeekday();
-        renderAllActiveChips();
-      });
+      renderChips("weekChips", weekOptions, "week", async function(v){ state.week = v; renderAllActiveChips(); await loadWeekRecords(); });
+      renderChips("weekdayChips", weekdayOptions, "weekday", function(v){ state.weekday = v; syncHourSectionByWeekday(); renderAllActiveChips(); });
       renderChips("taskChips", taskOptions, "task");
       renderProjectChips();
       renderUnitChips();
