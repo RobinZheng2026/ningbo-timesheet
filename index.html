@@ -3,814 +3,999 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>工时输入系统（最终版）</title>
+  <title>车间工时填报系统</title>
   <style>
-    :root {
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --line: #dfe5f0;
-      --text: #1f2a44;
-      --muted: #667085;
-      --primary: #1f6feb;
-      --primary-weak: #e8f0ff;
-      --danger: #d92d20;
-      --danger-weak: #feeceb;
-      --warn: #b54708;
-      --warn-weak: #fff4e5;
-      --success: #027a48;
-      --success-weak: #ecfdf3;
-      --shadow: 0 10px 24px rgba(16,24,40,.08);
-      --radius: 16px;
+    :root{
+      --brand:#0078d4;
+      --brand-dark:#005ea6;
+      --ok:#1f8f4c;
+      --warn:#b45309;
+      --danger:#b91c1c;
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --text:#1f2937;
+      --sub:#6b7280;
+      --border:#d1d5db;
+      --shadow:0 6px 18px rgba(0,0,0,.08);
+      --chip:#eef5ff;
+      --chip-border:#bfd7f5;
+      --chip-active:#0078d4;
+      --chip-text:#1f4b7a;
+      --table-border:#444;
+      --table-head:#f3f4f6;
+      --alert:#ff0000;
     }
 
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: linear-gradient(180deg, #f6f8fc 0%, #eef3fb 100%);
-      color: var(--text);
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      background: linear-gradient(180deg, #eef5fb 0%, var(--bg) 100%);
+      color:var(--text);
     }
-    .wrap {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 20px;
+    .header{
+      background: var(--brand);
+      color:#fff;
+      text-align:center;
+      padding:14px 12px;
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:.5px;
+      box-shadow:0 2px 8px rgba(0,0,0,.1);
     }
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
+    .wrap{
+      max-width:980px;
+      margin:14px auto;
+      padding:0 10px 24px;
     }
-    .title h1 {
-      margin: 0;
-      font-size: 28px;
-      line-height: 1.2;
-    }
-    .title p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .badge-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .badge {
-      padding: 8px 12px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      font-size: 13px;
+    .card{
+      background:#fff;
+      border-radius:18px;
       box-shadow: var(--shadow);
+      padding:12px 10px 16px;
+      border:1px solid rgba(0,0,0,.04);
     }
-    .grid {
-      display: grid;
-      grid-template-columns: 430px 1fr;
-      gap: 18px;
+    .sec-title{
+      margin:6px 0 10px;
+      font-size:16px;
+      font-weight:800;
+      color:var(--brand);
+      border-left:4px solid var(--brand);
+      padding-left:8px;
     }
-    @media (max-width: 1100px) {
-      .grid { grid-template-columns: 1fr; }
+    .id-row{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:8px;
+      margin-top:8px;
     }
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(16,24,40,.06);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
+    .id-card{
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fcfcfd;
+      padding:8px 10px;
+      min-height:68px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:4px;
+      min-width:0;
     }
-    .card-hd {
-      padding: 16px 18px;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+    .id-label{ font-size:12px; color:var(--sub); }
+    .id-value{
+      font-size:19px;
+      font-weight:800;
+      color:#111827;
+      word-break:break-all;
+      line-height:1.15;
     }
-    .card-hd h2 {
-      margin: 0;
-      font-size: 18px;
+    .id-value.ok{ color:var(--ok); }
+    .id-value.warn{ color:var(--warn); }
+    .id-value.err{ color:var(--danger); }
+    .tip{
+      margin:12px 0 14px;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#f8fbff;
+      border:1px solid #dbeafe;
+      color:#1f4b7a;
+      font-size:13px;
+      line-height:1.65;
     }
-    .card-bd { padding: 18px; }
-    .subtle {
-      color: var(--muted);
-      font-size: 13px;
+    .field{ margin-bottom:12px; }
+    .field label{
+      display:block;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:6px;
+      color:#374151;
     }
-    .section + .section { margin-top: 16px; }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
+    .field .req{ color:#d97706; margin-left:4px; }
+    .field.disabled-field label{ color:#9ca3af; }
+    .field-note{
+      margin-top:4px;
+      font-size:12px;
+      color:#6b7280;
     }
-    .form-grid.cols-1 { grid-template-columns: 1fr; }
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+    textarea{
+      width:100%;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:15px;
+      background:#fff;
+      color:#111827;
+      outline:none;
+      min-height:84px;
+      resize:vertical;
     }
-    .field label {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 600;
+    textarea:focus{
+      border-color:#93c5fd;
+      box-shadow:0 0 0 3px rgba(59,130,246,.15);
     }
-    .field input, .field select, .field textarea {
-      width: 100%;
-      border: 1px solid #cfd7e6;
-      border-radius: 12px;
-      padding: 11px 12px;
-      font-size: 14px;
-      outline: none;
-      transition: .18s ease;
-      background: #fff;
+    .chip-grid{ display:grid; gap:6px; }
+    .week-grid{ grid-template-columns: repeat(4, 1fr); }
+    .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
+    .task-grid{ grid-template-columns: repeat(4, 1fr); }
+    .project-grid{ grid-template-columns: repeat(6, 1fr); }
+    .unit-grid{ grid-template-columns: repeat(5, 1fr); }
+    .chip{
+      border:1px solid var(--chip-border);
+      background:var(--chip);
+      color:var(--chip-text);
+      border-radius:10px;
+      padding:8px 5px;
+      text-align:center;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      user-select:none;
+      transition:.15s ease;
+      min-height:42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      line-height:1.15;
+      word-break:break-word;
     }
-    .field textarea {
-      min-height: 72px;
-      resize: vertical;
+    .chip:active{ transform:scale(.98); }
+    .chip.active{
+      background:var(--chip-active);
+      color:#fff;
+      border-color:var(--chip-active);
+      box-shadow:0 6px 16px rgba(0,120,212,.22);
     }
-    .field input:focus, .field select:focus, .field textarea:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(31,111,235,.12);
+    .chip.disabled{
+      background:#f3f4f6;
+      color:#9ca3af;
+      border-color:#e5e7eb;
+      cursor:not-allowed;
+      box-shadow:none;
     }
-    .inline {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      flex-wrap: wrap;
+    .hours-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
-    .right { margin-left: auto; }
-    .btn {
-      border: 0;
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform .06s ease, opacity .18s ease, background-color .18s ease;
+    .hour-card{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px;
+      background:#fcfcfd;
     }
-    .btn:active { transform: translateY(1px); }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { opacity: .92; }
-    .btn-secondary { background: #edf2ff; color: #2446a8; }
-    .btn-secondary:hover { background: #e4ecff; }
-    .btn-light { background: #f3f5f9; color: #344054; }
-    .btn-light:hover { background: #e9eef7; }
-    .btn-danger { background: var(--danger-weak); color: var(--danger); }
-    .btn-danger:hover { background: #ffd9d6; }
-    .btn-sm { padding: 7px 10px; border-radius: 10px; font-size: 13px; }
-    .msg {
-      border-radius: 14px;
-      padding: 12px 14px;
-      font-size: 13px;
-      line-height: 1.55;
-      display: none;
+    .hour-title{
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+      color:#374151;
     }
-    .msg.show { display: block; }
-    .msg.error { background: var(--danger-weak); color: var(--danger); border: 1px solid #f7b4ae; }
-    .msg.warn { background: var(--warn-weak); color: var(--warn); border: 1px solid #ffd29d; }
-    .msg.success { background: var(--success-weak); color: var(--success); border: 1px solid #a6f4c5; }
+    .count-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .count-btn{
+      width:42px;
+      height:42px;
+      border:none;
+      border-radius:12px;
+      background:#e8f1fb;
+      color:#0f4c81;
+      font-size:24px;
+      font-weight:700;
+      cursor:pointer;
+      flex:0 0 42px;
+    }
+    .count-value{
+      flex:1;
+      text-align:center;
+      font-size:24px;
+      font-weight:800;
+      color:#111827;
+    }
+    .quick-row{
+      display:flex;
+      gap:6px;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+    .quick-btn{
+      border:1px solid #dbeafe;
+      background:#fff;
+      color:#2563eb;
+      border-radius:9px;
+      padding:5px 8px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+      min-width:41px;
+    }
+    .hidden{ display:none !important; }
+    .btn-area{
+      margin-top:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+    .btn{
+      width:100%;
+      border:none;
+      border-radius:14px;
+      padding:15px 16px;
+      font-size:18px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    .btn:active{ transform:scale(.99); }
+    .btn-primary{
+      background:var(--brand);
+      color:#fff;
+      box-shadow:0 8px 18px rgba(0,120,212,.20);
+    }
+    .btn-primary:hover{ background: var(--brand-dark); }
+    .btn-primary:disabled{ background:#9ca3af; box-shadow:none; cursor:not-allowed; }
+    .msg{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:12px;
+      font-size:14px;
+      line-height:1.6;
+      display:none;
+    }
+    .msg.ok{ display:block; background:#ecfdf5; border:1px solid #bbf7d0; color:#166534; }
+    .msg.err{ display:block; background:#fef2f2; border:1px solid #fecaca; color:#991b1b; }
+    .records-wrap{
+      margin-bottom:16px;
+      padding-bottom:14px;
+      border-bottom:1px solid #e5e7eb;
+    }
+    .record-tip{ font-size:13px; color:var(--sub); margin-bottom:10px; }
+    .table-scroll{
+      width:100%;
+      overflow-x:auto;
+      border:1px solid #d7dde5;
+      border-radius:12px;
+      background:#fff;
+    }
+    table.record-table{
+      width:max-content;
+      min-width:100%;
+      border-collapse:collapse;
+      table-layout:fixed;
+      background:#fff;
+      color:#111827;
+      font-size:13px;
+    }
+    .record-table th,
+    .record-table td{
+      border:1px solid var(--table-border);
+      padding:3px 4px;
+      text-align:center;
+      vertical-align:middle;
+      min-width:58px;
+      height:32px;
+      line-height:1.15;
+    }
+    .record-table th{
+      background:var(--table-head);
+      font-weight:700;
+    }
+    .record-table .w-job{ min-width:80px; }
+    .record-table .w-project{ min-width:120px; }
+    .record-table .w-unit{ min-width:76px; }
+    .record-table .w-remark{ min-width:106px; }
+    .record-table .cell-left{
+      text-align:left;
+      padding-left:8px;
+      font-weight:700;
+    }
+    .record-table .sum-label{
+      font-weight:800;
+      background:#fafafa;
+    }
+    .record-table .warn-cell{
+      background:var(--alert);
+      color:#fff;
+      font-weight:800;
+    }
+    .record-empty{
+      padding:14px;
+      border:1px dashed #cbd5e1;
+      border-radius:12px;
+      text-align:center;
+      color:#64748b;
+      background:#f8fafc;
+      font-size:14px;
+    }
+    .foot{ margin-top:16px; text-align:center; color:#9ca3af; font-size:12px; }
 
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+    @media (max-width: 680px){
+      .task-grid{ grid-template-columns: repeat(4, 1fr); }
+      .project-grid{ grid-template-columns: repeat(4, 1fr); }
+      .unit-grid{ grid-template-columns: repeat(4, 1fr); }
+      .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
+      .chip{ font-size:13px; min-height:40px; padding:7px 4px; }
     }
-    @media (max-width: 720px) {
-      .summary { grid-template-columns: 1fr; }
-    }
-    .metric {
-      background: #f8fafc;
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 14px;
-    }
-    .metric .label {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 6px;
-    }
-    .metric .value {
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -.02em;
-    }
-    .metric .tip {
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
+    @media (max-width: 560px){
+      .wrap{ padding:0 8px 18px; }
+      .card{ padding:10px 8px 14px; }
+      .week-grid{ grid-template-columns: repeat(4, 1fr); }
+      .weekday-grid{ grid-template-columns: repeat(7, 1fr); }
+      .task-grid{ grid-template-columns: repeat(3, 1fr); }
+      .project-grid{ grid-template-columns: repeat(3, 1fr); }
+      .unit-grid{ grid-template-columns: repeat(3, 1fr); }
+      .hours-box{ grid-template-columns:1fr 1fr; gap:8px; }
+      .id-row{ grid-template-columns:repeat(3, minmax(0,1fr)); }
+      .id-card{ padding:7px 8px; min-height:60px; }
+      .id-label{ font-size:11px; }
+      .id-value{ font-size:15px; }
+      .chip-grid{ gap:5px; }
+      .chip{ font-size:12px; min-height:38px; padding:6px 3px; border-radius:9px; }
+      #projectChips .chip{ font-size:14px; font-weight:800; }
+      #unitChips .chip{ font-size:13px; }
+      .count-btn{ width:40px; height:40px; flex-basis:40px; }
+      .count-value{ font-size:22px; }
+      .quick-btn{ padding:4px 7px; font-size:12px; min-width:38px; }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
+      /* 手机端表格压缩版 */
+      table.record-table{ font-size:11px; }
+      .record-table th,
+      .record-table td{
+        min-width:42px;
+        height:28px;
+        padding:2px 2px;
+        line-height:1.05;
+      }
+      .record-table .w-job{ min-width:70px; }
+      .record-table .w-project{ min-width:98px; }
+      .record-table .w-unit{ min-width:54px; }
+      .record-table .w-remark{ min-width:70px; }
+      .record-table .cell-left{ padding-left:4px; }
     }
-    th, td {
-      padding: 12px 10px;
-      border-bottom: 1px solid var(--line);
-      vertical-align: top;
-      text-align: left;
-    }
-    th {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      background: #fbfcfe;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    tbody tr:hover { background: #fafcff; }
-    .table-wrap {
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      overflow: auto;
-      max-height: 520px;
-      background: #fff;
-    }
-    .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 12px;
-      font-weight: 700;
-      white-space: nowrap;
-    }
-    .pill.normal { background: #ecfdf3; color: #027a48; }
-    .pill.ot-weekday { background: #eef4ff; color: #2457d6; }
-    .pill.ot-weekend { background: #fff3ea; color: #c4320a; }
-    .muted { color: var(--muted); }
-    .empty {
-      text-align: center;
-      padding: 36px 20px;
-      color: var(--muted);
-    }
-    .footer-tip {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-    }
-    .danger-text { color: var(--danger); font-weight: 600; }
-    .ok-text { color: var(--success); font-weight: 600; }
   </style>
 </head>
 <body>
+  <div class="header">车间工时填报系统</div>
   <div class="wrap">
-    <div class="header">
-      <div class="title">
-        <h1>工时输入系统（最终版）</h1>
-        <p>已加入：正常工时/加班工时强校验、同日历史数据自动比对、记录修改/删除、浏览器本地保存（localStorage）。</p>
+    <div class="card">
+      <div class="sec-title">身份确认</div>
+      <div class="id-row">
+        <div class="id-card">
+          <div class="id-label">员工姓名</div>
+          <div id="empName" class="id-value">--</div>
+        </div>
+        <div class="id-card">
+          <div class="id-label">员工工号</div>
+          <div id="empId" class="id-value">--</div>
+        </div>
+        <div class="id-card">
+          <div class="id-label">识别状态</div>
+          <div id="empState" class="id-value warn">待识别</div>
+        </div>
       </div>
-      <div class="badge-row">
-        <div class="badge">工作日正常工时：累计不得超过 8h</div>
-        <div class="badge">工作日加班：累计只能是 0 或 4h</div>
-        <div class="badge">编辑/删除后自动重算</div>
+
+      <div class="tip">
+        选择 Week 后，会在上方自动显示该员工本周已提交的工时表格。<br>
+        红色格表示该天汇总异常：工作日正常工时应为 8h；工作日加班只能是 0h 或 4h。
       </div>
-    </div>
 
-    <div class="grid">
-      <section class="card">
-        <div class="card-hd">
-          <h2 id="formTitle">新增工时记录</h2>
-          <div class="inline">
-            <button class="btn btn-light btn-sm" id="resetBtn" type="button">清空表单</button>
-          </div>
+      <div class="records-wrap">
+        <div class="sec-title">本周已提交工时明细</div>
+        <div class="record-tip">显示格式按台账表格样式：上方明细、底部汇总。左右滑动可查看完整表格。</div>
+        <div id="recordList">
+          <div class="record-empty">请选择 Week 查看本周记录</div>
         </div>
-        <div class="card-bd">
-          <div class="section form-grid">
-            <div class="field">
-              <label for="employeeId">员工编号</label>
-              <input id="employeeId" type="text" placeholder="例如：E001" />
-            </div>
-            <div class="field">
-              <label for="employeeName">员工姓名</label>
-              <input id="employeeName" type="text" placeholder="例如：张三" />
-            </div>
-            <div class="field">
-              <label for="workDate">日期</label>
-              <input id="workDate" type="date" />
-            </div>
-            <div class="field">
-              <label for="workType">工时类别</label>
-              <select id="workType">
-                <option value="normal">正常工时</option>
-                <option value="ot_weekday">工作日加班</option>
-                <option value="ot_weekend">周末加班</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="projectNo">项目号</label>
-              <input id="projectNo" type="text" placeholder="例如：PRJ-001" />
-            </div>
-            <div class="field">
-              <label for="unitNo">单元号</label>
-              <input id="unitNo" type="text" placeholder="例如：U110-1" />
-            </div>
-            <div class="field">
-              <label for="hours">工时（小时）</label>
-              <input id="hours" type="number" min="0" max="24" step="0.5" placeholder="例如：4 / 8 / 0.5" />
-            </div>
-            <div class="field">
-              <label for="remark">备注</label>
-              <input id="remark" type="text" placeholder="可选填写" />
-            </div>
-          </div>
+      </div>
 
-          <div class="section">
-            <div id="weekdayInfo" class="subtle">请选择日期后自动识别工作日/周末。</div>
-          </div>
+      <div class="sec-title">填写工时</div>
+      <div class="field">
+        <label>Week<span class="req">*</span></label>
+        <div class="chip-grid week-grid" id="weekChips"></div>
+      </div>
+      <div class="field">
+        <label>星期<span class="req">*</span></label>
+        <div class="chip-grid weekday-grid" id="weekdayChips"></div>
+      </div>
+      <div class="field">
+        <label>工时类别<span class="req">*</span></label>
+        <div class="chip-grid task-grid" id="taskChips"></div>
+      </div>
+      <div class="field" id="projectField">
+        <label id="projectLabel">项目号<span class="req">*</span></label>
+        <div class="chip-grid project-grid" id="projectChips"></div>
+        <div class="field-note hidden" id="projectNote"></div>
+      </div>
+      <div class="field" id="unitField">
+        <label id="unitLabel">单元号<span class="req">*</span></label>
+        <div class="chip-grid unit-grid" id="unitChips"></div>
+        <div class="field-note hidden" id="unitNote"></div>
+      </div>
 
-          <div class="section">
-            <div id="validationBox" class="msg"></div>
+      <div class="hours-box">
+        <div class="hour-card">
+          <div class="hour-title">正常工时（小时）<span class="req">*</span></div>
+          <div class="count-row">
+            <button class="count-btn" type="button" onclick="changeNumber('regularHours', -0.5)">-</button>
+            <div class="count-value" id="regularHoursDisplay">8</div>
+            <button class="count-btn" type="button" onclick="changeNumber('regularHours', 0.5)">+</button>
           </div>
-
-          <div class="section summary">
-            <div class="metric">
-              <div class="label">当日正常工时累计</div>
-              <div id="normalTotal" class="value">0.0h</div>
-              <div class="tip">工作日建议最终汇总为 8h；禁止超过 8h</div>
-            </div>
-            <div class="metric">
-              <div class="label">当日工作日加班累计</div>
-              <div id="weekdayOtTotal" class="value">0.0h</div>
-              <div class="tip">工作日加班当天累计只能是 0h 或 4h</div>
-            </div>
-            <div class="metric">
-              <div class="label">当前状态</div>
-              <div id="dayStatus" class="value" style="font-size:20px;">待输入</div>
-              <div id="dayStatusTip" class="tip">输入后自动校验历史数据 + 当前记录</div>
-            </div>
-          </div>
-
-          <div class="section inline">
-            <button class="btn btn-primary" id="saveBtn" type="button">保存记录</button>
-            <button class="btn btn-secondary" id="copyTodayBtn" type="button">带入今天日期</button>
-            <span class="subtle right">说明：保存到浏览器本地，刷新后仍保留；更换浏览器/清缓存会丢失。</span>
-          </div>
-
-          <div class="footer-tip">
-            <div>规则已实现：</div>
-            <div>1）<strong>正常工时</strong>：同一员工同一天累计 <span class="danger-text">不能大于 8h</span>；若工作日当天未到 8h 会提醒但不阻止继续分次录入。</div>
-            <div>2）<strong>工作日加班</strong>：同一员工同一天累计只能为 <strong>0 或 4h</strong>，且任何单条录入不得超过 4h。</div>
-            <div>3）<strong>编辑记录</strong>：编辑时会自动排除当前旧记录，再按修改后的值重新校验。</div>
-            <div>4）<strong>删除记录</strong>：删除后自动重新计算当天汇总。</div>
-          </div>
+          <div class="quick-row" id="regularHoursQuick"></div>
         </div>
-      </section>
-
-      <section class="card">
-        <div class="card-hd">
-          <div>
-            <h2>已提交记录</h2>
-            <div class="subtle">支持按员工/日期筛选，支持编辑、删除。修改后会重新做总工时校验。</div>
+        <div class="hour-card" id="weekdayOTCard">
+          <div class="hour-title">工作日加班（小时）</div>
+          <div class="count-row">
+            <button class="count-btn" type="button" onclick="changeNumber('otWeekday', -0.5)">-</button>
+            <div class="count-value" id="otWeekdayDisplay">0</div>
+            <button class="count-btn" type="button" onclick="changeNumber('otWeekday', 0.5)">+</button>
           </div>
-          <div class="inline">
-            <button class="btn btn-light btn-sm" id="exportBtn" type="button">导出 JSON</button>
-            <button class="btn btn-danger btn-sm" id="clearAllBtn" type="button">清空全部数据</button>
-          </div>
+          <div class="quick-row" id="otWeekdayQuick"></div>
         </div>
-        <div class="card-bd">
-          <div class="section form-grid">
-            <div class="field">
-              <label for="filterEmployee">筛选员工（编号/姓名）</label>
-              <input id="filterEmployee" type="text" placeholder="输入员工编号或姓名关键词" />
-            </div>
-            <div class="field">
-              <label for="filterDate">筛选日期</label>
-              <input id="filterDate" type="date" />
-            </div>
+        <div class="hour-card hidden" id="weekendOTCard">
+          <div class="hour-title">周末加班（小时）</div>
+          <div class="count-row">
+            <button class="count-btn" type="button" onclick="changeNumber('otWeekend', -0.5)">-</button>
+            <div class="count-value" id="otWeekendDisplay">0</div>
+            <button class="count-btn" type="button" onclick="changeNumber('otWeekend', 0.5)">+</button>
           </div>
-
-          <div class="section table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th style="min-width:90px;">日期</th>
-                  <th style="min-width:85px;">员工编号</th>
-                  <th style="min-width:90px;">员工姓名</th>
-                  <th style="min-width:110px;">工时类别</th>
-                  <th style="min-width:120px;">项目号</th>
-                  <th style="min-width:110px;">单元号</th>
-                  <th style="min-width:80px;">工时</th>
-                  <th style="min-width:140px;">备注</th>
-                  <th style="min-width:160px;">操作</th>
-                </tr>
-              </thead>
-              <tbody id="recordsBody"></tbody>
-            </table>
-          </div>
-          <div id="tableEmpty" class="empty" style="display:none;">暂无符合条件的记录</div>
+          <div class="quick-row" id="otWeekendQuick"></div>
         </div>
-      </section>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <label for="remark">备注</label>
+        <textarea id="remark" placeholder="可选"></textarea>
+      </div>
+
+      <div class="btn-area">
+        <button id="submitBtn" class="btn btn-primary" onclick="submitForm()" disabled>提交工时</button>
+      </div>
+
+      <div id="msg" class="msg"></div>
+      <div class="foot">Ningbo Workshop Timesheet</div>
     </div>
   </div>
 
   <script>
-    const STORAGE_KEY = 'workhour_records_final_v1';
-    const state = {
-      editingId: null,
-      records: []
+    const API_URL = "https://api.baserow.io/api/database/rows/table/1030254/?user_field_names=true";
+    const API_TOKEN = "vHwFROkQHYBYJck1Lv4i6kqitbbJI8e1";
+    const employeeMap = {
+      "1237794":"郑","1177215":"官辉","1177235":"王家伟","1177264":"李剑锋","1177265":"李建军","1177266":"李念亭","1177310":"师海芳","1177333":"黄维昆","1177336":"席新永","1177338":"叶峰","1177339":"虞志胜","1177342":"庄允吉","1235746":"丁允志","1236416":"张道仅","1239728":"郭振宗","1254596":"候海晴","1259740":"汪保平","1262912":"向波","900001":"林泽学","900002":"堂自赠","900003":"刘建希","900004":"邓翼阳","900005":"邓茂胜","900006":"宋冠楠","900007":"曹珪","900008":"侯自峰","900009":"刘晨光","900010":"肖永登","900011":"唐先发","900012":"肖渔"
     };
-
-    const el = {
-      employeeId: document.getElementById('employeeId'),
-      employeeName: document.getElementById('employeeName'),
-      workDate: document.getElementById('workDate'),
-      workType: document.getElementById('workType'),
-      projectNo: document.getElementById('projectNo'),
-      unitNo: document.getElementById('unitNo'),
-      hours: document.getElementById('hours'),
-      remark: document.getElementById('remark'),
-      validationBox: document.getElementById('validationBox'),
-      weekdayInfo: document.getElementById('weekdayInfo'),
-      normalTotal: document.getElementById('normalTotal'),
-      weekdayOtTotal: document.getElementById('weekdayOtTotal'),
-      dayStatus: document.getElementById('dayStatus'),
-      dayStatusTip: document.getElementById('dayStatusTip'),
-      saveBtn: document.getElementById('saveBtn'),
-      resetBtn: document.getElementById('resetBtn'),
-      copyTodayBtn: document.getElementById('copyTodayBtn'),
-      recordsBody: document.getElementById('recordsBody'),
-      tableEmpty: document.getElementById('tableEmpty'),
-      filterEmployee: document.getElementById('filterEmployee'),
-      filterDate: document.getElementById('filterDate'),
-      clearAllBtn: document.getElementById('clearAllBtn'),
-      exportBtn: document.getElementById('exportBtn'),
-      formTitle: document.getElementById('formTitle')
+    const projectUnits = {
+      "P0407596": ["U123","U123-1","U335","U343","U361","U368","U368-1","U368-3","U371","U373","U381","U382","U387","U451","U503","U641A","U641A-1","U641B","U641B-1","U641C","U641C-1"],
+      "P0407596_v": ["536165"],
+      "P0382530": ["U114-1","U125","U201A","U201B","U344","U361","U381","U401","P0335-DH2000A"],
+      "P0382530_V": ["102821","105076","503842","532971","129822"],
+      "P0373305": ["U121","U123","U123-1","U142","U335","U342","U361","U368","U368-1","U368-3","U381","U387","U503","U611","U611-A","U611-B","U611-C","U611-D"],
+      "P88359": ["U201-2","U335","U341","U361","U371","U381","U451"],
+      "P88359_V": ["536165"],
+      "P0384374": ["U120","U126","U126-1","U335","U343","U361","U368","U368-1","U368-3","U371","U373","U381","U387","U451","U641A","U641B","U641C","U641D"],
+      "P0384374_V": ["536474"]
     };
+    const weekOptions = ["W25","W26","W27","W28"];
+    const weekdayOptions = ["一","二","三","四","五","六","日"];
+    const taskOptions = ["机械组装","保温作业","电气安装","额外工时","仓库作业","车间管理","其它工作","请假"];
+    const dayConfigs = [
+      { key:"一", label:"周一", type:"weekday" },
+      { key:"二", label:"周二", type:"weekday" },
+      { key:"三", label:"周三", type:"weekday" },
+      { key:"四", label:"周四", type:"weekday" },
+      { key:"五", label:"周五", type:"weekday" },
+      { key:"六", label:"周六", type:"weekend" },
+      { key:"日", label:"周日", type:"weekend" }
+    ];
+    const quickHoursMap = {
+      regularHours: [0,1,2,3,4,8],
+      otWeekday: [0,1,2,3,4],
+      otWeekend: [0,1,2,3,4,8]
+    };
+    const TASKS_NO_PROJECT = ["仓库作业","其它工作","请假"];
+    const TASKS_PROJECT_ONLY = ["车间管理"];
 
-    function loadRecords() {
+    const state = { week:"", weekday:"", task:"", project:"", unit:"", regularHours:8, otWeekday:0, otWeekend:0 };
+    let isSubmitting = false;
+    let currentWeekRecords = [];
+
+    function $(id){ return document.getElementById(id); }
+    function getParam(name){ return new URL(window.location.href).searchParams.get(name); }
+    function showMsg(text, ok=true){ const el=$("msg"); el.className="msg "+(ok?"ok":"err"); el.innerHTML=text; }
+    function safe(v){ return String(v ?? "").replace(/[<>&"]/g, s => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[s])); }
+    function isWeekendDay(day){ return day === "六" || day === "日"; }
+    function needsProject(){ return !TASKS_NO_PROJECT.includes(state.task || ""); }
+    function needsUnit(){ return !(TASKS_NO_PROJECT.includes(state.task || "") || TASKS_PROJECT_ONLY.includes(state.task || "")); }
+
+    function setDisabledPlaceholder(containerId, text){
+      const container = $(containerId);
+      container.innerHTML = "";
+      const item = document.createElement("div");
+      item.className = "chip disabled";
+      item.innerText = text;
+      container.appendChild(item);
+    }
+
+    function renderChips(containerId, values, fieldName, onClick){
+      const container = $(containerId);
+      container.innerHTML = "";
+      if(!values || values.length === 0){
+        const empty = document.createElement("div");
+        empty.className = "chip disabled";
+        empty.innerText = fieldName === "unit" ? "请先选项目" : "暂无数据";
+        container.appendChild(empty);
+        return;
+      }
+      values.forEach(v => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.innerText = v;
+        chip.dataset.value = v;
+        chip.dataset.field = fieldName;
+        chip.onclick = async () => {
+          if(chip.classList.contains("disabled")) return;
+          if(typeof onClick === "function") await onClick(v);
+          else {
+            state[fieldName] = v;
+            if(fieldName === "weekday") syncHourSectionByWeekday();
+            if(fieldName === "task") applyTaskRules();
+            renderAllActiveChips();
+          }
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    function renderAllActiveChips(){
+      document.querySelectorAll(".chip").forEach(chip => {
+        const field = chip.dataset.field;
+        const value = chip.dataset.value;
+        if(!field) return;
+        chip.classList.toggle("active", state[field] === value);
+      });
+    }
+
+    function toggleFieldState(fieldId, labelId, noteId, disabled, noteText){
+      const field = $(fieldId);
+      const note = $(noteId);
+      if(disabled){
+        field.classList.add("disabled-field");
+        note.classList.remove("hidden");
+        note.textContent = noteText || "";
+      }else{
+        field.classList.remove("disabled-field");
+        note.classList.add("hidden");
+        note.textContent = "";
+      }
+    }
+
+    function renderProjectChips(){
+      if(!needsProject()){
+        setDisabledPlaceholder("projectChips", "该类别无需项目号");
+        return;
+      }
+      const projects = Object.keys(projectUnits);
+      renderChips("projectChips", projects, "project", function(v){
+        state.project = v;
+        if(needsUnit()) state.unit = "";
+        renderUnitChips();
+        renderAllActiveChips();
+      });
+    }
+
+    function renderUnitChips(){
+      if(!needsUnit()){
+        const text = TASKS_NO_PROJECT.includes(state.task || "") ? "该类别无需单元号" : "车间管理无需单元号";
+        setDisabledPlaceholder("unitChips", text);
+        return;
+      }
+      const units = state.project && projectUnits[state.project] ? projectUnits[state.project] : [];
+      renderChips("unitChips", units, "unit", function(v){ state.unit=v; renderAllActiveChips(); });
+      renderAllActiveChips();
+    }
+
+    function applyTaskRules(){
+      if(!needsProject()){
+        state.project = "";
+        state.unit = "";
+        toggleFieldState("projectField", "projectLabel", "projectNote", true, "当前工时类别不涉及项目信息");
+        toggleFieldState("unitField", "unitLabel", "unitNote", true, "当前工时类别不涉及单元信息");
+      }else if(!needsUnit()){
+        state.unit = "";
+        toggleFieldState("projectField", "projectLabel", "projectNote", false, "");
+        toggleFieldState("unitField", "unitLabel", "unitNote", true, "车间管理只需选择项目号");
+      }else{
+        toggleFieldState("projectField", "projectLabel", "projectNote", false, "");
+        toggleFieldState("unitField", "unitLabel", "unitNote", false, "");
+      }
+      renderProjectChips();
+      renderUnitChips();
+      renderAllActiveChips();
+    }
+
+    function renderQuickButtons(){
+      renderQuickRow("regularHoursQuick", "regularHours", quickHoursMap.regularHours, true);
+      renderQuickRow("otWeekdayQuick", "otWeekday", quickHoursMap.otWeekday, false);
+      renderQuickRow("otWeekendQuick", "otWeekend", quickHoursMap.otWeekend, false);
+    }
+    function renderQuickRow(containerId, field, values, regular){
+      const box = $(containerId); box.innerHTML = "";
+      values.forEach(v => {
+        const btn = document.createElement("button");
+        btn.type = "button"; btn.className = "quick-btn";
+        btn.textContent = v === 0 ? (regular ? "0小时" : "清零") : `${v}小时`;
+        btn.onclick = function(){ setNumber(field, v); };
+        box.appendChild(btn);
+      });
+    }
+    function refreshDisplays(){
+      $("regularHoursDisplay").innerText = state.regularHours;
+      $("otWeekdayDisplay").innerText = state.otWeekday;
+      $("otWeekendDisplay").innerText = state.otWeekend;
+    }
+    function getMaxHours(field){
+      if(field === "otWeekday" && state.weekday && !isWeekendDay(state.weekday)) return 4;
+      return 12;
+    }
+    function changeNumber(field, delta){
+      let next = Math.round((Number(state[field] || 0) + delta) * 2) / 2;
+      if(next < 0) next = 0;
+      const max = getMaxHours(field);
+      if(next > max) next = max;
+      state[field] = next;
+      refreshDisplays();
+    }
+    function setNumber(field, value){
+      const max = getMaxHours(field);
+      state[field] = Math.max(0, Math.min(value, max));
+      refreshDisplays();
+    }
+    function syncHourSectionByWeekday(){
+      const hasDay = !!state.weekday;
+      const weekend = isWeekendDay(state.weekday);
+      if(!hasDay){
+        $("weekdayOTCard").classList.remove("hidden");
+        $("weekendOTCard").classList.add("hidden");
+        refreshDisplays();
+        return;
+      }
+      if(weekend){
+        state.otWeekday = 0;
+        $("weekdayOTCard").classList.add("hidden");
+        $("weekendOTCard").classList.remove("hidden");
+      }else{
+        state.otWeekend = 0;
+        if(state.otWeekday > 4) state.otWeekday = 4;
+        $("weekdayOTCard").classList.remove("hidden");
+        $("weekendOTCard").classList.add("hidden");
+      }
+      refreshDisplays();
+    }
+
+    const empId = getParam("id");
+    const empName = empId ? employeeMap[empId] : "";
+    function initEmployee(){
+      $("empId").innerText = empId || "--";
+      if (empId && empName) {
+        $("empName").innerText = empName;
+        $("empState").innerText = "识别成功";
+        $("empState").className = "id-value ok";
+        $("submitBtn").disabled = false;
+      } else if (empId) {
+        $("empName").innerText = "未知员工";
+        $("empState").innerText = "未在名单中";
+        $("empState").className = "id-value err";
+        $("submitBtn").disabled = true;
+      } else {
+        $("empName").innerText = "--";
+        $("empState").innerText = "请扫码进入";
+        $("empState").className = "id-value warn";
+        $("submitBtn").disabled = true;
+      }
+    }
+
+    async function loadWeekRecords(){
+      if(!state.week || !empId){ renderWeekRecords([]); return; }
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        state.records = raw ? JSON.parse(raw) : [];
-      } catch (e) {
-        state.records = [];
+        const res = await fetch(API_URL, {
+          method: "GET",
+          headers: {"Authorization": "Token " + API_TOKEN, "Content-Type": "application/json"}
+        });
+        if(!res.ok) throw new Error("读取记录失败：" + res.status);
+        const data = await res.json();
+        let rows = [];
+        if(Array.isArray(data)) rows = data;
+        else if(Array.isArray(data.results)) rows = data.results;
+        rows = rows.filter(r => String(r.employeeId || "") === String(empId) && String(r.week || "") === String(state.week));
+        rows.sort((a,b)=> new Date(a.submitTime || 0).getTime() - new Date(b.submitTime || 0).getTime());
+        currentWeekRecords = rows;
+        renderWeekRecords(rows);
+      } catch(e){
+        renderWeekRecords([], "本周记录读取失败：" + e.message);
       }
     }
 
-    function saveRecords() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records));
+    function rowKey(r){
+      return [String(r.task||""), String(r.project||""), String(r.unit||""), String(r.remark||"").trim()].join("||");
     }
 
-    function uid() {
-      return 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-    }
+    function renderWeekRecords(rows, errMsg=""){
+      const box = $("recordList");
+      box.innerHTML = "";
+      if(errMsg){ box.innerHTML = `<div class="record-empty">${safe(errMsg)}</div>`; return; }
+      if(!state.week){ box.innerHTML = `<div class="record-empty">请选择 Week 查看本周记录</div>`; return; }
+      if(!rows || rows.length === 0){ box.innerHTML = `<div class="record-empty">当前员工在 ${safe(state.week)} 还没有提交记录</div>`; return; }
 
-    function toNum(v) {
-      const n = Number(v);
-      return Number.isFinite(n) ? n : 0;
-    }
+      const rowMap = new Map();
+      rows.forEach(r => {
+        const key = rowKey(r);
+        if(!rowMap.has(key)){
+          rowMap.set(key, {
+            task: String(r.task||""),
+            project: String(r.project||""),
+            unit: String(r.unit||""),
+            remark: String(r.remark||"").trim(),
+            days: {"一":{regular:0,overtime:0},"二":{regular:0,overtime:0},"三":{regular:0,overtime:0},"四":{regular:0,overtime:0},"五":{regular:0,overtime:0},"六":{regular:0,overtime:0},"日":{regular:0,overtime:0}},
+            totalRegular:0,
+            totalEveningOt:0,
+            totalWeekendOt:0
+          });
+        }
+        const row = rowMap.get(key);
+        const day = String(r.weekday || "");
+        const regular = Number(r.regularHours || 0);
+        const overtime = Number(r.otWeekday || 0) + Number(r.otWeekend || 0);
+        if(row.days[day]){
+          row.days[day].regular += regular;
+          row.days[day].overtime += overtime;
+        }
+        row.totalRegular += regular;
+        row.totalEveningOt += Number(r.otWeekday || 0);
+        row.totalWeekendOt += Number(r.otWeekend || 0);
+      });
 
-    function fmtHour(v) {
-      return Number(v || 0).toFixed(1) + 'h';
-    }
-
-    function isWeekend(dateStr) {
-      if (!dateStr) return null;
-      const d = new Date(dateStr + 'T00:00:00');
-      const day = d.getDay();
-      return day === 0 || day === 6;
-    }
-
-    function getWeekText(dateStr) {
-      if (!dateStr) return '';
-      const names = ['周日','周一','周二','周三','周四','周五','周六'];
-      return names[new Date(dateStr + 'T00:00:00').getDay()];
-    }
-
-    function typeLabel(type) {
-      if (type === 'normal') return '正常工时';
-      if (type === 'ot_weekday') return '工作日加班';
-      if (type === 'ot_weekend') return '周末加班';
-      return type || '';
-    }
-
-    function typeClass(type) {
-      if (type === 'normal') return 'normal';
-      if (type === 'ot_weekday') return 'ot-weekday';
-      return 'ot-weekend';
-    }
-
-    function currentFormData() {
-      return {
-        id: state.editingId || uid(),
-        employeeId: el.employeeId.value.trim(),
-        employeeName: el.employeeName.value.trim(),
-        workDate: el.workDate.value,
-        workType: el.workType.value,
-        projectNo: el.projectNo.value.trim(),
-        unitNo: el.unitNo.value.trim(),
-        hours: toNum(el.hours.value),
-        remark: el.remark.value.trim(),
-        updatedAt: new Date().toISOString()
+      const summary = {
+        "一":{regular:0,overtime:0},"二":{regular:0,overtime:0},"三":{regular:0,overtime:0},"四":{regular:0,overtime:0},"五":{regular:0,overtime:0},"六":{regular:0,overtime:0},"日":{regular:0,overtime:0},
+        totalRegular:0,totalEveningOt:0,totalWeekendOt:0
       };
+      Array.from(rowMap.values()).forEach(r => {
+        dayConfigs.forEach(dc => {
+          summary[dc.key].regular += r.days[dc.key].regular;
+          summary[dc.key].overtime += r.days[dc.key].overtime;
+        });
+        summary.totalRegular += r.totalRegular;
+        summary.totalEveningOt += r.totalEveningOt;
+        summary.totalWeekendOt += r.totalWeekendOt;
+      });
+
+      function warnWeekdayRegular(v){ return v !== 8; }
+      function warnWeekdayOt(v){ return !(v === 0 || v === 4); }
+
+      let thead = `
+        <thead>
+          <tr>
+            <th class="w-job" rowspan="2">工时类别</th>
+            <th class="w-project" rowspan="2">项目号</th>
+            <th class="w-unit" rowspan="2">单元号</th>
+            <th class="w-remark" rowspan="2">备注</th>
+            <th colspan="2">周一</th>
+            <th colspan="2">周二</th>
+            <th colspan="2">周三</th>
+            <th colspan="2">周四</th>
+            <th colspan="2">周五</th>
+            <th colspan="1">周六</th>
+            <th colspan="1">周日</th>
+            <th colspan="3">汇总</th>
+          </tr>
+          <tr>
+            <th>正常<br>出勤</th><th>实际<br>加班</th>
+            <th>正常<br>出勤</th><th>实际<br>加班</th>
+            <th>正常<br>出勤</th><th>实际<br>加班</th>
+            <th>正常<br>出勤</th><th>实际<br>加班</th>
+            <th>正常<br>出勤</th><th>实际<br>加班</th>
+            <th>实际<br>加班</th>
+            <th>实际<br>加班</th>
+            <th>正常<br>出勤</th>
+            <th>实际晚<br>上加班</th>
+            <th>实际周<br>末加班</th>
+          </tr>
+        </thead>`;
+
+      let bodyRows = "";
+      Array.from(rowMap.values()).forEach(r => {
+        bodyRows += `
+          <tr>
+            <td class="cell-left w-job">${safe(r.task)}</td>
+            <td class="w-project">${safe(r.project)}</td>
+            <td class="w-unit">${safe(r.unit)}</td>
+            <td class="w-remark">${safe(r.remark)}</td>
+            <td>${r.days["一"].regular || ""}</td><td>${r.days["一"].overtime || ""}</td>
+            <td>${r.days["二"].regular || ""}</td><td>${r.days["二"].overtime || ""}</td>
+            <td>${r.days["三"].regular || ""}</td><td>${r.days["三"].overtime || ""}</td>
+            <td>${r.days["四"].regular || ""}</td><td>${r.days["四"].overtime || ""}</td>
+            <td>${r.days["五"].regular || ""}</td><td>${r.days["五"].overtime || ""}</td>
+            <td>${r.days["六"].overtime || ""}</td>
+            <td>${r.days["日"].overtime || ""}</td>
+            <td>${r.totalRegular || ""}</td>
+            <td>${r.totalEveningOt || ""}</td>
+            <td>${r.totalWeekendOt || ""}</td>
+          </tr>`;
+      });
+
+      const tdClass = (warn) => warn ? ' class="warn-cell"' : '';
+      const sumRow = `
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="sum-label">汇总</td>
+          <td${tdClass(warnWeekdayRegular(summary["一"].regular))}>${summary["一"].regular || 0}</td>
+          <td${tdClass(warnWeekdayOt(summary["一"].overtime))}>${summary["一"].overtime || 0}</td>
+          <td${tdClass(warnWeekdayRegular(summary["二"].regular))}>${summary["二"].regular || 0}</td>
+          <td${tdClass(warnWeekdayOt(summary["二"].overtime))}>${summary["二"].overtime || 0}</td>
+          <td${tdClass(warnWeekdayRegular(summary["三"].regular))}>${summary["三"].regular || 0}</td>
+          <td${tdClass(warnWeekdayOt(summary["三"].overtime))}>${summary["三"].overtime || 0}</td>
+          <td${tdClass(warnWeekdayRegular(summary["四"].regular))}>${summary["四"].regular || 0}</td>
+          <td${tdClass(warnWeekdayOt(summary["四"].overtime))}>${summary["四"].overtime || 0}</td>
+          <td${tdClass(warnWeekdayRegular(summary["五"].regular))}>${summary["五"].regular || 0}</td>
+          <td${tdClass(warnWeekdayOt(summary["五"].overtime))}>${summary["五"].overtime || 0}</td>
+          <td>${summary["六"].overtime || 0}</td>
+          <td>${summary["日"].overtime || 0}</td>
+          <td>${summary.totalRegular || 0}</td>
+          <td>${summary.totalEveningOt || 0}</td>
+          <td>${summary.totalWeekendOt || 0}</td>
+        </tr>`;
+
+      box.innerHTML = `
+        <div class="table-scroll">
+          <table class="record-table">
+            ${thead}
+            <tbody>
+              ${bodyRows}
+              ${sumRow}
+            </tbody>
+          </table>
+        </div>`;
     }
 
-    function samePersonDay(a, b) {
-      return a.employeeId === b.employeeId && a.workDate === b.workDate;
+    function buildSubmitSignature(payload){
+      return JSON.stringify({
+        employeeId: payload.employeeId,
+        week: payload.week,
+        weekday: payload.weekday,
+        task: payload.task,
+        project: payload.project,
+        unit: payload.unit,
+        regularHours: Number(payload.regularHours),
+        otWeekday: Number(payload.otWeekday),
+        otWeekend: Number(payload.otWeekend),
+        remark: String(payload.remark || "").trim()
+      });
     }
-
-    function dayTotals(records, employeeId, workDate, excludeId = null) {
-      const list = records.filter(r => r.employeeId === employeeId && r.workDate === workDate && r.id !== excludeId);
-      return {
-        normal: list.filter(r => r.workType === 'normal').reduce((s, r) => s + toNum(r.hours), 0),
-        otWeekday: list.filter(r => r.workType === 'ot_weekday').reduce((s, r) => s + toNum(r.hours), 0),
-        otWeekend: list.filter(r => r.workType === 'ot_weekend').reduce((s, r) => s + toNum(r.hours), 0),
-        list
+    function existsExactDuplicate(signature){
+      return currentWeekRecords.some(r => JSON.stringify({
+        employeeId: r.employeeId,
+        week: r.week,
+        weekday: r.weekday,
+        task: r.task,
+        project: r.project,
+        unit: r.unit,
+        regularHours: Number(r.regularHours || 0),
+        otWeekday: Number(r.otWeekday || 0),
+        otWeekend: Number(r.otWeekend || 0),
+        remark: String(r.remark || "").trim()
+      }) === signature);
+    }
+    function isFastRepeat(signature){
+      const prevSig = localStorage.getItem("last_submit_signature");
+      const prevTs = Number(localStorage.getItem("last_submit_time") || 0);
+      return prevSig === signature && (Date.now() - prevTs) < 15000;
+    }
+    function saveLastSubmit(signature){
+      localStorage.setItem("last_submit_signature", signature);
+      localStorage.setItem("last_submit_time", String(Date.now()));
+    }
+    function validate(){
+      if(!empId || !empName) return "未识别到有效员工信息，请使用员工专属二维码扫码。";
+      if(!state.week) return "请选择 Week。";
+      if(!state.weekday) return "请选择星期。";
+      if(!state.task) return "请选择工时类别。";
+      if(needsProject() && !state.project) return "请选择项目号。";
+      if(needsUnit() && !state.unit) return "请选择单元号。";
+      if(state.regularHours < 0 || state.regularHours > 12) return "正常工时必须在 0~12 之间。";
+      if(!isWeekendDay(state.weekday) && (state.otWeekday < 0 || state.otWeekday > 4)) return "工作日加班必须在 0~4 小时之间。";
+      if(isWeekendDay(state.weekday) && state.otWeekday !== 0) return "周末不能填写工作日加班。";
+      if(!isWeekendDay(state.weekday) && state.otWeekend !== 0) return "工作日不能填写周末加班。";
+      if(state.otWeekend < 0 || state.otWeekend > 12) return "周末加班必须在 0~12 之间。";
+      return "";
+    }
+    async function submitForm(){
+      if(isSubmitting){ showMsg("正在提交中，请勿重复点击。", false); return; }
+      const err = validate();
+      if(err){ showMsg(err, false); return; }
+      if(!API_TOKEN || API_TOKEN.includes("请替换成你自己的Baserow Token")){
+        showMsg("请先把代码里的 API_TOKEN 替换成你自己的 Baserow token。", false); return;
+      }
+      const payload = {
+        submitTime: new Date().toISOString(),
+        employeeId: empId,
+        employeeName: empName,
+        week: state.week,
+        weekday: state.weekday,
+        task: state.task,
+        project: needsProject() ? state.project : "",
+        unit: needsUnit() ? state.unit : "",
+        regularHours: Number(state.regularHours),
+        otWeekday: Number(state.otWeekday),
+        otWeekend: Number(state.otWeekend),
+        remark: $("remark").value || ""
       };
-    }
-
-    function validateRecord(rec) {
-      const errors = [];
-      const warns = [];
-
-      if (!rec.employeeId) errors.push('员工编号不能为空。');
-      if (!rec.employeeName) errors.push('员工姓名不能为空。');
-      if (!rec.workDate) errors.push('日期不能为空。');
-      if (!rec.projectNo) errors.push('项目号不能为空。');
-      if (!rec.unitNo) errors.push('单元号不能为空。');
-      if (!(rec.hours > 0)) errors.push('工时必须大于 0。');
-      if (rec.hours > 24) errors.push('单条工时不能大于 24h。');
-
-      if (errors.length) {
-        return { valid: false, errors, warns, preview: null };
+      const signature = buildSubmitSignature(payload);
+      if(isFastRepeat(signature)){ showMsg("请勿连续重复提交完全相同的数据。", false); return; }
+      if(existsExactDuplicate(signature)){ showMsg("本周已存在一条完全相同的记录，无需重复提交。", false); return; }
+      try{
+        isSubmitting = true;
+        $("submitBtn").disabled = true;
+        showMsg("正在提交，请稍候…", true);
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: {"Authorization": "Token " + API_TOKEN, "Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+        if(!res.ok) throw new Error("接口返回失败状态：" + res.status);
+        saveLastSubmit(signature);
+        showMsg("✅ 提交成功。", true);
+        state.weekday = "";
+        state.task = "";
+        state.project = "";
+        state.unit = "";
+        state.regularHours = 8;
+        state.otWeekday = 0;
+        state.otWeekend = 0;
+        $("remark").value = "";
+        applyTaskRules();
+        renderAllActiveChips();
+        refreshDisplays();
+        syncHourSectionByWeekday();
+        await loadWeekRecords();
+      }catch(e){
+        showMsg("❌ 提交失败：" + e.message, false);
+      }finally{
+        isSubmitting = false;
+        $("submitBtn").disabled = !(empId && empName);
       }
-
-      const weekend = isWeekend(rec.workDate);
-      const totalsBefore = dayTotals(state.records, rec.employeeId, rec.workDate, state.editingId);
-      const preview = {
-        normal: totalsBefore.normal + (rec.workType === 'normal' ? rec.hours : 0),
-        otWeekday: totalsBefore.otWeekday + (rec.workType === 'ot_weekday' ? rec.hours : 0),
-        otWeekend: totalsBefore.otWeekend + (rec.workType === 'ot_weekend' ? rec.hours : 0)
-      };
-
-      if (rec.workType === 'normal') {
-        if (weekend === true) {
-          errors.push('周末不允许填写“正常工时”，请改为“周末加班”。');
-        }
-        if (rec.hours > 8) {
-          errors.push('单条正常工时不能大于 8h。');
-        }
-        if (preview.normal > 8) {
-          errors.push(`保存后该员工 ${rec.workDate} 的正常工时累计将达到 ${preview.normal.toFixed(1)}h，超过 8h，禁止提交。`);
-        }
-        if (weekend === false && preview.normal < 8) {
-          warns.push(`当前保存后，${rec.workDate} 的正常工时累计为 ${preview.normal.toFixed(1)}h，尚未满 8h。若后续还有拆分项目，可继续录入。`);
-        }
-      }
-
-      if (rec.workType === 'ot_weekday') {
-        if (weekend === true) {
-          errors.push('周末不能填写“工作日加班”，请改为“周末加班”。');
-        }
-        if (rec.hours > 4) {
-          errors.push('单条工作日加班不能超过 4h。');
-        }
-        if (preview.otWeekday > 4) {
-          errors.push(`保存后该员工 ${rec.workDate} 的工作日加班累计将达到 ${preview.otWeekday.toFixed(1)}h，超过 4h，禁止提交。`);
-        }
-        if (preview.otWeekday !== 4) {
-          errors.push(`工作日加班当天汇总只能是 0h 或 4h。当前保存后将是 ${preview.otWeekday.toFixed(1)}h，禁止提交。`);
-        }
-      }
-
-      if (rec.workType === 'ot_weekend') {
-        if (weekend === false) {
-          warns.push('当前填的是“周末加班”，但所选日期是工作日，请确认是否填错类别。');
-        }
-      }
-
-      return { valid: errors.length === 0, errors, warns, preview };
     }
-
-    function updateValidationView() {
-      const rec = currentFormData();
-      const result = validateRecord(rec);
-      const hasDate = !!rec.workDate;
-      const weekend = isWeekend(rec.workDate);
-      if (hasDate) {
-        el.weekdayInfo.textContent = `${rec.workDate}（${getWeekText(rec.workDate)}）｜${weekend ? '周末' : '工作日'}`;
-      } else {
-        el.weekdayInfo.textContent = '请选择日期后自动识别工作日/周末。';
-      }
-
-      const employeeId = rec.employeeId;
-      const workDate = rec.workDate;
-      let normal = 0, otWeekday = 0;
-      if (employeeId && workDate) {
-        const rb = dayTotals(state.records, employeeId, workDate, state.editingId);
-        normal = rb.normal + (rec.workType === 'normal' ? rec.hours : 0);
-        otWeekday = rb.otWeekday + (rec.workType === 'ot_weekday' ? rec.hours : 0);
-      }
-      el.normalTotal.textContent = fmtHour(normal);
-      el.weekdayOtTotal.textContent = fmtHour(otWeekday);
-
-      if (result.errors.length) {
-        el.validationBox.className = 'msg error show';
-        el.validationBox.innerHTML = result.errors.map(x => '• ' + x).join('<br>');
-        el.dayStatus.innerHTML = '<span class="danger-text">禁止提交</span>';
-        el.dayStatusTip.textContent = '请先修正以上错误。';
-      } else if (result.warns.length) {
-        el.validationBox.className = 'msg warn show';
-        el.validationBox.innerHTML = result.warns.map(x => '• ' + x).join('<br>');
-        el.dayStatus.innerHTML = '<span style="color:#b54708;font-weight:700;">可保存（有提醒）</span>';
-        el.dayStatusTip.textContent = '允许保存，但系统已给出提醒。';
-      } else {
-        el.validationBox.className = 'msg success show';
-        el.validationBox.innerHTML = '校验通过，可以提交。';
-        el.dayStatus.innerHTML = '<span class="ok-text">可提交</span>';
-        el.dayStatusTip.textContent = '当前记录满足已知校验规则。';
-      }
-
-      return result;
+    function init(){
+      initEmployee();
+      renderChips("weekChips", weekOptions, "week", async function(v){ state.week = v; renderAllActiveChips(); await loadWeekRecords(); });
+      renderChips("weekdayChips", weekdayOptions, "weekday", function(v){ state.weekday = v; syncHourSectionByWeekday(); renderAllActiveChips(); });
+      renderChips("taskChips", taskOptions, "task", function(v){ state.task = v; applyTaskRules(); renderAllActiveChips(); });
+      applyTaskRules();
+      renderQuickButtons();
+      renderAllActiveChips();
+      refreshDisplays();
+      syncHourSectionByWeekday();
+      renderWeekRecords([]);
     }
-
-    function clearForm() {
-      state.editingId = null;
-      el.employeeId.value = '';
-      el.employeeName.value = '';
-      el.workDate.value = '';
-      el.workType.value = 'normal';
-      el.projectNo.value = '';
-      el.unitNo.value = '';
-      el.hours.value = '';
-      el.remark.value = '';
-      el.formTitle.textContent = '新增工时记录';
-      el.saveBtn.textContent = '保存记录';
-      updateValidationView();
-    }
-
-    function fillForm(rec) {
-      state.editingId = rec.id;
-      el.employeeId.value = rec.employeeId || '';
-      el.employeeName.value = rec.employeeName || '';
-      el.workDate.value = rec.workDate || '';
-      el.workType.value = rec.workType || 'normal';
-      el.projectNo.value = rec.projectNo || '';
-      el.unitNo.value = rec.unitNo || '';
-      el.hours.value = rec.hours || '';
-      el.remark.value = rec.remark || '';
-      el.formTitle.textContent = '编辑工时记录';
-      el.saveBtn.textContent = '保存修改';
-      updateValidationView();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function submitRecord() {
-      const rec = currentFormData();
-      const result = validateRecord(rec);
-      updateValidationView();
-      if (!result.valid) {
-        alert('当前记录未通过校验，不能提交。请根据页面提示修正后重试。');
-        return;
-      }
-
-      if (state.editingId) {
-        const idx = state.records.findIndex(r => r.id === state.editingId);
-        if (idx >= 0) {
-          state.records[idx] = rec;
-        }
-      } else {
-        state.records.push(rec);
-      }
-      saveRecords();
-      renderRecords();
-      const msg = state.editingId ? '修改已保存。' : '记录已保存。';
-      clearForm();
-      alert(msg);
-    }
-
-    function deleteRecord(id) {
-      const rec = state.records.find(r => r.id === id);
-      if (!rec) return;
-      const ok = confirm(`确定删除这条记录吗？\n${rec.workDate}｜${rec.employeeName}｜${typeLabel(rec.workType)}｜${rec.hours}h`);
-      if (!ok) return;
-      state.records = state.records.filter(r => r.id !== id);
-      saveRecords();
-      renderRecords();
-      if (state.editingId === id) clearForm();
-      alert('删除成功，已自动重新计算当天汇总。');
-    }
-
-    function filterRecords(records) {
-      const kw = el.filterEmployee.value.trim().toLowerCase();
-      const fd = el.filterDate.value;
-      return records.filter(r => {
-        const matchKw = !kw || [r.employeeId, r.employeeName].some(v => (v || '').toLowerCase().includes(kw));
-        const matchDate = !fd || r.workDate === fd;
-        return matchKw && matchDate;
-      }).sort((a, b) => {
-        const ka = `${b.workDate}_${b.updatedAt || ''}`;
-        const kb = `${a.workDate}_${a.updatedAt || ''}`;
-        return ka.localeCompare(kb);
-      });
-    }
-
-    function renderRecords() {
-      const list = filterRecords(state.records);
-      el.recordsBody.innerHTML = '';
-      if (!list.length) {
-        el.tableEmpty.style.display = 'block';
-        return;
-      }
-      el.tableEmpty.style.display = 'none';
-
-      list.forEach(rec => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${rec.workDate}<br><span class="muted">${getWeekText(rec.workDate)}</span></td>
-          <td>${escapeHtml(rec.employeeId)}</td>
-          <td>${escapeHtml(rec.employeeName)}</td>
-          <td><span class="pill ${typeClass(rec.workType)}">${typeLabel(rec.workType)}</span></td>
-          <td>${escapeHtml(rec.projectNo)}</td>
-          <td>${escapeHtml(rec.unitNo)}</td>
-          <td>${fmtHour(rec.hours)}</td>
-          <td>${escapeHtml(rec.remark || '') || '<span class="muted">-</span>'}</td>
-          <td>
-            <div class="inline">
-              <button class="btn btn-secondary btn-sm" data-action="edit" data-id="${rec.id}">编辑</button>
-              <button class="btn btn-danger btn-sm" data-action="delete" data-id="${rec.id}">删除</button>
-            </div>
-          </td>
-        `;
-        el.recordsBody.appendChild(tr);
-      });
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function exportJson() {
-      const blob = new Blob([JSON.stringify(state.records, null, 2)], { type: 'application/json;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = '工时记录导出.json';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    function bindEvents() {
-      ['input', 'change'].forEach(evt => {
-        [el.employeeId, el.employeeName, el.workDate, el.workType, el.projectNo, el.unitNo, el.hours, el.remark]
-          .forEach(node => node.addEventListener(evt, updateValidationView));
-      });
-
-      el.saveBtn.addEventListener('click', submitRecord);
-      el.resetBtn.addEventListener('click', clearForm);
-      el.copyTodayBtn.addEventListener('click', () => {
-        const today = new Date();
-        const y = today.getFullYear();
-        const m = String(today.getMonth() + 1).padStart(2, '0');
-        const d = String(today.getDate()).padStart(2, '0');
-        el.workDate.value = `${y}-${m}-${d}`;
-        updateValidationView();
-      });
-      el.filterEmployee.addEventListener('input', renderRecords);
-      el.filterDate.addEventListener('change', renderRecords);
-      el.exportBtn.addEventListener('click', exportJson);
-      el.clearAllBtn.addEventListener('click', () => {
-        const ok = confirm('确定清空全部数据吗？此操作不可撤销。');
-        if (!ok) return;
-        state.records = [];
-        saveRecords();
-        clearForm();
-        renderRecords();
-        alert('已清空全部数据。');
-      });
-
-      el.recordsBody.addEventListener('click', (e) => {
-        const btn = e.target.closest('button[data-action]');
-        if (!btn) return;
-        const id = btn.getAttribute('data-id');
-        const action = btn.getAttribute('data-action');
-        const rec = state.records.find(r => r.id === id);
-        if (!rec) return;
-        if (action === 'edit') fillForm(rec);
-        if (action === 'delete') deleteRecord(id);
-      });
-    }
-
-    function init() {
-      loadRecords();
-      bindEvents();
-      renderRecords();
-      clearForm();
-    }
-
     init();
   </script>
 </body>
