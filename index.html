@@ -1,176 +1,179 @@
-<!-- ✅ 已精简头部，仅保留必要结构 -->
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>工时系统</title>
-</head>
-
-<body>
-
-<h2>工时填报</h2>
-
-<div id="info"></div>
-
-Week:
-<select id="week">
-  <option value="W25">W25</option>
-  <option value="W26">W26</option>
-</select>
-
-星期:
-<select id="day">
-  <option>一</option><option>二</option><option>三</option>
-  <option>四</option><option>五</option>
-  <option>六</option><option>日</option>
-</select>
-
-正常工时:
-<input id="reg" value="8">
-
-加班:
-<input id="ot" value="0">
-
-<button onclick="submitForm()">提交</button>
-
-<h3>记录</h3>
-<div id="list"></div>
+<!-- ✅ 只展示修改部分（已整合进你原代码） -->
+<!-- ✅ 关键：不要自己拼，直接覆盖你 script 部分 -->
 
 <script>
 
-const API_URL = "https://api.baserow.io/api/database/rows/table/1030254/";
-const TOKEN = "你的TOKEN";
-
-const empId = new URL(location).searchParams.get("id");
-
-let records = [];
+// ✅ 新增：编辑ID
 let editingId = null;
 
-// ✅ 读取记录
-async function load(){
-  const res = await fetch(API_URL+"?user_field_names=true",{
-    headers:{Authorization:"Token "+TOKEN}
-  });
-  const data = await res.json();
-  records = (data.results||[]).filter(x=>x.employeeId==empId);
-  render();
-}
-
-// ✅ 渲染
-function render(){
-
-  let html="";
-
-  records.forEach(r=>{
-    html+=`
-    <div>
-      ${r.weekday} | 正常:${r.regularHours} | 加班:${r.otWeekday}
-      <button onclick="edit(${r.id})">编辑</button>
-      <button onclick="del(${r.id})">删除</button>
-    </div>`;
-  });
-
-  document.getElementById("list").innerHTML = html;
-}
-
-// ✅ 编辑
-function edit(id){
-  if(!confirm("确认编辑？")) return;
-  const r = records.find(x=>x.id==id);
-
-  editingId=id;
-
-  document.getElementById("week").value=r.week;
-  document.getElementById("day").value=r.weekday;
-  document.getElementById("reg").value=r.regularHours;
-  document.getElementById("ot").value=r.otWeekday;
-}
-
-// ✅ 删除
-async function del(id){
-  if(!confirm("确认删除？")) return;
-  if(!confirm("再确认一次删除！")) return;
-
-  await fetch(API_URL+id+"/",{
-    method:"DELETE",
-    headers:{Authorization:"Token "+TOKEN}
-  });
-
-  load();
-}
-
-// ✅ 校验核心
+// ✅ ✅ ✅ 强校验（完全替换原 validate）
 function validate(){
 
-  const day = document.getElementById("day").value;
-  const reg = Number(document.getElementById("reg").value);
-  const ot = Number(document.getElementById("ot").value);
+  if(!empId || !empName)
+    return "未识别到员工";
 
-  let dayRecords = records.filter(r=>r.weekday==day);
+  if(!state.week) return "请选择Week";
+  if(!state.weekday) return "请选择星期";
+  if(!state.task) return "请选择工时类别";
 
-  // 编辑排除自己
+  if(needsProject() && !state.project)
+    return "请选择项目号";
+
+  if(needsUnit() && !state.unit)
+    return "请选择单元号";
+
+  // ✅ 当前天已有记录（排除编辑）
+  let dayRecords = currentWeekRecords.filter(r =>
+    r.weekday === state.weekday
+  );
+
   if(editingId){
-    dayRecords = dayRecords.filter(r=>r.id!=editingId);
+    dayRecords = dayRecords.filter(r=>r.id!==editingId);
   }
 
-  let totalReg = reg + dayRecords.reduce((s,r)=>s+Number(r.regularHours),0);
+  // ✅ 正常工时校验
+  let totalRegular = state.regularHours +
+    dayRecords.reduce((s,r)=>s+Number(r.regularHours||0),0);
 
-  if(reg>8 || reg<0) return "单条工时必须0~8";
-  if(totalReg>8) return "当天工时超过8";
-  if(totalReg!=8) return "当天工时必须等于8";
+  if(state.regularHours < 0 || state.regularHours > 8)
+    return "正常工时必须0~8";
 
-  // 工作日加班
-  if(day!="六" && day!="日"){
-    if(ot<0 || ot>4) return "加班0~4";
+  if(totalRegular > 8)
+    return "当天正常工时累计超8小时";
 
-    let totalOt = ot + dayRecords.reduce((s,r)=>s+Number(r.otWeekday||0),0);
+  if(totalRegular !== 8)
+    return "当天正常工时必须=8";
 
-    if(totalOt!=0 && totalOt!=4)
-      return "加班总和必须0或4";
+  // ✅ 工作日加班校验
+  if(!isWeekendDay(state.weekday)){
+
+    if(state.otWeekday < 0 || state.otWeekday > 4)
+      return "加班必须0~4";
+
+    let totalOT = state.otWeekday +
+      dayRecords.reduce((s,r)=>s+Number(r.otWeekday||0),0);
+
+    if(totalOT !== 0 && totalOT !== 4)
+      return "工作日加班总和必须0或4";
   }
 
   return "";
 }
 
-// ✅ 提交
+
+// ✅ ✅ ✅ 修改 submitForm（支持编辑）
 async function submitForm(){
 
+  if(isSubmitting){ return }
+
   const err = validate();
-  if(err){ alert(err); return; }
+  if(err){ showMsg(err,false); return }
 
-  const payload = {
-    employeeId:empId,
-    week:document.getElementById("week").value,
-    weekday:document.getElementById("day").value,
-    regularHours:Number(document.getElementById("reg").value),
-    otWeekday:Number(document.getElementById("ot").value)
-  };
-
-  let method="POST";
-  let url=API_URL;
+  let method = "POST";
+  let url = API_URL;
 
   if(editingId){
-    if(!confirm("确认修改？")) return;
-    method="PATCH";
-    url += editingId + "/";
+    if(!confirm("确认修改这条记录？")) return;
+    method = "PATCH";
+    url = API_URL + editingId + "/";
   }
 
-  await fetch(url,{
-    method:method,
-    headers:{
-      Authorization:"Token "+TOKEN,
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify(payload)
-  });
+  const payload = {
+    submitTime: new Date().toISOString(),
+    employeeId: empId,
+    employeeName: empName,
+    week: state.week,
+    weekday: state.weekday,
+    task: state.task,
+    project: needsProject() ? state.project : "",
+    unit: needsUnit() ? state.unit : "",
+    regularHours: Number(state.regularHours),
+    otWeekday: Number(state.otWeekday),
+    otWeekend: Number(state.otWeekend),
+    remark: $("remark").value || ""
+  };
 
-  editingId=null;
-  load();
+  try{
+    isSubmitting = true;
+
+    const res = await fetch(url,{
+      method:method,
+      headers:{
+        "Authorization":"Token "+API_TOKEN,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(payload)
+    });
+
+    if(!res.ok) throw new Error(res.status);
+
+    editingId = null;
+
+    showMsg("✅ 提交成功",true);
+
+    await loadWeekRecords();
+
+  }catch(e){
+    showMsg("❌ 提交失败："+e.message,false);
+  }finally{
+    isSubmitting=false;
+  }
 }
 
-load();
+
+// ✅ ✅ ✅ 删除函数
+async function deleteRow(id){
+
+  if(!confirm("确认删除这条记录？")) return;
+  if(!confirm("再次确认删除！")) return;
+
+  await fetch(API_URL + id + "/",{
+    method:"DELETE",
+    headers:{ "Authorization":"Token "+API_TOKEN }
+  });
+
+  showMsg("✅ 已删除",true);
+  await loadWeekRecords();
+}
+
+
+// ✅ ✅ ✅ 编辑函数
+function editRow(id){
+
+  const r = currentWeekRecords.find(x=>x.id==id);
+  if(!r) return;
+
+  if(!confirm("确认编辑该记录？")) return;
+
+  editingId = id;
+
+  state.week = r.week;
+  state.weekday = r.weekday;
+  state.task = r.task;
+  state.project = r.project;
+  state.unit = r.unit;
+  state.regularHours = Number(r.regularHours)||0;
+  state.otWeekday = Number(r.otWeekday)||0;
+  state.otWeekend = Number(r.otWeekend)||0;
+
+  $("remark").value = r.remark||"";
+
+  renderAllActiveChips();
+  refreshDisplays();
+}
+
+
+// ✅ ✅ ✅ 在 renderWeekRecords 中增加操作按钮
+// 找到你原来的 bodyRows += 那一段，加最后一列：
+
+// 在行末尾增加：
+bodyRows += `
+<tr>
+  ...
+  <td>
+    <button onclick="editRow(${r.id})">编辑</button>
+    <button onclick="deleteRow(${r.id})">删除</button>
+  </td>
+</tr>`;
 
 </script>
-</body>
-</html>
