@@ -222,12 +222,21 @@
       font-size:12px;
       font-weight:900;
       cursor:pointer;
+      min-height:30px;
     }
 
     .quick-btn:disabled {
       background:#f3f4f6;
       color:#aaa;
       cursor:not-allowed;
+    }
+
+    .remark-template-title {
+      font-size:12px;
+      color:#6b7280;
+      font-weight:900;
+      margin:6px 0 3px;
+      width:100%;
     }
 
     textarea,
@@ -551,6 +560,7 @@
         <div class="field" style="margin-top:14px">
           <label>备注</label>
           <textarea id="remark" placeholder="可选"></textarea>
+          <div id="remarkQuick" class="quick-row"></div>
         </div>
 
         <div class="btn-area">
@@ -627,6 +637,7 @@
       <div class="field">
         <label>备注</label>
         <textarea id="editRemark"></textarea>
+        <div id="editRemarkQuick" class="quick-row"></div>
       </div>
 
       <div class="modal-actions">
@@ -723,13 +734,23 @@ const projectUnits = {
 };
 
 const weekdayOptions = ["一","二","三","四","五","六","日"];
-const taskOptions = ["机械组装","保温作业","电气安装","额外工时","其它工作","仓库作业","请假"];
-const TASKS_NO_PROJECT = ["仓库作业","其它工作","请假"];
+const taskOptions = ["仓库作业","机械组装","保温作业","电气安装","额外工时","其它作业","请假"];
+const TASKS_NO_PROJECT = ["仓库作业","其它作业","其它工作","请假"];
 const TASKS_PROJECT_ONLY = ["车间管理"];
 const quickHoursMap = {
   regularHours:[0,1,2,3,4,8],
   otWeekday:[0,1,2,3,4],
   otWeekend:[0,1,2,3,4,8]
+};
+const remarkTemplates = {
+  "仓库作业":["点料、入库","发料、退料","装箱发货","仓库帮忙"],
+  "机械组装":["下料、组对、组装","焊接","压力测试","配件打磨","气管安装"],
+  "保温作业":["管道补漆","保温预制下料","保温安装","保温发泡","保温清理"],
+  "电气安装":["桥架安装","布线","端子接线","电气检测FAT"],
+  "额外工时":["项目组设计更改返工","增加额外支架等返工","项目组特殊要求返工","供应商问题返工","FAT帮忙","内部问题返工"],
+  "其它作业":["整理、打扫、5S等","培训等","早会","精益生产改善工作","其它","车间管理"],
+  "其它工作":["整理、打扫、5S等","培训等","早会","精益生产改善工作","其它","车间管理"],
+  "请假":["年假","病假","事假","出差"]
 };
 const state = {
   week:"",
@@ -942,6 +963,7 @@ function renderMainTaskChips(){
     state.task = value;
     applyTaskRules();
     renderActive();
+    renderRemarkQuick();
   });
 }
 function renderProjects(){
@@ -976,6 +998,29 @@ function applyTaskRules(){
   }
   renderProjects();
   renderUnits();
+}
+function renderRemarkQuick(target="main"){
+  const task = target === "edit" ? editState.task : state.task;
+  const box = target === "edit" ? $("editRemarkQuick") : $("remarkQuick");
+  const textarea = target === "edit" ? $("editRemark") : $("remark");
+  if(!box) return;
+  box.innerHTML = "";
+  const list = remarkTemplates[task] || [];
+  if(!list.length) return;
+  const title = document.createElement("div");
+  title.className = "remark-template-title";
+  title.innerText = "快捷备注（点击选择）";
+  box.appendChild(title);
+  list.forEach(text=>{
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "quick-btn";
+    btn.innerText = text;
+    btn.onclick = ()=>{
+      textarea.value = text;
+    };
+    box.appendChild(btn);
+  });
 }
 function renderQuickButtons(){
   renderQuickRow("regularHoursQuick", "regularHours", quickHoursMap.regularHours, true, setNumber);
@@ -1226,6 +1271,7 @@ async function submitForm(){
     state.otWeekday = 0;
     state.otWeekend = 0;
     $("remark").value = "";
+    renderRemarkQuick();
     applyTaskRules();
     renderActive();
     refreshDisplays();
@@ -1291,15 +1337,16 @@ function renderEditAll(){
   normalizeEditState();
   $("editWeekText").innerText = editState.week;
   renderChips("editWeekdayChips", weekdayOptions, "weekday", value=>{editState.weekday=value;editSyncDay();renderEditAll();}, editState);
-  renderChips("editTaskChips", taskOptions, "task", value=>{editState.task=value;if(!needsProjectByTask(value)){editState.project="";editState.unit="";}else if(!needsUnitByTask(value)) editState.unit="";renderEditAll();}, editState);
+  renderChips("editTaskChips", taskOptions, "task", value=>{editState.task=value;if(!needsProjectByTask(value)){editState.project="";editState.unit="";}else if(!needsUnitByTask(value)) editState.unit="";renderEditAll();renderRemarkQuick("edit");}, editState);
   if(!needsProjectByTask(editState.task)) disabledChip("editProjectChips", "该类别无需项目号");
-  else renderChips("editProjectChips", Object.keys(projectUnits), "project", value=>{editState.project=value;editState.unit="";renderEditAll();}, editState);
+  else renderChips("editProjectChips", Object.keys(projectUnits), "project", value=>{editState.project=value;editState.unit="";renderEditAll();renderRemarkQuick("edit");}, editState);
   if(!needsUnitByTask(editState.task)) disabledChip("editUnitChips", "该类别无需单元号");
   else{
     const units = editState.project && projectUnits[editState.project] ? projectUnits[editState.project] : [];
-    renderChips("editUnitChips", units, "unit", value=>{editState.unit=value;renderEditAll();}, editState);
+    renderChips("editUnitChips", units, "unit", value=>{editState.unit=value;renderEditAll();renderRemarkQuick("edit");}, editState);
   }
   renderEditQuickButtons();
+  renderRemarkQuick("edit");
   editSyncDay();
 }
 function openEditModal(id){
@@ -1314,6 +1361,7 @@ function openEditModal(id){
   normalizeEditState();
   $("editRemark").value = editState.remark;
   renderEditAll();
+  renderRemarkQuick("edit");
   $("editModal").classList.remove("hidden");
 }
 function closeEditModal(){
@@ -1432,6 +1480,7 @@ async function init(){
   renderMainTaskChips();
   applyTaskRules();
   renderQuickButtons();
+  renderRemarkQuick();
   refreshDisplays();
   await loadWeekRecords();
 }
