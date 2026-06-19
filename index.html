@@ -226,6 +226,52 @@
   min-height:28px;
   font-size:12px;
 }
+
+
+/* ✅ 单元号区域进阶优化 */
+.unit-search{
+  width:100%;
+  border:1px solid #cbd5e1;
+  border-radius:10px;
+  padding:8px 10px;
+  font-size:15px;
+  margin-bottom:6px;
+}
+
+/* ✅ 单元号按钮更大、更适合手机点击 */
+.unit-grid .chip{
+  font-size:17px;
+  min-height:46px;
+  line-height:1.2;
+  padding:6px 4px;
+  word-break:break-all;
+}
+
+/* ✅ 单元号分组标题 */
+.unit-group-title{
+  grid-column:1 / -1;
+  font-size:12px;
+  font-weight:900;
+  color:#64748b;
+  background:#f8fafc;
+  border:1px solid #e5e7eb;
+  border-radius:8px;
+  padding:5px 8px;
+  margin-top:4px;
+}
+
+/* ✅ 手机端单元号每行3个，更清楚 */
+@media(max-width:560px){
+  .unit-grid{
+    grid-template-columns:repeat(3,1fr)!important;
+  }
+
+  .unit-grid .chip{
+    font-size:18px;
+    min-height:48px;
+  }
+}
+
     .chip.active{
       background:var(--brand);
       border-color:var(--brand);
