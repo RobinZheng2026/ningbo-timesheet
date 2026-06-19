@@ -60,46 +60,73 @@
       padding-left:8px;
     }
 
+/* ✅ 身份整体 */
 .id-row{
   display:flex;
   background:#111;
   color:#fff;
-  padding:10px 8px;
-  border-radius:10px;
-  font-size:13px;
-  min-height:60px;   /* ✅ 强制高度更舒服
-  gap:6px;            /* ✅ 关键：3列之间有间距 */
+  padding:12px 10px;
+  border-radius:12px;
+  gap:8px;
+  min-height:70px;
 }
 
+/* ✅ 每个块 */
 .id-card{
   flex:1;
-  text-align:center;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  gap:2px;           /* ✅ 关键：上下不挤 */
+  align-items:center;
 }
 
-/* ✅ 标题更淡 */
+/* ✅ 标签 */
 .id-label{
   font-size:11px;
   color:#aaa;
-  line-height:1.2;
 }
 
-/* ✅ 数值更突出 */
+/* ✅ 核心信息（大字） */
 .id-value{
-  font-size:17px;
+  font-size:20px;
   font-weight:900;
   line-height:1.2;
+  margin-top:2px;
 }
 
-/* ✅ 状态颜色 */
-.id-value.ok{ color:#2ecc71; }
-.id-value.err{ color:#ff4d4f; }
-.id-value.warn{ color:#ffa940; }
-``
+/* ✅ 状态颜色（醒目） */
+.id-value.ok{
+  color:#2ecc71;
+}
 
+.id-value.err{
+  color:#ff4d4f;
+}
+
+.id-value.warn{
+  color:#ffa940;
+}
+
+/* ✅ 状态加图标（高级版重点） */
+.id-value.ok::before{
+  content:"✅ ";
+}
+
+.id-value.err::before{
+  content:"❌ ";
+}
+
+.id-value.warn::before{
+  content:"⚠ ";
+}
+
+/* ✅ 管理员特殊高亮 */
+.id-value.admin{
+  color:#ff4d4f;
+  background:rgba(255,77,79,0.15);
+  padding:2px 6px;
+  border-radius:6px;
+}
 
 
     .tip{
