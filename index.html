@@ -1,3 +1,4 @@
+<!-- VERSION: V3.1 STABLE PRODUCTION - CLEANED -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -176,7 +177,6 @@
   min-height:28px;
   font-size:12px;
 }
-
     .chip.active{
       background:var(--brand);
       border-color:var(--brand);
@@ -649,8 +649,8 @@
         </div>
 
         <div class="field" style="margin-top:14px">
-          <label>备注</label>
-          <textarea id="remark" placeholder="可选"></textarea>
+          <label>备注<span class="req">*</span></label>
+          <textarea id="remark" placeholder="必填：请选择或填写备注"></textarea>
           <div id="remarkQuick" class="quick-row"></div>
         </div>
 
@@ -726,8 +726,8 @@
       </div>
 
       <div class="field">
-        <label>备注</label>
-        <textarea id="editRemark"></textarea>
+        <label>备注<span class="req">*</span></label>
+        <textarea id="editRemark" placeholder="必填：请选择或填写备注"></textarea>
         <div id="editRemarkQuick" class="quick-row"></div>
       </div>
 
@@ -829,9 +829,9 @@ const taskOptions = ["机械组装","保温作业","电气安装","额外工时"
 const TASKS_NO_PROJECT = ["仓库作业","其它作业","其它工作","请假"];
 const TASKS_PROJECT_ONLY = ["车间管理"];
 const quickHoursMap = {
-  regularHours:[0,1,2,3,4,8],
-  otWeekday:[0,1,2,3,4],
-  otWeekend:[0,1,2,3,4,8]
+  regularHours:[0,0.5,1,2,3,4,8],
+  otWeekday:[0,0.5,1,2,3,4],
+  otWeekend:[0,0.5,1,2,3,4,8]
 };
 const remarkTemplates = {
   
@@ -1098,7 +1098,7 @@ function renderRemarkQuick(target="main"){
   if(!box) return;
   box.innerHTML = "";
   const list = remarkTemplates[task] || [];
-  if(!list.length) return;.
+  if(!list.length) return;
   const title = document.createElement("div");
   title.className = "remark-template-title";
   title.innerText = "快捷备注（点击选择）";
@@ -1126,7 +1126,7 @@ function renderQuickRow(containerId, field, values, regular, setter){
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "quick-btn";
-    btn.innerText = value === 0 ? (regular ? "0小时" : "清零") : value + "h";
+    btn.innerText = value === 0 ? "清零" : value + "h";
     btn.onclick = () => setter(field, value);
     box.appendChild(btn);
   });
