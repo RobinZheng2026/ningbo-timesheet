@@ -125,7 +125,7 @@ function needsProjectByTask(task){return !TASKS_NO_PROJECT.includes(task||"")}
 function needsUnitByTask(task){return !(TASKS_NO_PROJECT.includes(task||"")||TASKS_PROJECT_ONLY.includes(task||""))}
 function needsProject(){return needsProjectByTask(state.task)}
 function needsUnit(){return needsUnitByTask(state.task)}
-function isPlaceholderToken(token){token=String(token||"").trim();return !token||token==="vHwFROkQHYBYJck1Lv4i6kqitbbJI8e1"||token==="请替换成你自己的Baserow Token"||token==="你的真实Token"}
+function isPlaceholderToken(token){token=String(token||"").trim();return !token||token==="请替换成你自己的Baserow Token"||token==="你的真实Token"}
 function getApiToken(){const c=String(API_TOKEN_IN_CODE||"").trim();const l=String(localStorage.getItem(TOKEN_STORAGE_KEY)||"").trim();if(!isPlaceholderToken(c)){localStorage.setItem(TOKEN_STORAGE_KEY,c);return c}return l||""}
 function apiUrl(){
   return "https://api.baserow.io/api/database/rows/table/" + TABLE_ID + "/?user_field_names=true&size=200";
