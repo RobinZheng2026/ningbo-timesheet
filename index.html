@@ -1115,7 +1115,7 @@ function renderQuickRow(containerId, field, values, regular, setter){
     const btn = document.createElement("button");
     btn.type = "button";
     btn.className = "quick-btn";
-    btn.innerText = value === 0 ? (regular ? "0小时" : "清零") : value + "小时";
+    btn.innerText = value === 0 ? (regular ? "0小时" : "清零") : value + "h";
     btn.onclick = () => setter(field, value);
     box.appendChild(btn);
   });
