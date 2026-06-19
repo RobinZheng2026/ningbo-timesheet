@@ -180,7 +180,7 @@ async function loadAllWeeks(){
 
     const set = new Set();
 
-    // ✅ 数据库已有周
+    // ✅ 数据库已有
     rows.forEach(r=>{
       if(r.week) set.add(r.week)
     });
@@ -189,11 +189,11 @@ async function loadAllWeeks(){
     const current = getCurrentWeek();
     set.add(current);
 
-    // ✅ ✅ 强制加入前2周（关键改动）
+    // ✅ ✅ 前2周（带保护）
     const currentNum = Number(current.replace("W",""));
 
-    set.add("W" + (currentNum - 1));
-    set.add("W" + (currentNum - 2));
+    if(currentNum > 1) set.add("W" + (currentNum - 1));
+    if(currentNum > 2) set.add("W" + (currentNum - 2));
 
     // ✅ 排序
     allWeeks = Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b));
@@ -203,6 +203,7 @@ async function loadAllWeeks(){
     showMsg("读取历史周失败，仅显示当前周："+e.message,false);
   }
 }
+
 ``set.add(r.week)});set.add(getCurrentWeek());allWeeks=Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b))}catch(e){allWeeks=[getCurrentWeek()];showMsg("读取历史周失败，仅显示当前周："+e.message,false)}}
 function getWeekOptions(){return allWeeks}
 
