@@ -204,9 +204,6 @@ async function loadAllWeeks(){
   }
 }
 
-``set.add(r.week)});set.add(getCurrentWeek());allWeeks=Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b))}catch(e){allWeeks=[getCurrentWeek()];showMsg("读取历史周失败，仅显示当前周："+e.message,false)}}
-function getWeekOptions(){return allWeeks}
-
 function initEmployee(){ $("empId").innerText=empId||"--"; if(empId&&empName){$("empName").innerText=empName;if(verifyEmployeeKey()){$("empState").innerText=isAdmin()?"管理员":"验证成功";$("empState").className="id-value ok";$("submitBtn").disabled=isAdmin()}else{$("empState").innerText="验证失败";$("empState").className="id-value err";$("submitBtn").disabled=true;showMsg("身份验证码验证失败，禁止进入。",false)}}else if(empId){$("empName").innerText="未知员工";$("empState").innerText="未在名单中";$("empState").className="id-value err";$("submitBtn").disabled=true}else{$("empName").innerText="--";$("empState").innerText="请扫码进入";$("empState").className="id-value warn";$("submitBtn").disabled=true}}
 function renderChips(containerId,values,field,onClick,targetState=state){const box=$(containerId);box.innerHTML="";if(!values||!values.length){box.innerHTML='<div class="chip disabled">'+(field==="unit"?"请先选项目":"暂无数据")+'</div>';return}values.forEach(value=>{const chip=document.createElement("div");chip.className="chip"+(targetState[field]===value?" active":"");chip.innerText=value;chip.onclick=()=>onClick(value);box.appendChild(chip)})}
 function disabledChip(containerId,text){$(containerId).innerHTML='<div class="chip disabled">'+text+'</div>'}
