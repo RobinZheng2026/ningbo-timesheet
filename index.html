@@ -63,12 +63,15 @@
 /* ✅ 身份整体 */
 .id-row{
   display:flex;
-  background:#111;
-  color:#fff;
-  padding:12px 10px;
+  background:#ffffff;              /* ✅ 白底 */
+  padding:10px 8px;
   border-radius:12px;
   gap:8px;
   min-height:70px;
+
+  /* ✅ 卡片效果 */
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  border:1px solid #e5e7eb;
 }
 
 /* ✅ 每个块 */
@@ -78,7 +81,9 @@
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  color:#111;     /* ✅ 文字恢复黑色 */
 }
+``
 
 /* ✅ 标签 */
 .id-label{
