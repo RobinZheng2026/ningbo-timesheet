@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>车间工时填报系统</title>
   <style>
-    :root {
+    :root{
       --brand:#0078d4;
       --ok:#16833b;
       --danger:#b91c1c;
@@ -18,16 +18,18 @@
       --shadow:0 8px 24px rgba(0,0,0,.08);
     }
 
-    * { box-sizing:border-box; }
+    *{
+      box-sizing:border-box;
+    }
 
-    body {
+    body{
       margin:0;
       font-family:Arial,"Microsoft YaHei",sans-serif;
       background:linear-gradient(180deg,#eef7ff,#f4f6f8);
       color:var(--text);
     }
 
-    .header {
+    .header{
       background:var(--brand);
       color:#fff;
       text-align:center;
@@ -36,20 +38,20 @@
       font-weight:900;
     }
 
-    .wrap {
-      max-width:1080px;
+    .wrap{
+      max-width:1120px;
       margin:14px auto;
       padding:0 10px 24px;
     }
 
-    .card {
+    .card{
       background:#fff;
       border-radius:18px;
       box-shadow:var(--shadow);
       padding:12px 10px 16px;
     }
 
-    .sec-title {
+    .sec-title{
       margin:8px 0 10px;
       color:var(--brand);
       font-weight:900;
@@ -57,13 +59,13 @@
       padding-left:8px;
     }
 
-    .id-row {
+    .id-row{
       display:grid;
       grid-template-columns:repeat(3,1fr);
       gap:8px;
     }
 
-    .id-card {
+    .id-card{
       border:1px solid var(--line);
       border-radius:12px;
       background:#fcfcfd;
@@ -71,22 +73,30 @@
       min-height:62px;
     }
 
-    .id-label {
+    .id-label{
       font-size:12px;
       color:var(--sub);
     }
 
-    .id-value {
+    .id-value{
       font-size:18px;
       font-weight:900;
       word-break:break-all;
     }
 
-    .id-value.ok { color:var(--ok); }
-    .id-value.err { color:var(--danger); }
-    .id-value.warn { color:var(--warn); }
+    .id-value.ok{
+      color:var(--ok);
+    }
 
-    .tip {
+    .id-value.err{
+      color:var(--danger);
+    }
+
+    .id-value.warn{
+      color:var(--warn);
+    }
+
+    .tip{
       margin:12px 0;
       padding:10px 12px;
       border-radius:12px;
@@ -97,32 +107,48 @@
       line-height:1.7;
     }
 
-    .field { margin-bottom:12px; }
+    .field{
+      margin-bottom:12px;
+    }
 
-    .field label {
+    .field label{
       display:block;
       font-weight:900;
       font-size:14px;
       margin-bottom:6px;
     }
 
-    .req {
+    .req{
       color:#d97706;
       margin-left:4px;
     }
 
-    .chip-grid {
+    .chip-grid{
       display:grid;
       gap:6px;
     }
 
-    .week-grid { grid-template-columns:repeat(5,1fr); }
-    .weekday-grid { grid-template-columns:repeat(7,1fr); }
-    .task-grid { grid-template-columns:repeat(4,1fr); }
-    .project-grid { grid-template-columns:repeat(6,1fr); }
-    .unit-grid { grid-template-columns:repeat(5,1fr); }
+    .week-grid{
+      grid-template-columns:repeat(5,1fr);
+    }
 
-    .chip {
+    .weekday-grid{
+      grid-template-columns:repeat(7,1fr);
+    }
+
+    .task-grid{
+      grid-template-columns:repeat(4,1fr);
+    }
+
+    .project-grid{
+      grid-template-columns:repeat(6,1fr);
+    }
+
+    .unit-grid{
+      grid-template-columns:repeat(5,1fr);
+    }
+
+    .chip{
       border:1px solid var(--chip-border);
       background:var(--chip);
       color:#174b80;
@@ -140,14 +166,14 @@
       word-break:break-word;
     }
 
-    .chip.active {
+    .chip.active{
       background:var(--brand);
       border-color:var(--brand);
       color:#fff;
       box-shadow:0 6px 16px rgba(0,120,212,.22);
     }
 
-    .chip.disabled {
+    .chip.disabled{
       background:#f3f4f6;
       color:#9ca3af;
       border-color:#e5e7eb;
@@ -155,32 +181,32 @@
       box-shadow:none;
     }
 
-    .hours-box {
+    .hours-box{
       display:grid;
       grid-template-columns:1fr 1fr;
       gap:10px;
     }
 
-    .hour-card {
+    .hour-card{
       border:1px solid var(--line);
       border-radius:14px;
       padding:10px;
       background:#fcfcfd;
     }
 
-    .hour-title {
+    .hour-title{
       font-weight:900;
       font-size:14px;
       margin-bottom:8px;
     }
 
-    .count-row {
+    .count-row{
       display:flex;
       align-items:center;
       gap:10px;
     }
 
-    .count-btn {
+    .count-btn{
       width:42px;
       height:42px;
       border:none;
@@ -193,27 +219,27 @@
       flex:0 0 42px;
     }
 
-    .count-btn:disabled {
+    .count-btn:disabled{
       background:#f3f4f6;
       color:#aaa;
       cursor:not-allowed;
     }
 
-    .count-value {
+    .count-value{
       flex:1;
       text-align:center;
       font-size:24px;
       font-weight:900;
     }
 
-    .quick-row {
+    .quick-row{
       display:flex;
       gap:6px;
       flex-wrap:wrap;
       margin-top:8px;
     }
 
-    .quick-btn {
+    .quick-btn{
       border:1px solid #dbeafe;
       background:#fff;
       color:#2563eb;
@@ -225,13 +251,13 @@
       min-height:30px;
     }
 
-    .quick-btn:disabled {
+    .quick-btn:disabled{
       background:#f3f4f6;
       color:#aaa;
       cursor:not-allowed;
     }
 
-    .remark-template-title {
+    .remark-template-title{
       font-size:12px;
       color:#6b7280;
       font-weight:900;
@@ -240,7 +266,7 @@
     }
 
     textarea,
-    input {
+    input{
       width:100%;
       border:1px solid var(--line);
       border-radius:12px;
@@ -249,19 +275,19 @@
       font-family:inherit;
     }
 
-    textarea {
+    textarea{
       min-height:72px;
       resize:vertical;
     }
 
-    .btn-area {
+    .btn-area{
       margin-top:16px;
       display:flex;
       flex-direction:column;
       gap:10px;
     }
 
-    .btn {
+    .btn{
       width:100%;
       border:none;
       border-radius:14px;
@@ -271,31 +297,33 @@
       cursor:pointer;
     }
 
-    .btn-primary {
+    .btn-primary{
       background:var(--brand);
       color:#fff;
     }
 
-    .btn-primary:disabled {
+    .btn-primary:disabled{
       background:#aaa;
       cursor:not-allowed;
     }
 
-    .btn-secondary {
+    .btn-secondary{
       background:#e5e7eb;
       color:#111827;
     }
 
-    .admin-panel {
+    .admin-panel{
       display:none;
       gap:8px;
       margin:10px 0 14px;
       grid-template-columns:repeat(2,1fr);
     }
 
-    .admin-panel.show { display:grid; }
+    .admin-panel.show{
+      display:grid;
+    }
 
-    .admin-btn {
+    .admin-btn{
       border:none;
       border-radius:12px;
       padding:12px;
@@ -304,17 +332,17 @@
       cursor:pointer;
     }
 
-    .lock-btn {
+    .lock-btn{
       background:#fee2e2;
       color:#991b1b;
     }
 
-    .unlock-btn {
+    .unlock-btn{
       background:#dcfce7;
       color:#166534;
     }
 
-    .msg {
+    .msg{
       display:none;
       margin-top:12px;
       padding:12px;
@@ -323,21 +351,50 @@
       line-height:1.6;
     }
 
-    .msg.ok {
+    .msg.ok{
       display:block;
       background:#ecfdf5;
       border:1px solid #bbf7d0;
       color:#166534;
     }
 
-    .msg.err {
+    .msg.err{
       display:block;
       background:#fef2f2;
       border:1px solid #fecaca;
       color:#991b1b;
     }
 
-    .table-scroll {
+    .anomaly-box{
+      margin:10px 0 14px;
+      border:1px solid #fecaca;
+      background:#fff1f2;
+      color:#991b1b;
+      border-radius:12px;
+      padding:10px 12px;
+      font-size:13px;
+      line-height:1.7;
+      display:none;
+    }
+
+    .anomaly-title{
+      font-weight:900;
+      margin-bottom:5px;
+      color:#7f1d1d;
+    }
+
+    .anomaly-item{
+      display:inline-block;
+      background:#fee2e2;
+      border:1px solid #fecaca;
+      color:#991b1b;
+      border-radius:999px;
+      padding:4px 8px;
+      margin:3px;
+      font-weight:900;
+    }
+
+    .table-scroll{
       overflow-x:auto;
       border:1px solid #d7dde5;
       border-radius:12px;
@@ -345,7 +402,7 @@
       margin-bottom:12px;
     }
 
-    table {
+    table{
       border-collapse:collapse;
       min-width:100%;
       width:max-content;
@@ -353,7 +410,7 @@
     }
 
     th,
-    td {
+    td{
       border:1px solid #444;
       padding:4px;
       text-align:center;
@@ -361,26 +418,28 @@
       height:31px;
     }
 
-    th { background:#f3f4f6; }
+    th{
+      background:#f3f4f6;
+    }
 
-    .cell-left {
+    .cell-left{
       text-align:left;
       font-weight:900;
     }
 
-    .warn-cell {
-      background:red;
-      color:#fff;
+    .warn-cell{
+      background:red!important;
+      color:#fff!important;
       font-weight:900;
     }
 
-    .locked-cell {
+    .locked-cell{
       background:#fef3c7;
       color:#92400e;
       font-weight:900;
     }
 
-    .record-empty {
+    .record-empty{
       padding:14px;
       border:1px dashed #cbd5e1;
       border-radius:12px;
@@ -390,7 +449,7 @@
       font-size:14px;
     }
 
-    .small-btn {
+    .small-btn{
       border:none;
       border-radius:8px;
       padding:6px 9px;
@@ -400,14 +459,31 @@
       cursor:pointer;
     }
 
-    .edit-btn { background:#e0f2fe; color:#075985; }
-    .delete-btn { background:#fee2e2; color:#991b1b; }
-    .row-lock-btn { background:#fee2e2; color:#991b1b; }
-    .row-unlock-btn { background:#dcfce7; color:#166534; }
+    .edit-btn{
+      background:#e0f2fe;
+      color:#075985;
+    }
 
-    .hidden { display:none!important; }
+    .delete-btn{
+      background:#fee2e2;
+      color:#991b1b;
+    }
 
-    .modal-mask {
+    .row-lock-btn{
+      background:#fee2e2;
+      color:#991b1b;
+    }
+
+    .row-unlock-btn{
+      background:#dcfce7;
+      color:#166534;
+    }
+
+    .hidden{
+      display:none!important;
+    }
+
+    .modal-mask{
       position:fixed;
       inset:0;
       background:rgba(0,0,0,.45);
@@ -418,7 +494,7 @@
       padding:12px;
     }
 
-    .modal {
+    .modal{
       background:#fff;
       border-radius:18px 18px 12px 12px;
       max-width:760px;
@@ -428,18 +504,18 @@
       overflow:auto;
     }
 
-    .modal-title {
+    .modal-title{
       font-size:18px;
       font-weight:900;
       margin-bottom:10px;
     }
 
-    .modal-actions {
+    .modal-actions{
       display:flex;
       gap:10px;
     }
 
-    .foot {
+    .foot{
       text-align:center;
       color:#9ca3af;
       font-size:12px;
@@ -447,17 +523,17 @@
     }
 
     @media(max-width:560px){
-      .wrap{padding:0 8px 18px}
-      .week-grid{grid-template-columns:repeat(4,1fr)}
-      .task-grid,.project-grid,.unit-grid{grid-template-columns:repeat(3,1fr)}
-      .hours-box{grid-template-columns:1fr 1fr}
-      .id-row{grid-template-columns:repeat(3,1fr)}
-      .id-value{font-size:15px}
-      .chip{font-size:12px;min-height:38px}
-      .admin-panel{grid-template-columns:1fr}
-      .modal-actions{flex-direction:row}
-      table{font-size:11px}
-      th,td{min-width:42px;height:28px;padding:2px}
+      .wrap{padding:0 8px 18px;}
+      .week-grid{grid-template-columns:repeat(4,1fr);}
+      .task-grid,.project-grid,.unit-grid{grid-template-columns:repeat(3,1fr);}
+      .hours-box{grid-template-columns:1fr 1fr;}
+      .id-row{grid-template-columns:repeat(3,1fr);}
+      .id-value{font-size:15px;}
+      .chip{font-size:12px;min-height:38px;}
+      .admin-panel{grid-template-columns:1fr;}
+      .modal-actions{flex-direction:row;}
+      table{font-size:11px;}
+      th,td{min-width:42px;height:28px;padding:2px;}
     }
   </style>
 </head>
@@ -473,10 +549,12 @@
           <div class="id-label">员工姓名</div>
           <div id="empName" class="id-value">--</div>
         </div>
+
         <div class="id-card">
           <div class="id-label">员工工号</div>
           <div id="empId" class="id-value">--</div>
         </div>
+
         <div class="id-card">
           <div class="id-label">识别状态</div>
           <div id="empState" class="id-value warn">待识别</div>
@@ -496,6 +574,8 @@
         <button class="admin-btn lock-btn" onclick="lockAllVisibleRows()">🔒 一键锁定所选 Week 全部记录</button>
         <button class="admin-btn unlock-btn" onclick="unlockAllVisibleRows()">🔓 一键解除所选 Week 全部锁定</button>
       </div>
+
+      <div id="anomalyBox" class="anomaly-box"></div>
 
       <div class="sec-title">本周已提交工时明细</div>
       <div id="recordList">
@@ -734,7 +814,7 @@ const projectUnits = {
 };
 
 const weekdayOptions = ["一","二","三","四","五","六","日"];
-const taskOptions = ["仓库作业","机械组装","保温作业","电气安装","额外工时","其它作业","请假"];
+const taskOptions = ["机械组装","保温作业","电气安装","额外工时","其它作业","请假","仓库作业"];
 const TASKS_NO_PROJECT = ["仓库作业","其它作业","其它工作","请假"];
 const TASKS_PROJECT_ONLY = ["车间管理"];
 const quickHoursMap = {
@@ -743,14 +823,15 @@ const quickHoursMap = {
   otWeekend:[0,1,2,3,4,8]
 };
 const remarkTemplates = {
-  "仓库作业":["点料、入库","发料、退料","装箱发货","仓库帮忙"],
+  
   "机械组装":["下料、组对、组装","焊接","压力测试","配件打磨","气管安装"],
   "保温作业":["管道补漆","保温预制下料","保温安装","保温发泡","保温清理"],
-  "电气安装":["桥架安装","布线","端子接线","电气检测FAT"],
-  "额外工时":["项目组设计更改返工","增加额外支架等返工","项目组特殊要求返工","供应商问题返工","FAT帮忙","内部问题返工"],
+  "电气安装":["桥架安装","布线接线"],
+  "额外工时":["设计更改返工","增加额外支架等返工","项目组特殊要求返工","供应商问题返工","FAT帮忙","内部问题返工"],
   "其它作业":["整理、打扫、5S等","培训等","早会","精益生产改善工作","其它","车间管理"],
   "其它工作":["整理、打扫、5S等","培训等","早会","精益生产改善工作","其它","车间管理"],
-  "请假":["年假","病假","事假","出差"]
+  "请假":["年假","病假","事假","出差"],
+  "仓库作业":["点料、入库","发料、退料","装箱发货","仓库帮忙"]
 };
 const state = {
   week:"",
@@ -1084,14 +1165,117 @@ function syncHourSectionByWeekday(){
   }
   refreshDisplays();
 }
+function calcEmployeeDailyTotals(rows){
+  const map = {};
+  Object.keys(employeeMap).forEach(id=>{
+    if(id === ADMIN_ID) return;
+    map[id] = {
+      employeeId:id,
+      employeeName:employeeMap[id],
+      days:{}
+    };
+    weekdayOptions.forEach(day=>{
+      map[id].days[day] = {
+        regular:0,
+        otWeekday:0,
+        otWeekend:0,
+        overtime:0,
+        hasRecord:false
+      };
+    });
+  });
+  rows.forEach(record=>{
+    const id = String(record.employeeId || "");
+    if(!map[id]){
+      map[id] = {
+        employeeId:id,
+        employeeName:record.employeeName || employeeMap[id] || id,
+        days:{}
+      };
+      weekdayOptions.forEach(day=>{
+        map[id].days[day] = {
+          regular:0,
+          otWeekday:0,
+          otWeekend:0,
+          overtime:0,
+          hasRecord:false
+        };
+      });
+    }
+    const day = record.weekday;
+    if(map[id].days[day]){
+      map[id].days[day].regular += num(record.regularHours);
+      map[id].days[day].otWeekday += num(record.otWeekday);
+      map[id].days[day].otWeekend += num(record.otWeekend);
+      map[id].days[day].overtime += num(record.otWeekday) + num(record.otWeekend);
+      map[id].days[day].hasRecord = true;
+    }
+  });
+  return map;
+}
+function calcEmployeeAnomalies(rows){
+  const totals = calcEmployeeDailyTotals(rows);
+  const anomalies = {};
+  Object.keys(totals).forEach(id=>{
+    const item = totals[id];
+    const badDays = [];
+    ["一","二","三","四","五"].forEach(day=>{
+      const d = item.days[day];
+      const regularBad = d.regular !== 8;
+      const overtimeBad = !(d.otWeekday === 0 || d.otWeekday === 4);
+      if(regularBad || overtimeBad){
+        badDays.push(day);
+      }
+    });
+    if(badDays.length){
+      anomalies[id] = {
+        employeeId:id,
+        employeeName:item.employeeName,
+        days:badDays
+      };
+    }
+  });
+  return anomalies;
+}
+function renderAnomalyBox(rows){
+  const box = $("anomalyBox");
+  if(!box) return;
+  if(!isAdmin()){
+    box.style.display = "none";
+    box.innerHTML = "";
+    return;
+  }
+  const anomalies = calcEmployeeAnomalies(rows);
+  const ids = Object.keys(anomalies);
+  if(!ids.length){
+    box.style.display = "block";
+    box.innerHTML = '<div class="anomaly-title">✅ 当前所选 Week 未发现异常人员</div>';
+    box.style.background = "#ecfdf5";
+    box.style.borderColor = "#bbf7d0";
+    box.style.color = "#166534";
+    return;
+  }
+  box.style.display = "block";
+  box.style.background = "#fff1f2";
+  box.style.borderColor = "#fecaca";
+  box.style.color = "#991b1b";
+  let html = '<div class="anomaly-title">⚠ 异常人员列表（正常工时≠8 或工作日加班≠0/4）</div>';
+  ids.forEach(id=>{
+    const a = anomalies[id];
+    html += '<span class="anomaly-item">' + safe(a.employeeName) + '（' + a.days.map(d=>'周'+d).join('、') + '）</span>';
+  });
+  box.innerHTML = html;
+}
 async function loadWeekRecords(){
   if(!state.week || !empId){
     currentWeekRecords = [];
+    renderAnomalyBox([]);
     renderWeekRecords([]);
     return;
   }
   if(!requireAuth(false)){
     currentWeekRecords = [];
+    renderAnomalyBox([]);
     renderWeekRecords([], "身份验证码验证失败，禁止读取记录。");
     return;
   }
@@ -1106,9 +1290,11 @@ async function loadWeekRecords(){
       return new Date(a.submitTime || 0) - new Date(b.submitTime || 0);
     });
     currentWeekRecords = rows;
+    renderAnomalyBox(rows);
     renderWeekRecords(rows);
   }catch(e){
     currentWeekRecords = [];
+    renderAnomalyBox([]);
     renderWeekRecords([], "本周记录读取失败：" + e.message);
   }
 }
@@ -1126,6 +1312,7 @@ function renderWeekRecords(rows, err=""){
     box.innerHTML = '<div class="record-empty">当前 Week 没有提交记录</div>';
     return;
   }
+  const adminAnomalies = isAdmin() ? calcEmployeeAnomalies(rows) : {};
   const summary = {};
   weekdayOptions.forEach(day=>summary[day]={regular:0,overtime:0});
   const grouped = new Map();
@@ -1174,8 +1361,14 @@ function renderWeekRecords(rows, err=""){
   const head = '<thead><tr>' + employeeHead + '<th rowspan="2">工时类别</th><th rowspan="2">项目号</th><th rowspan="2">单元号</th><th rowspan="2">备注</th>' + ['周一','周二','周三','周四','周五'].map(x=>'<th colspan="2">'+x+'</th>').join('') + '<th>周六</th><th>周日</th><th colspan="3">汇总</th></tr><tr>' + Array(5).fill('<th>正常<br>出勤</th><th>实际<br>加班</th>').join('') + '<th>实际<br>加班</th><th>实际<br>加班</th><th>正常<br>出勤</th><th>实际晚<br>上加班</th><th>实际周<br>末加班</th></tr></thead>';
   let body = "";
   grouped.forEach(row=>{
-    const empCells = isAdmin() ? '<td>'+safe(row.employeeName)+'</td><td>'+safe(row.employeeId)+'</td>' : '';
-    body += '<tr>' + empCells + '<td class="cell-left">'+safe(row.task)+'</td><td>'+safe(row.project)+'</td><td>'+safe(row.unit)+'</td><td>'+safe(row.remark)+'</td>' + ['一','二','三','四','五'].map(day=>'<td>'+(row.days[day].regular || "")+'</td><td>'+(row.days[day].overtime || "")+'</td>').join('') + '<td>'+(row.days['六'].overtime || "")+'</td><td>'+(row.days['日'].overtime || "")+'</td><td>'+(row.totalRegular || "")+'</td><td>'+(row.totalEveningOt || "")+'</td><td>'+(row.totalWeekendOt || "")+'</td></tr>';
+    const anomaly = adminAnomalies[String(row.employeeId || "")];
+    const badDays = anomaly ? anomaly.days : [];
+    const hasError = !!anomaly;
+    const empCells = isAdmin() ? '<td class="'+(hasError?'warn-cell':'')+'">'+safe(row.employeeName)+'</td><td class="'+(hasError?'warn-cell':'')+'">'+safe(row.employeeId)+'</td>' : '';
+    body += '<tr>' + empCells + '<td class="cell-left">'+safe(row.task)+'</td><td>'+safe(row.project)+'</td><td>'+safe(row.unit)+'</td><td>'+safe(row.remark)+'</td>' + ['一','二','三','四','五'].map(day=>{
+      const cls = badDays.includes(day) ? ' class="warn-cell"' : '';
+      return '<td'+cls+'>'+(row.days[day].regular || "")+'</td><td'+cls+'>'+(row.days[day].overtime || "")+'</td>';
+    }).join('') + '<td>'+(row.days['六'].overtime || "")+'</td><td>'+(row.days['日'].overtime || "")+'</td><td>'+(row.totalRegular || "")+'</td><td>'+(row.totalEveningOt || "")+'</td><td>'+(row.totalWeekendOt || "")+'</td></tr>';
   });
   function warnClass(warn){ return warn ? ' class="warn-cell"' : ''; }
   const blankPrefix = isAdmin() ? '<td></td><td></td>' : '';
@@ -1183,7 +1376,10 @@ function renderWeekRecords(rows, err=""){
   let rawRows = "";
   rows.forEach(record=>{
     const locked = isLocked(record);
-    const empCells = isAdmin() ? '<td>'+safe(record.employeeName || employeeMap[record.employeeId] || "")+'</td><td>'+safe(record.employeeId || "")+'</td>' : '';
+    const anomaly = adminAnomalies[String(record.employeeId || "")];
+    const badDays = anomaly ? anomaly.days : [];
+    const rowDayBad = badDays.includes(record.weekday);
+    const empCells = isAdmin() ? '<td class="'+(anomaly?'warn-cell':'')+'">'+safe(record.employeeName || employeeMap[record.employeeId] || "")+'</td><td class="'+(anomaly?'warn-cell':'')+'">'+safe(record.employeeId || "")+'</td>' : '';
     const lockCell = locked ? '<td class="locked-cell">已锁定</td>' : '<td>未锁定</td>';
     let actionCell = "";
     if(isAdmin()){
@@ -1193,7 +1389,7 @@ function renderWeekRecords(rows, err=""){
     }else{
       actionCell = '<button class="small-btn edit-btn" onclick="openEditModal(\''+safe(record.id)+'\')">修改</button><button class="small-btn delete-btn" onclick="deleteRecord(\''+safe(record.id)+'\')">删除</button>';
     }
-    rawRows += '<tr>' + empCells + '<td>'+safe(record.weekday)+'</td><td class="cell-left">'+safe(record.task)+'</td><td>'+safe(record.project)+'</td><td>'+safe(record.unit)+'</td><td>'+num(record.regularHours)+'</td><td>'+num(record.otWeekday)+'</td><td>'+num(record.otWeekend)+'</td><td>'+safe(record.remark || "")+'</td>' + lockCell + '<td>'+actionCell+'</td></tr>';
+    rawRows += '<tr>' + empCells + '<td class="'+(rowDayBad?'warn-cell':'')+'">'+safe(record.weekday)+'</td><td class="cell-left">'+safe(record.task)+'</td><td>'+safe(record.project)+'</td><td>'+safe(record.unit)+'</td><td class="'+(rowDayBad?'warn-cell':'')+'">'+num(record.regularHours)+'</td><td class="'+(rowDayBad?'warn-cell':'')+'">'+num(record.otWeekday)+'</td><td>'+num(record.otWeekend)+'</td><td>'+safe(record.remark || "")+'</td>' + lockCell + '<td>'+actionCell+'</td></tr>';
   });
   const rawEmpHead = isAdmin() ? '<th>员工</th><th>工号</th>' : '';
   box.innerHTML = '<div class="table-scroll"><table>'+head+'<tbody>'+body+sumRow+'</tbody></table></div><div class="sec-title">原始记录管理</div><div class="table-scroll"><table><thead><tr>'+rawEmpHead+'<th>星期</th><th>工时类别</th><th>项目号</th><th>单元号</th><th>正常</th><th>工作日<br>加班</th><th>周末<br>加班</th><th>备注</th><th>锁定状态</th><th>操作</th></tr></thead><tbody>'+rawRows+'</tbody></table></div>';
