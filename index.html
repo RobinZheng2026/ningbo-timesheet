@@ -171,7 +171,39 @@ function weekNum(w){const n=Number(String(w).replace(/[^0-9]/g,""));return Numbe
 function detectLockField(row){if(row&&Object.prototype.hasOwnProperty.call(row,"Lock Status"))return "Lock Status";if(row&&Object.prototype.hasOwnProperty.call(row,"Locked"))return "Locked";return LOCK_FIELD}
 function isLocked(record){const f=detectLockField(record);return record[f]===true||record[f]==="true"||record[f]===1||record[f]==="1"}
 async function fetchRows(){const res=await fetch(apiUrl(),{headers:headers()});if(!res.ok)throw new Error("读取记录失败："+res.status);const data=await res.json();return Array.isArray(data)?data:(data.results||[])}
-async function loadAllWeeks(){try{const rows=await fetchRows();if(rows.length)LOCK_FIELD=detectLockField(rows[0]);const set=new Set();rows.forEach(r=>{if(r.week)set.add(r.week)});set.add(getCurrentWeek());allWeeks=Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b))}catch(e){allWeeks=[getCurrentWeek()];showMsg("读取历史周失败，仅显示当前周："+e.message,false)}}
+async function loadAllWeeks(){
+
+  try{
+    const rows = await fetchRows();
+
+    if(rows.length) LOCK_FIELD = detectLockField(rows[0]);
+
+    const set = new Set();
+
+    // ✅ 数据库已有周
+    rows.forEach(r=>{
+      if(r.week) set.add(r.week)
+    });
+
+    // ✅ 当前周
+    const current = getCurrentWeek();
+    set.add(current);
+
+    // ✅ ✅ 强制加入前2周（关键改动）
+    const currentNum = Number(current.replace("W",""));
+
+    set.add("W" + (currentNum - 1));
+    set.add("W" + (currentNum - 2));
+
+    // ✅ 排序
+    allWeeks = Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b));
+
+  }catch(e){
+    allWeeks=[getCurrentWeek()];
+    showMsg("读取历史周失败，仅显示当前周："+e.message,false);
+  }
+}
+``set.add(r.week)});set.add(getCurrentWeek());allWeeks=Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b))}catch(e){allWeeks=[getCurrentWeek()];showMsg("读取历史周失败，仅显示当前周："+e.message,false)}}
 function getWeekOptions(){return allWeeks}
 
 function initEmployee(){ $("empId").innerText=empId||"--"; if(empId&&empName){$("empName").innerText=empName;if(verifyEmployeeKey()){$("empState").innerText=isAdmin()?"管理员":"验证成功";$("empState").className="id-value ok";$("submitBtn").disabled=isAdmin()}else{$("empState").innerText="验证失败";$("empState").className="id-value err";$("submitBtn").disabled=true;showMsg("身份验证码验证失败，禁止进入。",false)}}else if(empId){$("empName").innerText="未知员工";$("empState").innerText="未在名单中";$("empState").className="id-value err";$("submitBtn").disabled=true}else{$("empName").innerText="--";$("empState").innerText="请扫码进入";$("empState").className="id-value warn";$("submitBtn").disabled=true}}
