@@ -127,8 +127,13 @@ function needsProject(){return needsProjectByTask(state.task)}
 function needsUnit(){return needsUnitByTask(state.task)}
 function isPlaceholderToken(token){token=String(token||"").trim();return !token||token==="vHwFROkQHYBYJck1Lv4i6kqitbbJI8e1"||token==="请替换成你自己的Baserow Token"||token==="你的真实Token"}
 function getApiToken(){const c=String(API_TOKEN_IN_CODE||"").trim();const l=String(localStorage.getItem(TOKEN_STORAGE_KEY)||"").trim();if(!isPlaceholderToken(c)){localStorage.setItem(TOKEN_STORAGE_KEY,c);return c}return l||""}
-function apiUrl(){return "https://api.baserow.io/api/database/rows/table/"+TABLE_ID+"/?user_field_names=true&size=200"}
-function rowUrl(id){return "https://api.baserow.io/api/database/rows/table/"+TABLE_ID+"/"+id+"/?user_field_names=true"}
+function apiUrl(){
+  return "https://api.baserow.io/api/database/rows/table/" + TABLE_ID + "/?user_field_names=true&size=200";
+}
+function rowUrl(id){
+  return "https://api.baserow.io/api/database/rows/table/" + TABLE_ID + "/" + id + "/?user_field_names=true";
+}
+``
 function headers(json=true){const h={Authorization:"Token "+getApiToken()};if(json)h["Content-Type"]="application/json";return h}
 function authKeyName(){return "NINGBO_WORKSHOP_EMP_KEY_OK_"+String(empId||"")}
 function isEmployeeKeyValid(key){return String(key||"").trim()===String(employeeKeyMap[empId]||"").trim()&&!!employeeKeyMap[empId]}
