@@ -62,40 +62,38 @@
 
 .id-row{
   display:flex;
-  font-size:13px;
   background:#111;
-  border-radius:8px;
-  padding:6px 8px;
+  color:#fff;
+  padding:10px 8px;
+  border-radius:10px;
+  font-size:13px;
 }
 
+/* ✅ 关键：恢复纵向结构 */
 .id-card{
   flex:1;
-  border:none;
-  background:transparent;
-  padding:2px 4px;
-  min-height:auto;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
+/* ✅ 标题小一点 */
 .id-label{
   font-size:11px;
+  color:#aaa;
 }
 
+/* ✅ 值明显一点 */
 .id-value{
-  font-size:14px;
-  font-weight:700;
+  font-size:16px;
+  font-weight:900;
 }
+.id-value.ok{ color:#2ecc71; }
+.id-value.err{ color:#ff4d4f; }
+.id-value.warn{ color:#ffa940; }
 
-    .id-value.ok{
-      color:var(--ok);
-    }
 
-    .id-value.err{
-      color:var(--danger);
-    }
-
-    .id-value.warn{
-      color:var(--warn);
-    }
 
     .tip{
       margin:12px 0;
@@ -166,7 +164,7 @@
       user-select:none;
       word-break:break-word;
     }
-    /* ✅ 工时类别区域放大 */
+/* ✅ 工时类别区域放大 */
 .task-grid .chip{
   font-size:15px;
   min-height:40px;
