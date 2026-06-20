@@ -2020,6 +2020,16 @@ async function init(){
   }
   renderMainWeekChips();
   renderMainWeekdayChips();
+// ✅ 自动选择今天星期
+function getTodayWeekday(){
+  const d = new Date().getDay(); // 0=周日
+  return ["日","一","二","三","四","五","六"][d];
+}
+
+// ✅ 默认选中今天
+state.weekday = getTodayWeekday();
+renderActive();   // ✅ 刷新选中效果
+syncHourSectionByWeekday(); // ✅ 自动切换加班/周末逻辑
   renderMainTaskChips();
   applyTaskRules();
   renderQuickButtons();
