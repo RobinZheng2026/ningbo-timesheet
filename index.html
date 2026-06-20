@@ -2016,20 +2016,12 @@ async function init(){
   await loadAllWeeks();
   if(!state.week){
     const current = getCurrentWeek();
-    state.weekday = getTodayWeekday();
     state.week = allWeeks.includes(current) ? current : (allWeeks[allWeeks.length-1] || current);
   }
-renderMainWeekChips();
-renderMainWeekdayChips();
-
-// ✅ 自动选择今天
-state.weekday = getTodayWeekday();
-
-renderActive();
-syncHourSectionByWeekday();
-
-renderMainTaskChips();
-applyTaskRules();
+  renderMainWeekChips();
+  renderMainWeekdayChips();
+  renderMainTaskChips();
+  applyTaskRules();
   renderQuickButtons();
   renderRemarkQuick();
   refreshDisplays();
