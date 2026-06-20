@@ -83,7 +83,6 @@
   align-items:center;
   color:#111;     /* ✅ 文字恢复黑色 */
 }
-``
 
 /* ✅ 标签 */
 .id-label{
@@ -203,6 +202,29 @@
       user-select:none;
       word-break:break-word;
     }
+/* ✅ U类（单元） */
+.unit-u{
+  background:#e8f4ff;
+  border:1px solid #9cc9f5;
+  color:#0f4c81;
+}
+
+/* ✅ NIN类（容器） */
+.unit-n{
+  background:#fff4e6;
+  border:1px solid #f7c58a;
+  color:#b45309;
+}
+
+/* ✅ hover增强（更明显） */
+.unit-u:hover{
+  background:#d6ecff;
+}
+
+.unit-n:hover{
+  background:#ffe8cc;
+}
+
 /* ✅ 工时类别区域放大 */
 .task-grid .chip{
   font-size:15px;
@@ -228,16 +250,6 @@
 }
 
 
-/* ✅ 单元号区域进阶优化 */
-.unit-search{
-  width:100%;
-  border:1px solid #cbd5e1;
-  border-radius:10px;
-  padding:8px 10px;
-  font-size:15px;
-  margin-bottom:6px;
-}
-
 /* ✅ 单元号按钮更大、更适合手机点击 */
 .unit-grid .chip{
   font-size:17px;
@@ -258,6 +270,18 @@
   border-radius:8px;
   padding:5px 8px;
   margin-top:4px;
+}
+
+.unit-group-title.unit-group-u{
+  color:#0f4c81;
+  background:#e8f4ff;
+  border-color:#9cc9f5;
+}
+
+.unit-group-title.unit-group-n{
+  color:#b45309;
+  background:#fff4e6;
+  border-color:#f7c58a;
 }
 
 /* ✅ 手机端单元号每行3个，更清楚 */
@@ -1236,6 +1260,7 @@ function renderChips(containerId, values, field, onClick, targetState=state){
     box.appendChild(chip);
   });
 }
+
 function disabledChip(containerId, text){
   $(containerId).innerHTML = '<div class="chip disabled">' + text + '</div>';
 }
@@ -1280,17 +1305,88 @@ function renderProjects(){
     renderActive();
   });
 }
+function sortUnitsByType(units){
+  const uList = [];
+  const nList = [];
+  const other = [];
+
+  (units || []).forEach(unit=>{
+    const val = String(unit || "").toUpperCase();
+    if(val.startsWith("U")){
+      uList.push(unit);
+    }else if(val.startsWith("NIN")){
+      nList.push(unit);
+    }else{
+      other.push(unit);
+    }
+  });
+
+  const sorter = (a,b)=>String(a).localeCompare(String(b), undefined, {numeric:true, sensitivity:"base"});
+  uList.sort(sorter);
+  nList.sort(sorter);
+  other.sort(sorter);
+
+  return {uList,nList,other};
+}
+
+function unitChipClass(unit, selected){
+  const val = String(unit || "").toUpperCase();
+  let cls = "chip";
+
+  if(val.startsWith("U")) cls += " unit-u";
+  else if(val.startsWith("NIN")) cls += " unit-n";
+
+  if(selected === unit) cls += " active";
+  return cls;
+}
+
+function addUnitGroup(box, title, list, groupClass, selectedValue, onSelect){
+  if(!list || !list.length) return;
+
+  const titleEl = document.createElement("div");
+  titleEl.className = "unit-group-title " + groupClass;
+  titleEl.innerText = title;
+  box.appendChild(titleEl);
+
+  list.forEach(unit=>{
+    const chip = document.createElement("div");
+    chip.className = unitChipClass(unit, selectedValue);
+    chip.innerText = unit;
+    chip.onclick = ()=>onSelect(unit);
+    box.appendChild(chip);
+  });
+}
+
 function renderUnits(){
   if(!needsUnit()){
     disabledChip("unitChips", "该类别无需单元号");
     return;
   }
+
   const units = state.project && projectUnits[state.project] ? projectUnits[state.project] : [];
-  renderChips("unitChips", units, "unit", value=>{
+  const {uList,nList,other} = sortUnitsByType(units);
+  const box = $("unitChips");
+  box.innerHTML = "";
+
+  if(!units.length){
+    disabledChip("unitChips", "请先选项目");
+    return;
+  }
+
+  addUnitGroup(box, "U 系列（单元）", uList, "unit-group-u", state.unit, value=>{
+    state.unit = value;
+    renderActive();
+  });
+  addUnitGroup(box, "NIN 系列（容器）", nList, "unit-group-n", state.unit, value=>{
+    state.unit = value;
+    renderActive();
+  });
+  addUnitGroup(box, "其它", other, "unit-group-other", state.unit, value=>{
     state.unit = value;
     renderActive();
   });
 }
+
 function applyTaskRules(){
   if(!needsProject()){
     state.project = "";
@@ -1751,6 +1847,39 @@ function normalizeEditState(){
   }
   if(editState.project && editState.unit && !projectUnits[editState.project].includes(editState.unit)) editState.unit = "";
 }
+function renderEditUnits(){
+  if(!needsUnitByTask(editState.task)){
+    disabledChip("editUnitChips", "该类别无需单元号");
+    return;
+  }
+
+  const units = editState.project && projectUnits[editState.project] ? projectUnits[editState.project] : [];
+  const {uList,nList,other} = sortUnitsByType(units);
+  const box = $("editUnitChips");
+  box.innerHTML = "";
+
+  if(!units.length){
+    disabledChip("editUnitChips", "请先选项目");
+    return;
+  }
+
+  addUnitGroup(box, "U 系列（单元）", uList, "unit-group-u", editState.unit, value=>{
+    editState.unit = value;
+    renderEditAll();
+    renderRemarkQuick("edit");
+  });
+  addUnitGroup(box, "NIN 系列（容器）", nList, "unit-group-n", editState.unit, value=>{
+    editState.unit = value;
+    renderEditAll();
+    renderRemarkQuick("edit");
+  });
+  addUnitGroup(box, "其它", other, "unit-group-other", editState.unit, value=>{
+    editState.unit = value;
+    renderEditAll();
+    renderRemarkQuick("edit");
+  });
+}
+
 function renderEditAll(){
   normalizeEditState();
   $("editWeekText").innerText = editState.week;
@@ -1758,11 +1887,7 @@ function renderEditAll(){
   renderChips("editTaskChips", taskOptions, "task", value=>{editState.task=value;if(!needsProjectByTask(value)){editState.project="";editState.unit="";}else if(!needsUnitByTask(value)) editState.unit="";renderEditAll();renderRemarkQuick("edit");}, editState);
   if(!needsProjectByTask(editState.task)) disabledChip("editProjectChips", "该类别无需项目号");
   else renderChips("editProjectChips", Object.keys(projectUnits), "project", value=>{editState.project=value;editState.unit="";renderEditAll();renderRemarkQuick("edit");}, editState);
-  if(!needsUnitByTask(editState.task)) disabledChip("editUnitChips", "该类别无需单元号");
-  else{
-    const units = editState.project && projectUnits[editState.project] ? projectUnits[editState.project] : [];
-    renderChips("editUnitChips", units, "unit", value=>{editState.unit=value;renderEditAll();renderRemarkQuick("edit");}, editState);
-  }
+  renderEditUnits();
   renderEditQuickButtons();
   renderRemarkQuick("edit");
   editSyncDay();
