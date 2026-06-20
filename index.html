@@ -1,4 +1,4 @@
-<!-- VERSION: V3.1 STABLE PRODUCTION - CLEANED -->
+<!-- VERSION: V3.2 STABLE PRODUCTION - AUTO WEEKDAY HOURS -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -1462,25 +1462,40 @@ function disableRegularInputs(disabled){
   $("regularPlus").disabled = disabled;
   document.querySelectorAll("#regularHoursQuick .quick-btn").forEach(btn=>btn.disabled = disabled);
 }
-function syncHourSectionByWeekday(){
+function getTodayWeekday(){
+  const d = new Date().getDay(); // 0=周日
+  return ["日","一","二","三","四","五","六"][d];
+}
+
+function applyAutoHoursByWeekday(){
   if(!state.weekday){
     refreshDisplays();
     return;
   }
+
   if(isWeekendDay(state.weekday)){
+    // ✅ 周末：正常工时和工作日加班自动归零，只显示周末加班
     state.regularHours = 0;
     state.otWeekday = 0;
+    state.otWeekend = Math.max(0, Math.min(num(state.otWeekend), maxHours("otWeekend")));
     $("weekdayOTCard").classList.add("hidden");
     $("weekendOTCard").classList.remove("hidden");
     disableRegularInputs(true);
   }else{
-    if(state.regularHours === 0) state.regularHours = 8;
+    // ✅ 工作日：自动默认正常工时8h，周末加班自动归零，只显示工作日加班
+    state.regularHours = 8;
     state.otWeekend = 0;
+    state.otWeekday = Math.max(0, Math.min(num(state.otWeekday), maxHours("otWeekday")));
     $("weekdayOTCard").classList.remove("hidden");
     $("weekendOTCard").classList.add("hidden");
     disableRegularInputs(false);
   }
+
   refreshDisplays();
+}
+
+function syncHourSectionByWeekday(){
+  applyAutoHoursByWeekday();
 }
 function calcEmployeeDailyTotals(rows){
   const map = {};
@@ -1818,16 +1833,27 @@ function renderEditQuickButtons(){
   renderQuickRow("editOtWeekendQuick", "otWeekend", quickHoursMap.otWeekend, false, editSetNumber);
 }
 function editSyncDay(){
+  if(!editState.weekday){
+    editRefreshDisplays();
+    return;
+  }
+
   if(isWeekendDay(editState.weekday)){
+    // ✅ 编辑时切到周末：正常工时和工作日加班自动归零
     editState.regularHours = 0;
     editState.otWeekday = 0;
+    editState.otWeekend = Math.max(0, Math.min(num(editState.otWeekend), maxHours("otWeekend")));
     $("editWeekdayOTCard").classList.add("hidden");
     $("editWeekendOTCard").classList.remove("hidden");
   }else{
+    // ✅ 编辑时切到工作日：默认正常工时8h，周末加班归零
+    if(editState.regularHours === 0) editState.regularHours = 8;
     editState.otWeekend = 0;
+    editState.otWeekday = Math.max(0, Math.min(num(editState.otWeekday), maxHours("otWeekday")));
     $("editWeekdayOTCard").classList.remove("hidden");
     $("editWeekendOTCard").classList.add("hidden");
   }
+
   editRefreshDisplays();
 }
 function normalizeEditState(){
@@ -2009,32 +2035,36 @@ async function unlockAllVisibleRows(){
 async function init(){
   if(new URL(location.href).searchParams.get("admin") === "1") $("ruleBox").classList.remove("hidden");
   initEmployee();
+
   if(isAdmin()){
     $("inputArea").classList.add("hidden");
     $("adminPanel").classList.add("show");
   }
+
   await loadAllWeeks();
+
   if(!state.week){
     const current = getCurrentWeek();
     state.week = allWeeks.includes(current) ? current : (allWeeks[allWeeks.length-1] || current);
   }
+
   renderMainWeekChips();
   renderMainWeekdayChips();
-// ✅ 自动选择今天星期
-function getTodayWeekday(){
-  const d = new Date().getDay(); // 0=周日
-  return ["日","一","二","三","四","五","六"][d];
-}
 
-// ✅ 默认选中今天
-state.weekday = getTodayWeekday();
-renderActive();   // ✅ 刷新选中效果
-syncHourSectionByWeekday(); // ✅ 自动切换加班/周末逻辑
+  // ✅ 第一次进入页面时自动选中当天星期，减少员工一步操作
+  if(!state.weekday){
+    state.weekday = getTodayWeekday();
+  }
+
+  // ✅ 根据当天是工作日/周末，自动设置默认工时区
+  syncHourSectionByWeekday();
+
   renderMainTaskChips();
   applyTaskRules();
   renderQuickButtons();
   renderRemarkQuick();
   refreshDisplays();
+  renderActive();
   await loadWeekRecords();
 }
 init();
