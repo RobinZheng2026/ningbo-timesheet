@@ -1,4 +1,4 @@
-<!-- VERSION: V3.2 STABLE PRODUCTION - AUTO WEEKDAY HOURS -->
+<!-- VERSION: V4.2 FINAL - ADMIN SELECTED WEEK EXCEL EXPORT -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -471,6 +471,10 @@
       background:#dcfce7;
       color:#166534;
     }
+    .export-btn{
+      background:#dbeafe;
+      color:#1d4ed8;
+    }
 
     .msg{
       display:none;
@@ -703,6 +707,8 @@
       <div id="adminPanel" class="admin-panel">
         <button class="admin-btn lock-btn" onclick="lockAllVisibleRows()">🔒 一键锁定所选 Week 全部记录</button>
         <button class="admin-btn unlock-btn" onclick="unlockAllVisibleRows()">🔓 一键解除所选 Week 全部锁定</button>
+      
+        <button class="admin-btn export-btn" onclick="exportSelectedWeekExcel()">📥 导出所选 Week 数据</button>
       </div>
 
       <div id="anomalyBox" class="anomaly-box"></div>
@@ -901,6 +907,7 @@ const employeeMap = {
 };
 
 const employeeKeyMap = {
+ "1237794": "7794888",
   "1177215": "721514",
   "1177235": "723511",
   "1177264": "726465",
@@ -914,7 +921,7 @@ const employeeKeyMap = {
   "1177342": "734258",
   "1235746": "574619",
   "1236416": "641619",
-  "1237794": "779495",
+  
   "1239728": "972859",
   "1254596": "459618",
   "1259740": "974014",
@@ -1199,17 +1206,32 @@ async function loadAllWeeks(){
   try{
     const rows = await fetchRows();
     if(rows.length) LOCK_FIELD = detectLockField(rows[0]);
+
     const set = new Set();
     rows.forEach(r=>{ if(r.week) set.add(r.week); });
+
     const current = getCurrentWeek();
-    set.add(current);
     const currentNum = Number(current.replace("W", ""));
-    if(currentNum > 1) set.add("W" + (currentNum - 1));
-    if(currentNum > 2) set.add("W" + (currentNum - 2));
+
+    // ✅ 管理员和员工都显示：当前周前后各4周
+    for(let i=-4;i<=4;i++){
+      const w = currentNum + i;
+      if(w > 0) set.add("W" + w);
+    }
+
     allWeeks = Array.from(set).sort((a,b)=>weekNum(a)-weekNum(b));
   }catch(e){
-    allWeeks = [getCurrentWeek()];
-    showMsg("读取历史周失败，仅显示当前周：" + e.message, false);
+    const current = getCurrentWeek();
+    const currentNum = Number(current.replace("W", ""));
+    const arr = [];
+
+    for(let i=-4;i<=4;i++){
+      const w = currentNum + i;
+      if(w > 0) arr.push("W" + w);
+    }
+
+    allWeeks = arr;
+    showMsg("读取历史周失败，仅显示当前周前后4周：" + e.message, false);
   }
 }
 function getWeekOptions(){ return allWeeks; }
@@ -2032,6 +2054,176 @@ async function unlockAllVisibleRows(){
     showMsg("❌ 一键解锁失败：" + e.message,false);
   }
 }
+
+function excelEscape(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;");
+}
+function excelCell(value, className=""){
+  return '<td class="' + className + '">' + excelEscape(value) + '</td>';
+}
+function excelHeader(value){
+  return '<th>' + excelEscape(value) + '</th>';
+}
+function exportDateText(){
+  const d = new Date();
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  const dd = String(d.getDate()).padStart(2,"0");
+  const hh = String(d.getHours()).padStart(2,"0");
+  const mi = String(d.getMinutes()).padStart(2,"0");
+  return yyyy + mm + dd + "_" + hh + mi;
+}
+function buildSelectedWeekExportSummary(rows){
+  const result = {};
+
+  rows.forEach(record=>{
+    const id = String(record.employeeId || "");
+    const name = record.employeeName || employeeMap[id] || id;
+
+    if(!result[id]){
+      result[id] = {
+        employeeId:id,
+        employeeName:name,
+        days:{},
+        totalRegular:0,
+        totalOtWeekday:0,
+        totalOtWeekend:0,
+        anomaly:[]
+      };
+      weekdayOptions.forEach(day=>{
+        result[id].days[day] = {regular:0, otWeekday:0, otWeekend:0};
+      });
+    }
+
+    const day = record.weekday;
+    if(result[id].days[day]){
+      result[id].days[day].regular += num(record.regularHours);
+      result[id].days[day].otWeekday += num(record.otWeekday);
+      result[id].days[day].otWeekend += num(record.otWeekend);
+    }
+
+    result[id].totalRegular += num(record.regularHours);
+    result[id].totalOtWeekday += num(record.otWeekday);
+    result[id].totalOtWeekend += num(record.otWeekend);
+  });
+
+  Object.keys(result).forEach(id=>{
+    const emp = result[id];
+    ["一","二","三","四","五"].forEach(day=>{
+      const d = emp.days[day];
+      if(d.regular !== 8) emp.anomaly.push("周" + day + "正常=" + d.regular + "h");
+      if(!(d.otWeekday === 0 || d.otWeekday === 4)) emp.anomaly.push("周" + day + "工作日加班=" + d.otWeekday + "h");
+    });
+  });
+
+  return result;
+}
+function exportSelectedWeekExcel(){
+  if(!isAdmin()){
+    alert("只有管理员可以导出所选 Week 数据。");
+    return;
+  }
+  if(!state.week){
+    alert("请先选择 Week。");
+    return;
+  }
+
+  const rows = currentWeekRecords || [];
+  if(!rows.length){
+    alert("当前所选 Week 没有可导出的数据。");
+    return;
+  }
+
+  const summary = buildSelectedWeekExportSummary(rows);
+  const ids = Object.keys(summary).sort((a,b)=>String(summary[a].employeeName || "").localeCompare(String(summary[b].employeeName || ""), "zh-Hans-CN"));
+
+  let html = '';
+  html += '<html><head><meta charset="UTF-8">';
+  html += '<style>';
+  html += 'body{font-family:Arial,"Microsoft YaHei",sans-serif;}';
+  html += 'table{border-collapse:collapse;font-size:12px;}';
+  html += 'th,td{border:1px solid #444;padding:5px;text-align:center;mso-number-format:"\\@";}';
+  html += 'th{background:#dbeafe;font-weight:bold;}';
+  html += '.title{font-size:18px;font-weight:bold;text-align:left;background:#ffffff;}';
+  html += '.subTitle{font-size:14px;font-weight:bold;text-align:left;background:#f3f4f6;}';
+  html += '.bad{background:#ff0000;color:#ffffff;font-weight:bold;}';
+  html += '.left{text-align:left;}';
+  html += '</style></head><body>';
+
+  html += '<table>';
+  html += '<tr><td class="title" colspan="18">车间工时周汇总 - ' + excelEscape(state.week) + '</td></tr>';
+  html += '<tr><td class="subTitle" colspan="18">导出时间：' + excelEscape(new Date().toLocaleString()) + '</td></tr>';
+  html += '<tr><td colspan="18"></td></tr>';
+  html += '<tr>';
+  html += excelHeader("员工姓名") + excelHeader("工号");
+  ["一","二","三","四","五"].forEach(day=>{
+    html += excelHeader("周" + day + "正常");
+    html += excelHeader("周" + day + "加班");
+  });
+  html += excelHeader("周六加班") + excelHeader("周日加班");
+  html += excelHeader("正常合计") + excelHeader("工作日晚加班合计") + excelHeader("周末加班合计") + excelHeader("异常说明");
+  html += '</tr>';
+
+  ids.forEach(id=>{
+    const emp = summary[id];
+    const hasError = emp.anomaly.length > 0;
+    html += '<tr>';
+    html += excelCell(emp.employeeName, hasError ? "bad" : "");
+    html += excelCell(emp.employeeId, hasError ? "bad" : "");
+    ["一","二","三","四","五"].forEach(day=>{
+      const d = emp.days[day];
+      html += excelCell(d.regular, d.regular !== 8 ? "bad" : "");
+      html += excelCell(d.otWeekday, !(d.otWeekday === 0 || d.otWeekday === 4) ? "bad" : "");
+    });
+    html += excelCell(emp.days["六"].otWeekend || 0);
+    html += excelCell(emp.days["日"].otWeekend || 0);
+    html += excelCell(emp.totalRegular);
+    html += excelCell(emp.totalOtWeekday);
+    html += excelCell(emp.totalOtWeekend);
+    html += excelCell(emp.anomaly.join("；"), hasError ? "bad left" : "left");
+    html += '</tr>';
+  });
+
+  html += '<tr><td colspan="18"></td></tr>';
+  html += '<tr><td class="subTitle" colspan="13">原始明细</td></tr>';
+  html += '<tr>';
+  ["提交时间","员工姓名","工号","Week","星期","工时类别","项目号","单元号","正常工时","工作日加班","周末加班","备注","锁定状态"].forEach(h=>html += excelHeader(h));
+  html += '</tr>';
+
+  rows.forEach(record=>{
+    html += '<tr>';
+    html += excelCell(record.submitTime || "");
+    html += excelCell(record.employeeName || employeeMap[record.employeeId] || "");
+    html += excelCell(record.employeeId || "");
+    html += excelCell(record.week || "");
+    html += excelCell(record.weekday || "");
+    html += excelCell(record.task || "");
+    html += excelCell(record.project || "");
+    html += excelCell(record.unit || "");
+    html += excelCell(num(record.regularHours));
+    html += excelCell(num(record.otWeekday));
+    html += excelCell(num(record.otWeekend));
+    html += excelCell(record.remark || "", "left");
+    html += excelCell(isLocked(record) ? "已锁定" : "未锁定");
+    html += '</tr>';
+  });
+
+  html += '</table></body></html>';
+
+  const blob = new Blob(["\ufeff" + html], {type:"application/vnd.ms-excel;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "车间工时_" + state.week + "_" + exportDateText() + ".xls";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
 async function init(){
   if(new URL(location.href).searchParams.get("admin") === "1") $("ruleBox").classList.remove("hidden");
   initEmployee();
