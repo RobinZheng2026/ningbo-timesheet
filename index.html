@@ -1,4 +1,4 @@
-<!-- VERSION: V4.5 FINAL - ADMIN PANEL HIDDEN + FULL PAGINATION LOCK + AUTO REFRESH -->
+<!-- VERSION: V4.6 FINAL - WHOLE WEEK LOCK + WEEK LOCK ICON -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -873,14 +873,6 @@ const ADMIN_ID = "1237794";
 let LOCK_FIELD = "Lock Status";
 
 const employeeMap = {
-  "991001": "林泽学",
-  "991002": "堂自赠",
-  "991003": "刘建希",
-  "991005": "邓茂胜",
-  "991008": "曹珪",
-  "991009": "侯自峰",
-  "991012": "唐先发",
-  "991013": "梁庄华",
   "1177215": "官辉",
   "1177235": "王家伟",
   "1177264": "李剑锋",
@@ -898,40 +890,50 @@ const employeeMap = {
   "1239728": "郭振宗",
   "1254596": "候海晴",
   "1259740": "汪保平",
-  "1262912": "向波"
+  "1262912": "向波",
+  "employeeId": "name",
+  "S1001": "林泽学",
+  "S1002": "堂自赠",
+  "S1003": "刘建希",
+  "S1005": "邓茂胜",
+  "S1008": "曹珪",
+  "S1009": "侯自峰",
+  "S1012": "唐先发",
+  "S1013": "梁庄华"
 };
 
 const employeeKeyMap = {
-  "991001": "100130",
-  "991002": "100276",
-  "991003": "100351",
-  "991005": "100599",
-  "991008": "100891",
-  "991009": "100947",
-  "991012": "101211",
-  "991013": "101330",
-  "1177215": "721574",
-  "1177235": "723511",
-  "1177264": "726478",
-  "1177265": "726517",
-  "1177266": "726637",
-  "1177310": "731018",
-  "1177333": "733372",
-  "1177336": "733633",
-  "1177338": "733872",
-  "1177339": "733973",
-  "1177342": "734257",
-  "1235746": "574630",
-  "1236416": "641620",
-  "1237794": "7794888",
-  "1239728": "972872",
-  "1254596": "459682",
-  "1259740": "974075",
-  "1262912": "291288"
+  "1177215": "72157",
+  "1177235": "72352",
+  "1177264": "72640",
+  "1177265": "72657",
+  "1177266": "72669",
+  "1177310": "73109",
+  "1177333": "73337",
+  "1177336": "73366",
+  "1177338": "73381",
+  "1177339": "73399",
+  "1177342": "73422",
+  "1235746": "57466",
+  "1236416": "64163",
+  "1237794": "77949",
+  "1239728": "97285",
+  "1254596": "45969",
+  "1259740": "97400",
+  "1262912": "29125",
+  "employeeId": "Key",
+  "S1001": "10016",
+  "S1002": "10028",
+  "S1003": "10038",
+  "S1005": "10050",
+  "S1008": "10089",
+  "S1009": "10098",
+  "S1012": "10120",
+  "S1013": "10133"
 };
 
 const projectUnits = {
-  "P0351706": [
+    "P0351706": [
     "U503",
     "U451",
     "U381",
@@ -949,7 +951,6 @@ const projectUnits = {
     "U103"
   ],
   "P0384374": [
-    "NIN-52981",
     "U641D",
     "U641C",
     "U641B",
@@ -968,16 +969,17 @@ const projectUnits = {
     "U201A",
     "U126-1",
     "U126",
-    "U120"
+    "U120",
+    "NIN-52981"
   ],
   "P0373305": [
+    "U641",
     "U611-D",
     "U611-C",
     "U611-B",
     "U611-A",
     "U611",
     "U503",
-    "U641",
     "U387",
     "U381",
     "U368-3",
@@ -992,19 +994,27 @@ const projectUnits = {
     "U121"
   ],
   "P88359": [
-    "NIN-53054",
     "U451",
     "U381",
     "U371",
     "U361",
     "U341",
     "U335",
-    "U201-2"
+    "U201-2",
+    "NIN-53054"
   ],
   "P0382530": [
-    "NIN-53076",
-    "U125",
+    "U501",
+    "U401",
+    "U381",
+    "U361",
     "U344",
+    "U335",
+    "U201B",
+    "U201A",
+    "U125",
+    "U114-1",
+    "NIN-53076",
     "NIN-53073",
     "NIN-53072",
     "NIN-53071",
@@ -1017,28 +1027,18 @@ const projectUnits = {
     "NIN-53064",
     "NIN-53061",
     "NIN-53060",
-    "U335",
-    "NIN-53053",
-    "U501",
-    "U401",
-    "U381",
-    "U361",
-    "U201B",
-    "U201A",
-    "U114-1"
+    "NIN-53053"
   ],
   "P0407596": [
-    "NIN-53063",
-    "NIN-53062",
     "U641C-1",
-    "U641B-1",
     "U641C",
+    "U641B-1",
     "U641B",
     "U641A-1",
     "U641A",
     "U503",
-    "U387",
     "U451",
+    "U387",
     "U382",
     "U381",
     "U373",
@@ -1050,15 +1050,9 @@ const projectUnits = {
     "U343",
     "U335",
     "U123-1",
-    "U123"
-  ],
-  "After_sales_销售": [
-    "NIN-53111",
-    "NIN-53086",
-    "NIN-53085",
-    "NIN-53084",
-    "NIN-53083",
-    "NIN-53082"
+    "U123",
+    "NIN-53063",
+    "NIN-53062"
   ]
 };
 
@@ -1105,6 +1099,7 @@ let editState = {
 };
 let currentWeekRecords = [];
 let allWeeks = [];
+let lockedWeeks = new Set();
 let isSubmitting = false;
 let editingRowId = "";
 let employeeAuthorized = false;
@@ -1199,6 +1194,15 @@ function isLocked(record){
   const f = detectLockField(record);
   return record[f] === true || record[f] === "true" || record[f] === 1 || record[f] === "1";
 }
+function refreshLockedWeeks(rows){
+  lockedWeeks = new Set();
+  (rows || []).forEach(row=>{
+    if(row && row.week && isLocked(row)) lockedWeeks.add(String(row.week));
+  });
+}
+function isWeekLocked(week){
+  return lockedWeeks.has(String(week || ""));
+}
 async function fetchRows(){
   let all = [];
   let url = apiUrl();
@@ -1230,6 +1234,7 @@ async function loadAllWeeks(){
   try{
     const rows = await fetchRows();
     if(rows.length) LOCK_FIELD = detectLockField(rows[0]);
+    refreshLockedWeeks(rows);
 
     const set = new Set();
     rows.forEach(r=>{ if(r.week) set.add(r.week); });
@@ -1293,7 +1298,11 @@ function initEmployee(){
   }
 }
 function displayChipText(value, field){
-  if(field === "week" && value === getCurrentWeek()) return value + "（本周）";
+  if(field === "week"){
+    const lockIcon = isWeekLocked(value) ? " 🔒" : "";
+    if(value === getCurrentWeek()) return value + lockIcon + "（本周）";
+    return value + lockIcon;
+  }
   return value;
 }
 function renderChips(containerId, values, field, onClick, targetState=state){
@@ -1801,6 +1810,7 @@ function duplicate(signatureText, excludeRowId){
 }
 function validatePayload(payload, excludeRowId){
   if(isAdmin()) return "管理员账号不允许填报或修改工时数据。";
+  if(isWeekLocked(payload.week)) return "该 Week 已被管理员锁定，禁止新增、修改或删除。";
   if(!payload.employeeId || !employeeMap[payload.employeeId]) return "未识别到有效员工信息，请使用员工专属二维码扫码。";
   if(!payload.week) return "请选择 Week。";
   if(!payload.weekday) return "请选择星期。";
@@ -1975,6 +1985,7 @@ function openEditModal(id){
   const record = currentWeekRecords.find(x=>String(x.id)===String(id));
   if(!record) return showMsg("未找到要修改的记录。",false);
   if(String(record.employeeId) !== String(empId)) return showMsg("非法操作：只能修改自己的记录。",false);
+  if(isWeekLocked(record.week || state.week)) return showMsg("该 Week 已被管理员锁定，禁止新增、修改或删除。",false);
   if(isLocked(record)) return showMsg("该记录已被管理员锁定，不能修改。",false);
   editingRowId = String(id);
   editState = {week:record.week || state.week,weekday:record.weekday || "",task:record.task || "",project:record.project || "",unit:record.unit || "",regularHours:num(record.regularHours),otWeekday:num(record.otWeekday),otWeekend:num(record.otWeekend),remark:record.remark || ""};
@@ -1994,6 +2005,7 @@ async function saveEdit(){
   if(!requireAuth(true)) return;
   const oldRecord = currentWeekRecords.find(x=>String(x.id)===String(editingRowId));
   if(oldRecord && String(oldRecord.employeeId) !== String(empId)) return alert("非法操作：只能修改自己的记录。");
+  if(isWeekLocked((oldRecord && oldRecord.week) || editState.week)) return alert("该 Week 已被管理员锁定，禁止新增、修改或删除。");
   if(oldRecord && isLocked(oldRecord)) return alert("该记录已被管理员锁定，不能修改。");
   normalizeEditState();
   const weekend = isWeekendDay(editState.weekday);
@@ -2017,6 +2029,7 @@ async function deleteRecord(id){
   const record = currentWeekRecords.find(x=>String(x.id)===String(id));
   if(!record) return showMsg("未找到要删除的记录。",false);
   if(String(record.employeeId) !== String(empId)) return showMsg("非法操作：只能删除自己的记录。",false);
+  if(isWeekLocked(record.week || state.week)) return showMsg("该 Week 已被管理员锁定，禁止新增、修改或删除。",false);
   if(isLocked(record)) return showMsg("该记录已被管理员锁定，不能删除。",false);
   if(!confirm("确认删除这条记录吗？\n\n星期："+(record.weekday||"")+"\n工时类别："+(record.task||"")+"\n项目号："+(record.project||"")+"\n单元号："+(record.unit||"")+"\n正常工时："+num(record.regularHours)+"h\n工作日加班："+num(record.otWeekday)+"h\n周末加班："+num(record.otWeekend)+"h")) return;
   if(!confirm("删除后无法在本页面恢复。请再次确认：是否永久删除？")) return;
@@ -2069,13 +2082,15 @@ async function lockAllVisibleRows(){
   }
 
   if(!rows.length) return alert("当前 Week 没有记录。");
-  if(!confirm("确认锁定所选 Week 全部记录？锁定后员工不能修改或删除。")) return;
+  if(!confirm("确认锁定所选 Week 全部记录？锁定后员工不能新增、修改或删除。")) return;
 
   try{
     for(const record of rows){
       await patchLocked(record.id,true);
     }
-    showMsg("✅ 所选 Week 全部记录已锁定。",true);
+    refreshLockedWeeks(await fetchRows());
+    showMsg("✅ 所选 Week 已整周锁定，员工不能再新增、修改或删除。",true);
+    renderActive();
     await loadWeekRecords();
   }catch(e){
     showMsg("❌ 一键锁定失败：" + e.message,false);
@@ -2100,7 +2115,9 @@ async function unlockAllVisibleRows(){
     for(const record of rows){
       await patchLocked(record.id,false);
     }
-    showMsg("✅ 所选 Week 全部记录已解锁。",true);
+    refreshLockedWeeks(await fetchRows());
+    showMsg("✅ 所选 Week 已解除整周锁定。",true);
+    renderActive();
     await loadWeekRecords();
   }catch(e){
     showMsg("❌ 一键解锁失败：" + e.message,false);
