@@ -1149,12 +1149,20 @@ function headers(json=true){
 function authKeyName(){ return "NINGBO_WORKSHOP_EMP_KEY_OK_" + String(empId || ""); }
 function isEmployeeKeyValid(key){ return String(key || "").trim() === String(employeeKeyMap[empId] || "").trim() && !!employeeKeyMap[empId]; }
 function verifyEmployeeKey(){
-  if(!empId || !empName) return false;
-  const saved = localStorage.getItem(authKeyName());
-  if(saved && isEmployeeKeyValid(saved)){
-    employeeAuthorized = true;
+
+  // ✅ 管理员直接通过（关键）
+  if(isAdmin()){
     return true;
   }
+
+  const key = $("empKeyInput").value.trim();
+
+  if(!state.employeeKeyMap || !empId){
+    return false;
+  }
+
+  return String(state.employeeKeyMap[empId] || "") === key;
+}
   const input = prompt("请输入你的个人验证码：");
   if(isEmployeeKeyValid(input)){
     employeeAuthorized = true;
