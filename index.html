@@ -1,4 +1,4 @@
-<!-- VERSION: V4.4 FINAL - UTF8 FIXED + ADMIN VALIDATION + EXCEL EXPORT -->
+<!-- VERSION: V4.5 FINAL - ADMIN PANEL HIDDEN + FULL PAGINATION LOCK + AUTO REFRESH -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -443,7 +443,7 @@
     }
 
     .admin-panel{
-      display:grid;
+      display:none;
       gap:8px;
       margin:10px 0 14px;
       grid-template-columns:repeat(3,1fr);
@@ -873,64 +873,65 @@ const ADMIN_ID = "1237794";
 let LOCK_FIELD = "Lock Status";
 
 const employeeMap = {
-  "1177215":"官辉",
-  "1177235":"王家伟",
-  "1177264":"李剑锋",
-  "1177265":"李建军",
-  "1177266":"李念亭",
-  "1177310":"师海芳",
-  "1177333":"黄维昆",
-  "1177336":"席新永",
-  "1177338":"叶峰",
-  "1177339":"虞志胜",
-  "1177342":"庄允吉",
-  "1235746":"丁允志",
-  "1236416":"张道仅",
-  "1237794":"Manager",
-  "1239728":"郭振宗",
-  "1254596":"候海晴",
-  "1259740":"汪保平",
-  "1262912":"向波",
-  "S1001":"林泽学",
-  "S1005":"邓茂胜",
-  "S1008":"曹珪",
-  "S1009":"侯自峰",
-  "S1012":"唐先发",
-  "S1013":"梁庄华"
+  "991001": "林泽学",
+  "991002": "堂自赠",
+  "991003": "刘建希",
+  "991005": "邓茂胜",
+  "991008": "曹珪",
+  "991009": "侯自峰",
+  "991012": "唐先发",
+  "991013": "梁庄华",
+  "1177215": "官辉",
+  "1177235": "王家伟",
+  "1177264": "李剑锋",
+  "1177265": "李建军",
+  "1177266": "李念亭",
+  "1177310": "师海芳",
+  "1177333": "黄维昆",
+  "1177336": "席新永",
+  "1177338": "叶峰",
+  "1177339": "虞志胜",
+  "1177342": "庄允吉",
+  "1235746": "丁允志",
+  "1236416": "张道仅",
+  "1237794": "Manager",
+  "1239728": "郭振宗",
+  "1254596": "候海晴",
+  "1259740": "汪保平",
+  "1262912": "向波"
 };
 
 const employeeKeyMap = {
- "1237794": "779495",
-  "1177215": "721514",
+  "991001": "100130",
+  "991002": "100276",
+  "991003": "100351",
+  "991005": "100599",
+  "991008": "100891",
+  "991009": "100947",
+  "991012": "101211",
+  "991013": "101330",
+  "1177215": "721574",
   "1177235": "723511",
-  "1177264": "726465",
+  "1177264": "726478",
   "1177265": "726517",
-  "1177266": "726674",
-  "1177310": "731084",
-  "1177333": "733394",
-  "1177336": "733613",
-  "1177338": "733818",
-  "1177339": "733981",
-  "1177342": "734258",
-  "1235746": "574619",
-  "1236416": "641619",
-  
-  "1239728": "972859",
-  "1254596": "459618",
-  "1259740": "974014",
-  "1262912": "291249",
-  "S1001": "100167",
-  "S1002": "100284",
-  "S1003": "100351",
-  "S1005": "100588",
-  "S1008": "100818",
-  "S1009": "100947",
-  "S1012": "101213",
-  "S1013": "101375"
+  "1177266": "726637",
+  "1177310": "731018",
+  "1177333": "733372",
+  "1177336": "733633",
+  "1177338": "733872",
+  "1177339": "733973",
+  "1177342": "734257",
+  "1235746": "574630",
+  "1236416": "641620",
+  "1237794": "7794888",
+  "1239728": "972872",
+  "1254596": "459682",
+  "1259740": "974075",
+  "1262912": "291288"
 };
 
 const projectUnits = {
-    "P0351706": [
+  "P0351706": [
     "U503",
     "U451",
     "U381",
@@ -948,6 +949,7 @@ const projectUnits = {
     "U103"
   ],
   "P0384374": [
+    "NIN-52981",
     "U641D",
     "U641C",
     "U641B",
@@ -966,17 +968,16 @@ const projectUnits = {
     "U201A",
     "U126-1",
     "U126",
-    "U120",
-    "NIN-52981"
+    "U120"
   ],
   "P0373305": [
-    "U641",
     "U611-D",
     "U611-C",
     "U611-B",
     "U611-A",
     "U611",
     "U503",
+    "U641",
     "U387",
     "U381",
     "U368-3",
@@ -991,27 +992,19 @@ const projectUnits = {
     "U121"
   ],
   "P88359": [
+    "NIN-53054",
     "U451",
     "U381",
     "U371",
     "U361",
     "U341",
     "U335",
-    "U201-2",
-    "NIN-53054"
+    "U201-2"
   ],
   "P0382530": [
-    "U501",
-    "U401",
-    "U381",
-    "U361",
-    "U344",
-    "U335",
-    "U201B",
-    "U201A",
-    "U125",
-    "U114-1",
     "NIN-53076",
+    "U125",
+    "U344",
     "NIN-53073",
     "NIN-53072",
     "NIN-53071",
@@ -1024,18 +1017,28 @@ const projectUnits = {
     "NIN-53064",
     "NIN-53061",
     "NIN-53060",
-    "NIN-53053"
+    "U335",
+    "NIN-53053",
+    "U501",
+    "U401",
+    "U381",
+    "U361",
+    "U201B",
+    "U201A",
+    "U114-1"
   ],
   "P0407596": [
+    "NIN-53063",
+    "NIN-53062",
     "U641C-1",
-    "U641C",
     "U641B-1",
+    "U641C",
     "U641B",
     "U641A-1",
     "U641A",
     "U503",
-    "U451",
     "U387",
+    "U451",
     "U382",
     "U381",
     "U373",
@@ -1047,12 +1050,17 @@ const projectUnits = {
     "U343",
     "U335",
     "U123-1",
-    "U123",
-    "NIN-53063",
-    "NIN-53062"
+    "U123"
+  ],
+  "After_sales_销售": [
+    "NIN-53111",
+    "NIN-53086",
+    "NIN-53085",
+    "NIN-53084",
+    "NIN-53083",
+    "NIN-53082"
   ]
 };
-
 const weekdayOptions = ["一","二","三","四","五","六","日"];
 const taskOptions = ["机械组装","保温作业","电气安装","额外工时","其它作业","请假","仓库作业"];
 const TASKS_NO_PROJECT = ["仓库作业","其它作业","其它工作","请假"];
@@ -1191,10 +1199,31 @@ function isLocked(record){
   return record[f] === true || record[f] === "true" || record[f] === 1 || record[f] === "1";
 }
 async function fetchRows(){
-  const res = await fetch(apiUrl(), { headers:headers() });
-  if(!res.ok) throw new Error("读取记录失败：" + res.status);
-  const data = await res.json();
-  return Array.isArray(data) ? data : (data.results || []);
+  let all = [];
+  let url = apiUrl();
+
+  while(url){
+    const res = await fetch(url, { headers:headers() });
+    if(!res.ok) throw new Error("读取记录失败：" + res.status);
+
+    const data = await res.json();
+
+    if(Array.isArray(data)){
+      all = all.concat(data);
+      break;
+    }
+
+    const rows = data.results || [];
+    all = all.concat(rows);
+    url = data.next || "";
+  }
+
+  return all;
+}
+
+async function fetchAllWeekRows(week){
+  const rows = await fetchRows();
+  return rows.filter(row=>String(row.week || "") === String(week));
 }
 async function loadAllWeeks(){
   try{
@@ -2030,23 +2059,46 @@ async function unlockOne(id){
 async function lockAllVisibleRows(){
   if(!isAdmin()) return showMsg("只有管理员可以锁定。",false);
   if(!state.week) return alert("请先选择 Week。");
-  if(!currentWeekRecords.length) return alert("当前 Week 没有记录。");
-  if(!confirm("确认锁定所选 Week 所有已显示记录？锁定后员工不能修改或删除。")) return;
+
+  let rows = [];
   try{
-    for(const record of currentWeekRecords) await patchLocked(record.id,true);
+    rows = await fetchAllWeekRows(state.week);
+  }catch(e){
+    return showMsg("❌ 读取所选 Week 全部记录失败：" + e.message,false);
+  }
+
+  if(!rows.length) return alert("当前 Week 没有记录。");
+  if(!confirm("确认锁定所选 Week 全部记录？锁定后员工不能修改或删除。")) return;
+
+  try{
+    for(const record of rows){
+      await patchLocked(record.id,true);
+    }
     showMsg("✅ 所选 Week 全部记录已锁定。",true);
     await loadWeekRecords();
   }catch(e){
     showMsg("❌ 一键锁定失败：" + e.message,false);
   }
 }
+
 async function unlockAllVisibleRows(){
   if(!isAdmin()) return showMsg("只有管理员可以解锁。",false);
   if(!state.week) return alert("请先选择 Week。");
-  if(!currentWeekRecords.length) return alert("当前 Week 没有记录。");
-  if(!confirm("确认解除所选 Week 所有已显示记录的锁定？")) return;
+
+  let rows = [];
   try{
-    for(const record of currentWeekRecords) await patchLocked(record.id,false);
+    rows = await fetchAllWeekRows(state.week);
+  }catch(e){
+    return showMsg("❌ 读取所选 Week 全部记录失败：" + e.message,false);
+  }
+
+  if(!rows.length) return alert("当前 Week 没有记录。");
+  if(!confirm("确认解除所选 Week 全部记录的锁定？")) return;
+
+  try{
+    for(const record of rows){
+      await patchLocked(record.id,false);
+    }
     showMsg("✅ 所选 Week 全部记录已解锁。",true);
     await loadWeekRecords();
   }catch(e){
@@ -2227,6 +2279,7 @@ async function init(){
   if(new URL(location.href).searchParams.get("admin") === "1") $("ruleBox").classList.remove("hidden");
   initEmployee();
 
+  $("adminPanel").classList.remove("show");
   if(isAdmin()){
     $("inputArea").classList.add("hidden");
     $("adminPanel").classList.add("show");
