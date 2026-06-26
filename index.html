@@ -1,4 +1,4 @@
-<!-- VERSION: V6.3 FINAL - UNIFIED INPUT GUARDRAILS -->
+<!-- VERSION: V7.2.1 FINAL - REMARK CELL SIZE OVERRIDE FIX -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -909,11 +909,619 @@
     .inline-hour-input.maxed{background:#f3f4f6!important;color:#9ca3af!important;border-color:#cbd5e1!important;}
     .hour-input.pending,
     .inline-hour-input.pending{background:#dcfce7!important;border-color:#16a34a!important;color:#111827!important;}
-    
-.integrated-note{
-  display:none !important;
-}
 
+    /* V6.4：工时类别/备注也改为卡片选择器 */
+    .task-picker-btn,.remark-picker-btn{font-size:12px!important;}
+    .picker-card.task{background:#f0f9ff;color:#075985;border-color:#bae6fd;}
+    .picker-card.remark{background:#f8fafc;color:#0f172a;border-color:#d7dde5;align-items:flex-start;justify-content:flex-start;text-align:left;line-height:1.35;}
+    .picker-card.remark.active,.picker-card.task.active{background:#dbeafe!important;color:#075985!important;border-color:#0078d4!important;}
+    @media(max-width:560px){
+      .task-picker-btn,.remark-picker-btn{font-size:13px!important;height:28px!important;padding:3px 2px!important;}
+      .picker-card.task,.picker-card.remark{font-size:17px;min-height:48px;}
+      .picker-card.remark{padding:12px 10px;}
+    }
+
+    /* V6.5：隐藏防错提示 + 手机端项目信息自适应 + 备注保留自定义输入 */
+    .integrated-note{display:none!important;}
+    .remark-custom-wrap{display:flex;gap:4px;align-items:center;width:100%;}
+    .remark-custom-input{
+      flex:1;
+      min-width:72px!important;
+      height:28px!important;
+      padding:3px 5px!important;
+      font-size:12px!important;
+      border:1px solid #bcd0e5!important;
+      border-radius:7px!important;
+    }
+    .remark-select-btn{
+      width:auto!important;
+      min-width:40px!important;
+      max-width:46px!important;
+      flex:0 0 auto;
+      padding:3px 5px!important;
+      font-size:12px!important;
+    }
+    @media(max-width:760px){
+      /* 覆盖之前过窄的固定列：项目号/单元号允许换行显示完整内容 */
+      .main-timesheet-table thead tr:first-child th:nth-child(1),.main-timesheet-table tbody td:nth-child(1){width:52px!important;min-width:52px!important;max-width:52px!important;left:0!important;white-space:normal!important;word-break:break-all!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(2),.main-timesheet-table tbody td:nth-child(2){width:auto!important;min-width:76px!important;max-width:96px!important;left:52px!important;white-space:normal!important;word-break:break-all!important;overflow:visible!important;text-overflow:clip!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(3),.main-timesheet-table tbody td:nth-child(3){width:auto!important;min-width:78px!important;max-width:104px!important;left:128px!important;white-space:normal!important;word-break:break-all!important;overflow:visible!important;text-overflow:clip!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(4),.main-timesheet-table tbody td:nth-child(4){width:auto!important;min-width:104px!important;max-width:140px!important;left:206px!important;white-space:normal!important;word-break:break-all!important;overflow:visible!important;text-overflow:clip!important;}
+      .main-timesheet-table .integrated-project-cell,.main-timesheet-table .integrated-unit-cell{width:auto!important;max-width:none!important;}
+      .project-picker-btn,.unit-picker-btn{white-space:normal!important;word-break:break-all!important;height:auto!important;min-height:28px!important;line-height:1.2!important;padding:3px 3px!important;}
+      .remark-custom-input{font-size:12px!important;height:28px!important;min-width:76px!important;}
+      .remark-select-btn{font-size:12px!important;height:28px!important;}
+    }
+
+    /* V6.6：主功能区左侧列宽按“原始记录管理”表的可读宽度统一 */
+    @media(max-width:760px){
+      .main-timesheet-table thead tr:first-child th:nth-child(1),
+      .main-timesheet-table tbody td:nth-child(1){
+        width:64px!important;
+        min-width:64px!important;
+        max-width:64px!important;
+        left:0!important;
+        white-space:normal!important;
+        word-break:break-word!important;
+        overflow:visible!important;
+        text-overflow:clip!important;
+      }
+      .main-timesheet-table thead tr:first-child th:nth-child(2),
+      .main-timesheet-table tbody td:nth-child(2){
+        width:86px!important;
+        min-width:86px!important;
+        max-width:86px!important;
+        left:64px!important;
+        white-space:normal!important;
+        word-break:break-word!important;
+        overflow:visible!important;
+        text-overflow:clip!important;
+      }
+      .main-timesheet-table thead tr:first-child th:nth-child(3),
+      .main-timesheet-table tbody td:nth-child(3){
+        width:74px!important;
+        min-width:74px!important;
+        max-width:74px!important;
+        left:150px!important;
+        white-space:normal!important;
+        word-break:break-word!important;
+        overflow:visible!important;
+        text-overflow:clip!important;
+      }
+      .main-timesheet-table thead tr:first-child th:nth-child(4),
+      .main-timesheet-table tbody td:nth-child(4){
+        width:96px!important;
+        min-width:96px!important;
+        max-width:96px!important;
+        left:224px!important;
+        white-space:normal!important;
+        word-break:break-word!important;
+        overflow:visible!important;
+        text-overflow:clip!important;
+      }
+      .main-timesheet-table .integrated-project-cell,
+      .main-timesheet-table .integrated-unit-cell,
+      .main-timesheet-table .integrated-remark-cell{
+        width:auto!important;
+        max-width:none!important;
+      }
+      .project-picker-btn,
+      .unit-picker-btn,
+      .remark-custom-input{
+        white-space:normal!important;
+        word-break:break-word!important;
+        overflow:visible!important;
+        text-overflow:clip!important;
+        line-height:1.2!important;
+      }
+      .project-picker-btn{min-height:28px!important;height:auto!important;}
+      .unit-picker-btn{min-height:28px!important;height:auto!important;}
+      .remark-custom-wrap{align-items:flex-start!important;}
+      .remark-custom-input{min-height:28px!important;height:auto!important;}
+    }
+
+    /* V6.7：主功能区左侧4列固定宽度：工时类别4汉字、项目号P+数字、单元号NIN-53040、备注4汉字 */
+    .main-timesheet-table{
+      table-layout:fixed!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(1),
+    .main-timesheet-table tbody td:nth-child(1){
+      width:58px!important;
+      min-width:58px!important;
+      max-width:58px!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      word-break:keep-all!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(2),
+    .main-timesheet-table tbody td:nth-child(2){
+      width:78px!important;
+      min-width:78px!important;
+      max-width:78px!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      word-break:keep-all!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(3),
+    .main-timesheet-table tbody td:nth-child(3){
+      width:86px!important;
+      min-width:86px!important;
+      max-width:86px!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      word-break:keep-all!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(4),
+    .main-timesheet-table tbody td:nth-child(4){
+      width:58px!important;
+      min-width:58px!important;
+      max-width:58px!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      word-break:keep-all!important;
+    }
+    .main-timesheet-table tbody td:nth-child(4) .remark-custom-wrap{
+      width:100%!important;
+      min-width:0!important;
+      gap:2px!important;
+    }
+    .main-timesheet-table tbody td:nth-child(4) .remark-custom-input{
+      width:34px!important;
+      min-width:34px!important;
+      max-width:34px!important;
+      flex:0 0 34px!important;
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      padding:2px!important;
+      font-size:11px!important;
+    }
+    .main-timesheet-table tbody td:nth-child(4) .remark-select-btn{
+      width:22px!important;
+      min-width:22px!important;
+      max-width:22px!important;
+      padding:2px!important;
+      font-size:10px!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      white-space:nowrap!important;
+    }
+    .main-timesheet-table .project-picker-btn,
+    .main-timesheet-table .unit-picker-btn,
+    .main-timesheet-table .task-picker-btn{
+      white-space:nowrap!important;
+      overflow:hidden!important;
+      text-overflow:clip!important;
+      word-break:keep-all!important;
+      width:100%!important;
+      max-width:100%!important;
+      height:28px!important;
+      line-height:1.2!important;
+      padding:3px 2px!important;
+      box-sizing:border-box!important;
+    }
+    @media(max-width:760px){
+      .main-timesheet-table thead tr:first-child th:nth-child(1),
+      .main-timesheet-table tbody td:nth-child(1){
+        left:0!important;
+        width:58px!important;
+        min-width:58px!important;
+        max-width:58px!important;
+      }
+      .main-timesheet-table thead tr:first-child th:nth-child(2),
+      .main-timesheet-table tbody td:nth-child(2){
+        left:58px!important;
+        width:78px!important;
+        min-width:78px!important;
+        max-width:78px!important;
+      }
+      .main-timesheet-table thead tr:first-child th:nth-child(3),
+      .main-timesheet-table tbody td:nth-child(3){
+        left:136px!important;
+        width:86px!important;
+        min-width:86px!important;
+        max-width:86px!important;
+      }
+      .main-timesheet-table thead tr:first-child th:nth-child(4),
+      .main-timesheet-table tbody td:nth-child(4){
+        left:222px!important;
+        width:58px!important;
+        min-width:58px!important;
+        max-width:58px!important;
+      }
+    }
+
+    /* V6.8：主表紧凑密度最终版——对齐原始记录管理，无无效间距 */
+    .main-timesheet-table{
+      table-layout:fixed!important;
+      border-collapse:collapse!important;
+      border-spacing:0!important;
+    }
+    .main-timesheet-table th,
+    .main-timesheet-table td{
+      padding:1px 2px!important;
+      height:26px!important;
+      min-height:26px!important;
+      line-height:1.05!important;
+      vertical-align:middle!important;
+    }
+    .main-timesheet-table thead th{
+      font-size:12px!important;
+      font-weight:900!important;
+    }
+    .main-timesheet-table tbody td{
+      font-size:12px!important;
+    }
+    .main-timesheet-table .picker-btn,
+    .main-timesheet-table .task-picker-btn,
+    .main-timesheet-table .project-picker-btn,
+    .main-timesheet-table .unit-picker-btn,
+    .main-timesheet-table .remark-select-btn{
+      height:24px!important;
+      min-height:24px!important;
+      padding:1px 2px!important;
+      border-radius:5px!important;
+      line-height:1.05!important;
+      font-size:11px!important;
+      box-shadow:none!important;
+    }
+    .main-timesheet-table .hour-input,
+    .main-timesheet-table .inline-hour-input{
+      height:24px!important;
+      min-height:24px!important;
+      width:34px!important;
+      min-width:34px!important;
+      max-width:34px!important;
+      padding:1px!important;
+      border-radius:5px!important;
+      font-size:11px!important;
+      line-height:1!important;
+      box-shadow:none!important;
+    }
+    .main-timesheet-table .integrated-del-btn{
+      height:20px!important;
+      min-height:20px!important;
+      padding:1px 4px!important;
+      margin-top:1px!important;
+      border-radius:5px!important;
+      font-size:10px!important;
+      line-height:1!important;
+    }
+    .main-timesheet-table .remark-custom-wrap{
+      gap:1px!important;
+      align-items:center!important;
+    }
+    .main-timesheet-table .remark-custom-input{
+      height:24px!important;
+      min-height:24px!important;
+      width:34px!important;
+      min-width:34px!important;
+      max-width:34px!important;
+      flex:0 0 34px!important;
+      padding:1px 2px!important;
+      border-radius:5px!important;
+      font-size:11px!important;
+      line-height:1!important;
+      overflow:hidden!important;
+      white-space:nowrap!important;
+      text-overflow:clip!important;
+    }
+    .main-timesheet-table .remark-select-btn{
+      width:22px!important;
+      min-width:22px!important;
+      max-width:22px!important;
+      flex:0 0 22px!important;
+      overflow:hidden!important;
+      white-space:nowrap!important;
+    }
+    /* 左侧四列固定成实际内容宽度：4汉字 / P+8位 / NIN-53040 / 4汉字 */
+    .main-timesheet-table thead tr:first-child th:nth-child(1),
+    .main-timesheet-table tbody td:nth-child(1){
+      width:56px!important;min-width:56px!important;max-width:56px!important;
+      white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;word-break:keep-all!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(2),
+    .main-timesheet-table tbody td:nth-child(2){
+      width:74px!important;min-width:74px!important;max-width:74px!important;
+      white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;word-break:keep-all!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(3),
+    .main-timesheet-table tbody td:nth-child(3){
+      width:82px!important;min-width:82px!important;max-width:82px!important;
+      white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;word-break:keep-all!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(4),
+    .main-timesheet-table tbody td:nth-child(4){
+      width:56px!important;min-width:56px!important;max-width:56px!important;
+      white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;word-break:keep-all!important;
+    }
+    @media(max-width:760px){
+      .main-timesheet-table th,
+      .main-timesheet-table td{padding:1px 2px!important;height:26px!important;line-height:1.05!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(1),
+      .main-timesheet-table tbody td:nth-child(1){left:0!important;width:56px!important;min-width:56px!important;max-width:56px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(2),
+      .main-timesheet-table tbody td:nth-child(2){left:56px!important;width:74px!important;min-width:74px!important;max-width:74px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(3),
+      .main-timesheet-table tbody td:nth-child(3){left:130px!important;width:82px!important;min-width:82px!important;max-width:82px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(4),
+      .main-timesheet-table tbody td:nth-child(4){left:212px!important;width:56px!important;min-width:56px!important;max-width:56px!important;}
+      .main-timesheet-table .picker-btn,
+      .main-timesheet-table .task-picker-btn,
+      .main-timesheet-table .project-picker-btn,
+      .main-timesheet-table .unit-picker-btn{font-size:11px!important;height:24px!important;min-height:24px!important;padding:1px 2px!important;}
+    }
+
+    /* V7.0：工时弹窗选择后直接写入；支持0.25/0.5；手机端继续压缩 */
+    .main-timesheet-table{width:max-content!important;min-width:0!important;}
+    .main-timesheet-table th,.main-timesheet-table td{min-width:0!important;}
+    .hour-picker-mask{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:10000;display:flex;align-items:flex-end;justify-content:center;padding:10px;}
+    .hour-picker-panel{width:min(520px,100%);background:#fff;border-radius:18px 18px 12px 12px;box-shadow:0 18px 50px rgba(0,0,0,.22);overflow:hidden;}
+    .hour-picker-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #e5e7eb;background:#f8fafc;font-weight:900;color:#0f172a;}
+    .hour-picker-close{border:none;border-radius:9px;padding:6px 10px;background:#e5e7eb;font-weight:900;color:#111827;cursor:pointer;}
+    .hour-picker-body{padding:12px;}
+    .hour-picker-input{width:100%!important;height:42px!important;border:1px solid #bcd0e5!important;border-radius:10px!important;padding:8px 10px!important;font-size:20px!important;font-weight:900!important;text-align:center!important;}
+    .hour-picker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px;}
+    .hour-picker-option{border:1px solid #bcd0e5;border-radius:10px;background:#f8fbff;color:#0f4c81;font-weight:900;min-height:42px;font-size:18px;cursor:pointer;}
+    .hour-picker-option:active{transform:scale(.98);}
+    .hour-picker-option:disabled{background:#f3f4f6;color:#9ca3af;border-color:#e5e7eb;cursor:not-allowed;}
+    .hour-picker-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+    .hour-picker-actions button{border:none;border-radius:10px;min-height:42px;font-size:16px;font-weight:900;cursor:pointer;}
+    .hour-picker-clear{background:#f3f4f6;color:#111827;}
+    .hour-picker-ok{background:#0078d4;color:#fff;}
+    .hour-picker-hint{font-size:12px;color:#64748b;font-weight:900;margin-top:8px;text-align:center;}
+    @media(max-width:760px){
+      .wrap{padding:0 4px 14px!important;}
+      .card{padding:8px 4px 6px!important;border-radius:14px!important;}
+      .table-scroll{border-radius:9px!important;margin-bottom:8px!important;}
+      .main-timesheet-table th,.main-timesheet-table td{padding:0!important;height:23px!important;line-height:1!important;font-size:10.5px!important;}
+      .main-timesheet-table thead th{font-size:10.5px!important;}
+      .main-timesheet-table .picker-btn,.main-timesheet-table .task-picker-btn,.main-timesheet-table .project-picker-btn,.main-timesheet-table .unit-picker-btn{height:22px!important;min-height:22px!important;padding:0 1px!important;border-radius:4px!important;font-size:10px!important;line-height:1!important;}
+      .main-timesheet-table .inline-hour-input,.main-timesheet-table .hour-input{height:22px!important;min-height:22px!important;width:30px!important;min-width:30px!important;max-width:30px!important;padding:0!important;border-radius:4px!important;font-size:10px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(1),.main-timesheet-table tbody td:nth-child(1){left:0!important;width:52px!important;min-width:52px!important;max-width:52px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(2),.main-timesheet-table tbody td:nth-child(2){left:52px!important;width:68px!important;min-width:68px!important;max-width:68px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(3),.main-timesheet-table tbody td:nth-child(3){left:120px!important;width:78px!important;min-width:78px!important;max-width:78px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(4),.main-timesheet-table tbody td:nth-child(4){left:198px!important;width:52px!important;min-width:52px!important;max-width:52px!important;}
+      .main-timesheet-table .remark-custom-input{height:22px!important;min-height:22px!important;width:31px!important;min-width:31px!important;max-width:31px!important;font-size:10px!important;padding:0 1px!important;border-radius:4px!important;}
+      .main-timesheet-table .remark-select-btn{height:22px!important;min-height:22px!important;width:19px!important;min-width:19px!important;max-width:19px!important;font-size:9px!important;padding:0!important;border-radius:4px!important;}
+      .main-timesheet-table .integrated-del-btn{height:18px!important;min-height:18px!important;font-size:9px!important;padding:0 3px!important;margin-top:0!important;border-radius:4px!important;}
+      .hour-picker-grid{grid-template-columns:repeat(4,1fr);gap:7px;}
+      .hour-picker-option{min-height:40px;font-size:17px;}
+    }
+
+    /* V7.1：一次性修复 - 管理员异常、PC/手机宽度、备注两行、输入法稳定、单元多列 */
+    /* PC端恢复舒适密度，不再被手机紧凑规则压得太窄 */
+    .main-timesheet-table th,
+    .main-timesheet-table td{
+      padding:2px 4px!important;
+      height:28px!important;
+      min-height:28px!important;
+      line-height:1.15!important;
+      font-size:13px!important;
+    }
+    .main-timesheet-table thead th{font-size:13px!important;}
+    .main-timesheet-table .picker-btn,
+    .main-timesheet-table .task-picker-btn,
+    .main-timesheet-table .project-picker-btn,
+    .main-timesheet-table .unit-picker-btn{
+      height:26px!important;
+      min-height:26px!important;
+      padding:2px 3px!important;
+      font-size:12px!important;
+      border-radius:6px!important;
+      line-height:1.1!important;
+    }
+    .main-timesheet-table .inline-hour-input,
+    .main-timesheet-table .hour-input{
+      height:26px!important;
+      min-height:26px!important;
+      width:38px!important;
+      min-width:38px!important;
+      max-width:38px!important;
+      padding:1px!important;
+      font-size:12px!important;
+      border-radius:5px!important;
+    }
+    .main-timesheet-table thead tr:first-child th:nth-child(1),.main-timesheet-table tbody td:nth-child(1){width:68px!important;min-width:68px!important;max-width:68px!important;}
+    .main-timesheet-table thead tr:first-child th:nth-child(2),.main-timesheet-table tbody td:nth-child(2){width:86px!important;min-width:86px!important;max-width:86px!important;}
+    .main-timesheet-table thead tr:first-child th:nth-child(3),.main-timesheet-table tbody td:nth-child(3){width:94px!important;min-width:94px!important;max-width:94px!important;}
+    .main-timesheet-table thead tr:first-child th:nth-child(4),.main-timesheet-table tbody td:nth-child(4){width:72px!important;min-width:72px!important;max-width:72px!important;}
+
+    /* 备注：输入框和选择按钮分两行；删除按钮已移到工时类别列 */
+    .remark-custom-wrap{display:flex!important;flex-direction:column!important;gap:2px!important;width:100%!important;align-items:stretch!important;}
+    .remark-custom-actions{display:flex!important;gap:2px!important;width:100%!important;}
+    .main-timesheet-table .remark-custom-input{
+      width:100%!important;
+      min-width:0!important;
+      max-width:none!important;
+      flex:0 0 auto!important;
+      height:24px!important;
+      min-height:24px!important;
+      padding:1px 2px!important;
+      font-size:12px!important;
+      border-radius:5px!important;
+    }
+    .main-timesheet-table .remark-select-btn{
+      width:100%!important;
+      min-width:0!important;
+      max-width:none!important;
+      height:22px!important;
+      min-height:22px!important;
+      padding:1px 2px!important;
+      font-size:11px!important;
+      border-radius:5px!important;
+    }
+    .task-del-btn{
+      display:block!important;
+      width:100%!important;
+      height:20px!important;
+      min-height:20px!important;
+      margin-top:2px!important;
+      padding:1px 2px!important;
+      font-size:10px!important;
+      line-height:1!important;
+      border-radius:5px!important;
+    }
+
+    /* 单元号弹窗：每个区域内多列排列，减少上下滑动 */
+    .picker-panel{width:min(880px,100%)!important;}
+    .picker-list{
+      display:grid!important;
+      grid-template-columns:repeat(auto-fit,minmax(78px,1fr))!important;
+      gap:4px!important;
+      max-height:62vh!important;
+      overflow:auto!important;
+      padding:5px!important;
+    }
+    .picker-item{
+      min-height:34px!important;
+      padding:6px 4px!important;
+      border:1px solid #e5e7eb!important;
+      border-radius:7px!important;
+      font-size:13px!important;
+      line-height:1.1!important;
+    }
+
+    @media(max-width:760px){
+      /* 手机端继续紧凑，但不影响PC */
+      .wrap{padding:0 4px 14px!important;}
+      .card{padding:8px 4px 6px!important;border-radius:14px!important;}
+      .table-scroll{border-radius:9px!important;margin-bottom:8px!important;}
+      .main-timesheet-table th,.main-timesheet-table td{padding:0!important;height:24px!important;min-height:24px!important;line-height:1!important;font-size:10.5px!important;}
+      .main-timesheet-table thead th{font-size:10.5px!important;}
+      .main-timesheet-table .picker-btn,.main-timesheet-table .task-picker-btn,.main-timesheet-table .project-picker-btn,.main-timesheet-table .unit-picker-btn{height:22px!important;min-height:22px!important;padding:0 1px!important;border-radius:4px!important;font-size:10px!important;line-height:1!important;}
+      .main-timesheet-table .inline-hour-input,.main-timesheet-table .hour-input{height:22px!important;min-height:22px!important;width:30px!important;min-width:30px!important;max-width:30px!important;padding:0!important;border-radius:4px!important;font-size:10px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(1),.main-timesheet-table tbody td:nth-child(1){left:0!important;width:54px!important;min-width:54px!important;max-width:54px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(2),.main-timesheet-table tbody td:nth-child(2){left:54px!important;width:70px!important;min-width:70px!important;max-width:70px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(3),.main-timesheet-table tbody td:nth-child(3){left:124px!important;width:80px!important;min-width:80px!important;max-width:80px!important;}
+      .main-timesheet-table thead tr:first-child th:nth-child(4),.main-timesheet-table tbody td:nth-child(4){left:204px!important;width:58px!important;min-width:58px!important;max-width:58px!important;}
+      .main-timesheet-table .remark-custom-input{height:22px!important;min-height:22px!important;font-size:10px!important;padding:0 1px!important;border-radius:4px!important;}
+      .main-timesheet-table .remark-select-btn{height:18px!important;min-height:18px!important;font-size:9px!important;padding:0!important;border-radius:4px!important;}
+      .task-del-btn{height:18px!important;min-height:18px!important;font-size:9px!important;padding:0 2px!important;margin-top:1px!important;}
+      .picker-columns{grid-template-columns:1fr 1fr!important;gap:6px!important;}
+      .picker-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important;max-height:66vh!important;padding:3px!important;}
+      .picker-item{font-size:12px!important;min-height:30px!important;padding:4px 2px!important;border-radius:6px!important;}
+      .picker-col-title{font-size:13px!important;padding:7px 4px!important;}
+    }
+
+    /* V7.2：备注输入体验优化 - 备注输入框/选择按钮与项目号按钮同宽同高 */
+    .main-timesheet-table thead tr:first-child th:nth-child(4),
+    .main-timesheet-table tbody td:nth-child(4){
+      width:86px!important;
+      min-width:86px!important;
+      max-width:86px!important;
+    }
+    .remark-custom-wrap{
+      display:flex!important;
+      flex-direction:column!important;
+      gap:3px!important;
+      width:100%!important;
+      align-items:stretch!important;
+    }
+    .remark-custom-actions{width:100%!important;display:flex!important;}
+    .main-timesheet-table .remark-custom-input,
+    .main-timesheet-table .remark-select-btn{
+      width:100%!important;
+      min-width:0!important;
+      max-width:none!important;
+      flex:0 0 auto!important;
+      height:26px!important;
+      min-height:26px!important;
+      padding:2px 3px!important;
+      font-size:12px!important;
+      line-height:1.1!important;
+      border-radius:6px!important;
+      text-align:center!important;
+      box-sizing:border-box!important;
+    }
+    .main-timesheet-table .remark-custom-input:focus{
+      outline:2px solid #16a34a!important;
+      border-color:#16a34a!important;
+      background:#f0fdf4!important;
+    }
+    .main-timesheet-table .remark-select-btn{
+      font-weight:900!important;
+      background:#fff!important;
+      color:#0f4c81!important;
+    }
+    .remark-picker-custom{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:8px;
+      margin-bottom:10px;
+      padding-bottom:10px;
+      border-bottom:1px solid #e5e7eb;
+    }
+    .remark-picker-input{
+      height:40px!important;
+      border:1px solid #bcd0e5!important;
+      border-radius:10px!important;
+      padding:6px 10px!important;
+      font-size:16px!important;
+      font-weight:900!important;
+    }
+    .remark-picker-apply{
+      border:none;
+      border-radius:10px;
+      padding:0 12px;
+      background:#0078d4;
+      color:#fff;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .remark-picker-section-title{
+      grid-column:1/-1;
+      color:#64748b;
+      font-size:12px;
+      font-weight:900;
+      margin:2px 0 4px;
+    }
+    @media(max-width:760px){
+      .main-timesheet-table thead tr:first-child th:nth-child(4),
+      .main-timesheet-table tbody td:nth-child(4){
+        left:204px!important;
+        width:70px!important;
+        min-width:70px!important;
+        max-width:70px!important;
+      }
+      .main-timesheet-table .remark-custom-input,
+      .main-timesheet-table .remark-select-btn{
+        height:22px!important;
+        min-height:22px!important;
+        font-size:10px!important;
+        padding:0 2px!important;
+        border-radius:4px!important;
+      }
+      .remark-custom-wrap{gap:2px!important;}
+      .remark-picker-custom{grid-template-columns:1fr;gap:6px;}
+      .remark-picker-input{height:38px!important;font-size:15px!important;}
+      .remark-picker-apply{height:38px!important;}
+    }
+
+    /* V7.2.1：强制覆盖旧规则，备注输入框/选择按钮真正与项目号按钮等宽等高 */
+    .main-timesheet-table tbody td:nth-child(4) .remark-custom-wrap,
+    .main-timesheet-table .integrated-remark-cell .remark-custom-wrap{display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:3px!important;width:100%!important;min-width:0!important;max-width:none!important;}
+    .main-timesheet-table tbody td:nth-child(4) .remark-custom-actions,
+    .main-timesheet-table .integrated-remark-cell .remark-custom-actions{display:flex!important;width:100%!important;min-width:0!important;max-width:none!important;}
+    .main-timesheet-table tbody td:nth-child(4) .remark-custom-input,
+    .main-timesheet-table .integrated-remark-cell .remark-custom-input,
+    .main-timesheet-table tbody td:nth-child(4) .remark-select-btn,
+    .main-timesheet-table .integrated-remark-cell .remark-select-btn{width:100%!important;min-width:100%!important;max-width:100%!important;flex:0 0 auto!important;height:26px!important;min-height:26px!important;max-height:26px!important;padding:2px 3px!important;font-size:12px!important;line-height:1.1!important;border-radius:6px!important;text-align:center!important;box-sizing:border-box!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:clip!important;}
+    .main-timesheet-table .integrated-remark-cell{padding:2px 4px!important;}
+    .main-timesheet-table .integrated-remark-cell .remark-select-btn{font-weight:900!important;background:#fff!important;color:#0f4c81!important;border:1px solid #bcd0e5!important;cursor:pointer!important;}
+    @media(max-width:760px){
+      .main-timesheet-table tbody td:nth-child(4) .remark-custom-wrap,
+      .main-timesheet-table .integrated-remark-cell .remark-custom-wrap{gap:2px!important;}
+      .main-timesheet-table tbody td:nth-child(4) .remark-custom-input,
+      .main-timesheet-table .integrated-remark-cell .remark-custom-input,
+      .main-timesheet-table tbody td:nth-child(4) .remark-select-btn,
+      .main-timesheet-table .integrated-remark-cell .remark-select-btn{width:100%!important;min-width:100%!important;max-width:100%!important;height:22px!important;min-height:22px!important;max-height:22px!important;font-size:10px!important;line-height:1!important;padding:0 2px!important;border-radius:4px!important;}
+      .main-timesheet-table .integrated-remark-cell{padding:1px 2px!important;}
+    }
 </style>
 </head>
 <body>
@@ -1248,7 +1856,7 @@ const projectUnits = {
     "NIN-53063",
     "NIN-53062"
   ],
-    "After_sales_销售": [
+    "销售订单": [
     "NIN-53111",
     "NIN-53086",
     "NIN-53085",
@@ -1322,9 +1930,23 @@ function showMsg(text, ok=true){
 }
 function isWeekendDay(day){ return day === "六" || day === "日"; }
 function shouldCheckMissingWorkdays(){
-  // ✅ 只有已过去的 Week 才把未填写的工作日判定为异常；本周未到的日期不提前标红
   if(!state.week) return false;
-  return weekNum(state.week) < weekNum(getCurrentWeek());
+  const selected = weekNum(state.week);
+  const current = weekNum(getCurrentWeek());
+  if(selected < current) return true;       // 过去周：周一到周五都检查
+  if(selected === current) return "partial"; // 当前周：只检查今天及之前
+  return false;
+}
+function shouldCheckMissingDay(day){
+  const mode = shouldCheckMissingWorkdays();
+  if(mode === true) return true;
+  if(mode !== "partial") return false;
+  const workdays = ["一","二","三","四","五"];
+  const today = getTodayWeekday();
+  const dayIndex = workdays.indexOf(day);
+  const todayIndex = workdays.indexOf(today);
+  if(dayIndex < 0 || todayIndex < 0) return false;
+  return dayIndex <= todayIndex;
 }
 
 // ✅ 三级异常颜色规则：0=正常，1=轻微异常（黄色），2=严重异常（红色）
@@ -1902,14 +2524,19 @@ function calcEmployeeAnomalies(rows){
 
     // ✅ 名单里有，但所选 Week 整周一条都没提交 = 严重异常
     if(!hasAnyRecord){
-      anomalies[id] = {
-        employeeId:id,
-        employeeName:item.employeeName,
-        days:["整周未提交"],
-        levels:{},
-        level:2,
-        missingAllWeek:true
-      };
+      const checkableDays = ["一","二","三","四","五"].filter(day=>shouldCheckMissingDay(day));
+      if(checkableDays.length){
+        const levels = {};
+        checkableDays.forEach(day=>levels[day] = 2);
+        anomalies[id] = {
+          employeeId:id,
+          employeeName:item.employeeName,
+          days:checkableDays,
+          levels:levels,
+          level:2,
+          missingAllWeek:true
+        };
+      }
       return;
     }
 
@@ -1921,7 +2548,7 @@ function calcEmployeeAnomalies(rows){
       const d = item.days[day];
       // ✅ 已过去的 Week：工作日没填也算严重异常；本周不提前标红未来未填日期
       if(!d || !d.hasRecord){
-        if(checkMissingWorkdays){
+        if(shouldCheckMissingDay(day)){
           badDays.push(day);
           levels[day] = 2;
           maxBadLevel = 2;
@@ -2113,15 +2740,15 @@ function inlineMaxValue(rowKey, day, field, originalValue){
   const limit = fieldLimit(day, field);
   const inlineKey = inlineEditKey(rowKey, day, field);
   const totalExceptThisCell = inlineDayTotal(day, field) - num(originalValue) + inlineDraftAdjustmentTotal(day, field, inlineKey) + integratedDraftFieldTotal(day, field);
-  return Math.max(0, Math.min(limit, Math.round((limit - totalExceptThisCell) * 2) / 2));
+  return Math.max(0, Math.min(limit, Math.round((limit - totalExceptThisCell) * 4) / 4));
 }
 function unifiedMaxForIntegratedCell(day, field, rowId){
   const limit = fieldLimit(day, field);
   const max = limit - inlineDayTotal(day, field) - inlineDraftAdjustmentTotal(day, field) - integratedDraftFieldTotal(day, field, rowId, field);
-  return Math.max(0, Math.min(limit, Math.round(max * 2) / 2));
+  return Math.max(0, Math.min(limit, Math.round(max * 4) / 4));
 }
 function unifiedEffectiveTotal(day, field){
-  return Math.round((inlineDayTotal(day, field) + inlineDraftAdjustmentTotal(day, field) + integratedDraftFieldTotal(day, field)) * 2) / 2;
+  return Math.round((inlineDayTotal(day, field) + inlineDraftAdjustmentTotal(day, field) + integratedDraftFieldTotal(day, field)) * 4) / 4;
 }
 function validateUnifiedDraftTotals(){
   for(const day of weekdayOptions){
@@ -2143,12 +2770,12 @@ function inlineCellInput(rowKey, day, field, originalValue, className){
   const v = inlineDraftValue(rowKey, day, field, originalValue);
   const pending = Object.prototype.hasOwnProperty.call(inlineEditDrafts, k) && num(inlineEditDrafts[k]) !== num(originalValue);
   const maxed = max <= 0 && num(originalValue) <= 0;
-  return '<td'+className+'><input class="inline-hour-input '+(pending?'pending ':'')+(maxed?'maxed':'')+'" type="number" step="0.5" min="0" max="'+max+'" value="'+safe(v || "")+'" placeholder="0" '+(maxed?'disabled':'')+' oninput="updateInlineEdit(\''+safe(rowKey)+'\',\''+day+'\',\''+field+'\',this.value,'+num(originalValue)+')"></td>';
+  return '<td'+className+'><input class="inline-hour-input '+(pending?'pending ':'')+(maxed?'maxed':'')+'" type="text" inputmode="decimal" readonly data-kind="inline" data-row-key="'+safe(rowKey)+'" data-day="'+day+'" data-field="'+field+'" data-original="'+num(originalValue)+'" data-max="'+max+'" value="'+safe(v || "")+'" placeholder="0" '+(maxed?'disabled':'')+' onclick="openHourPickerFromInput(this)" onfocus="openHourPickerFromInput(this)"></td>';
 }
 function updateInlineEdit(rowKey, day, field, value, originalValue){
   const k = inlineEditKey(rowKey, day, field);
   const max = inlineMaxValue(rowKey, day, field, originalValue);
-  let v = Math.round(num(value) * 2) / 2;
+  let v = Math.round(num(value) * 4) / 4;
   if(v < 0) v = 0;
   if(v > max) v = max;
   inlineEditDrafts[k] = v === 0 ? "" : String(v);
@@ -2253,6 +2880,88 @@ async function submitInlineAndIntegratedRows(){
   }
 }
 
+
+let hourPickerContext = null;
+function hourQuickValues(field){
+  if(field === "regular") return [0.25,0.5,1,2,3,4,6,8];
+  return [0.25,0.5,1,2,4];
+}
+function closeHourPicker(){
+  const old = document.getElementById("hourPickerMask");
+  if(old) old.remove();
+  hourPickerContext = null;
+}
+function sanitizeHourInput(v, max){
+  let n = Number(String(v || "").replace(/，/g,".").replace(/[^0-9.]/g,""));
+  if(!Number.isFinite(n)) n = 0;
+  n = Math.round(n * 4) / 4;
+  n = Math.max(0, Math.min(n, num(max)));
+  return n;
+}
+function applyHourPickerValue(value){
+  if(!hourPickerContext) return;
+  const v = sanitizeHourInput(value, hourPickerContext.max);
+  if(hourPickerContext.kind === "inline"){
+    updateInlineEdit(hourPickerContext.rowIdOrKey, hourPickerContext.day, hourPickerContext.field, v, hourPickerContext.originalValue);
+  }else{
+    updateIntegratedHour(hourPickerContext.rowIdOrKey, hourPickerContext.day, hourPickerContext.field, v);
+  }
+  closeHourPicker();
+}
+function openHourPickerFromInput(el){
+  if(!el || el.disabled) return;
+  const max = num(el.dataset.max);
+  if(max <= 0 && num(el.value) <= 0) return;
+  openHourPicker({
+    kind: el.dataset.kind,
+    rowIdOrKey: el.dataset.rowKey,
+    day: el.dataset.day,
+    field: el.dataset.field,
+    originalValue: num(el.dataset.original),
+    currentValue: el.value,
+    max: max
+  });
+}
+function openHourPicker(ctx){
+  closeHourPicker();
+  hourPickerContext = ctx;
+  const field = ctx.field;
+  const title = (field === "regular" ? "正常出勤" : "加班") + " - 周" + ctx.day;
+  const values = hourQuickValues(field).filter(v=>v <= Math.max(ctx.max, num(ctx.currentValue)) + 0.0001);
+  const mask = document.createElement("div");
+  mask.id = "hourPickerMask";
+  mask.className = "hour-picker-mask";
+  mask.innerHTML = '<div class="hour-picker-panel" onclick="event.stopPropagation()">'
+    + '<div class="hour-picker-head"><div>'+safe(title)+'</div><button type="button" class="hour-picker-close">关闭</button></div>'
+    + '<div class="hour-picker-body">'
+    + '<input id="hourPickerInput" class="hour-picker-input" inputmode="decimal" type="text" value="'+safe(ctx.currentValue || "")+'" placeholder="输入数字，如0.5">'
+    + '<div class="hour-picker-grid"></div>'
+    + '<div class="hour-picker-actions"><button type="button" class="hour-picker-clear">清零</button><button type="button" class="hour-picker-ok">应用输入</button></div>'
+    + '<div class="hour-picker-hint">点快捷值会直接写入；也可输入0.25、0.5等小数。当前最大可填：'+safe(ctx.max)+'h</div>'
+    + '</div></div>';
+  mask.addEventListener("click", closeHourPicker);
+  document.body.appendChild(mask);
+  mask.querySelector(".hour-picker-close").addEventListener("click", closeHourPicker);
+  mask.querySelector(".hour-picker-clear").addEventListener("click", ()=>applyHourPickerValue(0));
+  mask.querySelector(".hour-picker-ok").addEventListener("click", ()=>{
+    const input = document.getElementById("hourPickerInput");
+    applyHourPickerValue(input ? input.value : 0);
+  });
+  const grid = mask.querySelector(".hour-picker-grid");
+  values.forEach(v=>{
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "hour-picker-option";
+    btn.textContent = v + "h";
+    btn.addEventListener("click", ()=>applyHourPickerValue(v));
+    grid.appendChild(btn);
+  });
+  const input = document.getElementById("hourPickerInput");
+  if(input){
+    input.addEventListener("keydown", e=>{ if(e.key === "Enter") applyHourPickerValue(input.value); });
+    setTimeout(()=>{ input.focus(); input.select(); }, 0);
+  }
+}
 function todayWeekdayChar(){
   return ["日","一","二","三","四","五","六"][new Date().getDay()];
 }
@@ -2516,7 +3225,7 @@ function integratedMaxForCell(day, field, rowId){
   return unifiedMaxForIntegratedCell(day, field, rowId);
 }
 function clampHalfHour(v, max){
-  let n = Math.round(num(v) * 2) / 2;
+  let n = Math.round(num(v) * 4) / 4;
   n = Math.max(0, Math.min(n, max));
   return n === 0 ? "" : String(n);
 }
@@ -2542,6 +3251,8 @@ function updateIntegratedMeta(rowId, field, value){
   const row = integratedRows.find(r=>String(r.id)===String(rowId));
   if(!row) return;
   row[field] = value;
+  // 备注输入时不重绘整张表，避免手机输入法每删/输一个字就关闭。
+  if(field === "remark") return;
   if(field === "task"){
     if(!needsProjectByTask(value)){
       row.project = "";
@@ -2599,6 +3310,71 @@ function openUnitPicker(rowId){
   openPickerPanel("选择单元号", html);
 }
 function chooseUnitForRow(rowId, unit){ const row = rowById(rowId); if(!row) return; row.unit = unit; closePickerPanel(); renderWeekRecordsKeepScroll(); }
+
+function openTaskPicker(rowId){
+  const row = rowById(rowId);
+  if(!row) return;
+  const cards = taskOptions.map(t=>'<div class="picker-card task '+(String(row.task)===String(t)?'active':'')+'" onclick="chooseTaskForRow(\''+safe(rowId)+'\',\''+safe(t)+'\')">'+safe(t)+'</div>').join('');
+  openPickerPanel("选择工时类别", '<div class="picker-grid">'+cards+'</div>');
+}
+function chooseTaskForRow(rowId, task){
+  const row = rowById(rowId);
+  if(!row) return;
+  row.task = task;
+  row.project = "";
+  row.unit = "";
+  row.remark = "";
+  closePickerPanel();
+  renderWeekRecordsKeepScroll();
+}
+
+function combinedRemarkOptionsForRow(row){
+  const preset = remarkOptionsForTask(row.task);
+  const recent = [];
+  (currentWeekRecords || []).forEach(record=>{
+    if(String(record.task || "") !== String(row.task || "")) return;
+    const r = String(record.remark || "").trim();
+    if(r) recent.push(r);
+  });
+  const merged = [];
+  preset.concat(recent).forEach(r=>{
+    if(r && !merged.includes(r)) merged.push(r);
+  });
+  return merged;
+}
+function applyCustomRemarkFromPicker(rowId){
+  const input = document.getElementById("remarkPickerInput");
+  const row = rowById(rowId);
+  if(!row || !input) return;
+  row.remark = input.value;
+  closePickerPanel();
+  renderWeekRecordsKeepScroll();
+}
+function openRemarkPicker(rowId){
+  const row = rowById(rowId);
+  if(!row) return;
+  if(!row.task){
+    openPickerPanel("选择备注", '<div class="picker-empty">请先选择工时类别</div>');
+    return;
+  }
+  const remarks = combinedRemarkOptionsForRow(row);
+  const customHtml = '<div class="remark-picker-custom"><input id="remarkPickerInput" class="remark-picker-input" value="'+safe(row.remark || "")+'" placeholder="可直接输入自定义备注"><button type="button" class="remark-picker-apply" onclick="applyCustomRemarkFromPicker(\''+safe(rowId)+'\')">应用自定义</button></div>';
+  if(!remarks.length){
+    openPickerPanel("选择备注", customHtml + '<div class="picker-empty">当前工时类别暂无预设备注，可直接输入自定义备注</div>');
+    setTimeout(()=>{ const input = document.getElementById("remarkPickerInput"); if(input){input.focus(); input.select(); input.addEventListener("keydown", e=>{ if(e.key === "Enter") applyCustomRemarkFromPicker(rowId); });} }, 0);
+    return;
+  }
+  const cards = remarks.map(r=>'<div class="picker-card remark '+(String(row.remark)===String(r)?'active':'')+'" onclick="chooseRemarkForRow(\''+safe(rowId)+'\',\''+safe(r)+'\')">'+safe(r)+'</div>').join('');
+  openPickerPanel("选择备注", customHtml + '<div class="remark-picker-section-title">快捷备注 / 历史备注</div><div class="picker-grid">'+cards+'</div>');
+  setTimeout(()=>{ const input = document.getElementById("remarkPickerInput"); if(input){input.addEventListener("keydown", e=>{ if(e.key === "Enter") applyCustomRemarkFromPicker(rowId); });} }, 0);
+}
+function chooseRemarkForRow(rowId, remark){
+  const row = rowById(rowId);
+  if(!row) return;
+  row.remark = remark;
+  closePickerPanel();
+  renderWeekRecordsKeepScroll();
+}
 function buildIntegratedInputRowsHtml(){
   if(isAdmin()) return "";
   ensureIntegratedRows();
@@ -2609,22 +3385,22 @@ function buildIntegratedInputRowsHtml(){
     const projects = Object.keys(projectUnits);
     const units = row.project && projectUnits[row.project] ? projectUnits[row.project] : [];
     html += '<tr class="integrated-input-row">';
-    html += '<td class="integrated-meta-cell"><select onchange="updateIntegratedMeta(\''+row.id+'\',\'task\',this.value)"><option value="">请选择</option>' + taskOptions.map(t=>optionHtml(t,row.task)).join('') + '</select></td>';
+    html += '<td class="integrated-meta-cell"><button type="button" class="picker-btn task-picker-btn" onclick="openTaskPicker(\''+row.id+'\')">' + safe(row.task || '请选择') + '</button><button type="button" class="integrated-mini-btn integrated-del-btn task-del-btn" onclick="deleteIntegratedRow(\''+row.id+'\')">删除</button></td>';
     html += '<td class="integrated-project-cell"><button type="button" class="picker-btn project-picker-btn" ' + (!projectNeeded ? 'disabled' : '') + ' onclick="openProjectPicker(\''+row.id+'\')">' + safe(projectNeeded ? (row.project || '请选择') : '无需项目') + '</button></td>';
     html += '<td class="integrated-unit-cell"><button type="button" class="picker-btn unit-picker-btn" ' + (!unitNeeded || !row.project ? 'disabled' : '') + ' onclick="openUnitPicker(\''+row.id+'\')">' + safe(unitNeeded ? (row.project ? (row.unit || '请选择') : '先选项目') : '无需单元') + '</button></td>';
     const remarkListId = 'remark_list_' + row.id;
-    html += '<td class="integrated-remark-cell"><input class="remark-input" list="'+remarkListId+'" value="' + safe(row.remark || "") + '" placeholder="必填备注，可手动输入" oninput="updateIntegratedMeta(\''+row.id+'\',\'remark\',this.value)">' + remarkDatalistHtml(remarkListId, row.task) + '<button type="button" class="integrated-mini-btn integrated-del-btn" onclick="deleteIntegratedRow(\''+row.id+'\')">删除</button></td>';
+    html += '<td class="integrated-remark-cell"><div class="remark-custom-wrap"><input class="remark-custom-input" title="' + safe(row.remark || "") + '" value="' + safe(row.remark || "") + '" placeholder="自定义备注" oninput="updateIntegratedMeta(\''+row.id+'\',\'remark\',this.value);this.title=this.value"><div class="remark-custom-actions"><button type="button" class="picker-btn remark-picker-btn remark-select-btn" onclick="openRemarkPicker(\''+row.id+'\')">选择</button></div></div></td>';
     ["一","二","三","四","五"].forEach(day=>{
       const d = row.days[day];
       const maxR = integratedMaxForCell(day, "regular", row.id);
       const maxOt = integratedMaxForCell(day, "otWeekday", row.id);
-      html += '<td><input class="hour-input '+(maxR<=0 && num(d.regular)<=0?'maxed':'')+'" type="number" step="0.5" min="0" max="'+maxR+'" value="'+safe(d.regular)+'" placeholder="0" '+(maxR<=0 && num(d.regular)<=0?'disabled':'')+' oninput="updateIntegratedHour(\''+row.id+'\',\''+day+'\',\'regular\',this.value)"></td>';
-      html += '<td><input class="hour-input '+(maxOt<=0 && num(d.otWeekday)<=0?'maxed':'')+'" type="number" step="0.5" min="0" max="'+maxOt+'" value="'+safe(d.otWeekday)+'" placeholder="0" '+(maxOt<=0 && num(d.otWeekday)<=0?'disabled':'')+' oninput="updateIntegratedHour(\''+row.id+'\',\''+day+'\',\'otWeekday\',this.value)"></td>';
+      html += '<td><input class="hour-input '+(maxR<=0 && num(d.regular)<=0?'maxed':'')+'" type="text" inputmode="decimal" readonly data-kind="integrated" data-row-key="'+safe(row.id)+'" data-day="'+day+'" data-field="regular" data-original="0" data-max="'+maxR+'" value="'+safe(d.regular)+'" placeholder="0" '+(maxR<=0 && num(d.regular)<=0?'disabled':'')+' onclick="openHourPickerFromInput(this)" onfocus="openHourPickerFromInput(this)"></td>';
+      html += '<td><input class="hour-input '+(maxOt<=0 && num(d.otWeekday)<=0?'maxed':'')+'" type="text" inputmode="decimal" readonly data-kind="integrated" data-row-key="'+safe(row.id)+'" data-day="'+day+'" data-field="otWeekday" data-original="0" data-max="'+maxOt+'" value="'+safe(d.otWeekday)+'" placeholder="0" '+(maxOt<=0 && num(d.otWeekday)<=0?'disabled':'')+' onclick="openHourPickerFromInput(this)" onfocus="openHourPickerFromInput(this)"></td>';
     });
     ["六","日"].forEach(day=>{
       const d = row.days[day];
       const maxOt = integratedMaxForCell(day, "otWeekend", row.id);
-      html += '<td><input class="hour-input '+(maxOt<=0 && num(d.otWeekend)<=0?'maxed':'')+'" type="number" step="0.5" min="0" max="'+maxOt+'" value="'+safe(d.otWeekend)+'" placeholder="0" '+(maxOt<=0 && num(d.otWeekend)<=0?'disabled':'')+' oninput="updateIntegratedHour(\''+row.id+'\',\''+day+'\',\'otWeekend\',this.value)"></td>';
+      html += '<td><input class="hour-input '+(maxOt<=0 && num(d.otWeekend)<=0?'maxed':'')+'" type="text" inputmode="decimal" readonly data-kind="integrated" data-row-key="'+safe(row.id)+'" data-day="'+day+'" data-field="otWeekend" data-original="0" data-max="'+maxOt+'" value="'+safe(d.otWeekend)+'" placeholder="0" '+(maxOt<=0 && num(d.otWeekend)<=0?'disabled':'')+' onclick="openHourPickerFromInput(this)" onfocus="openHourPickerFromInput(this)"></td>';
     });
     html += '<td class="integrated-total-cell">' + (integratedRowRegularTotal(row) || '') + '</td>';
     html += '<td class="integrated-total-cell">' + (integratedRowEveningTotal(row) || '') + '</td>';
