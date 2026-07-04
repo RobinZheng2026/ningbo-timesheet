@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no,email=no,address=no"><title>车间工时填报系统 V5.12.4</title>
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no,email=no,address=no"><title>车间工时填报系统 V5.12.13</title>
 <style>
 :root{--p:#1f4e79;--p2:#2f75b5;--bg:#eef2f6;--card:#fff;--line:#d7e0ea;--head:#e8edf3;--sub:#f5f7fa;--ok:#16a34a;--danger:#dc3545;--blue:#0b86df;--text:#1f2937}*{box-sizing:border-box}body{margin:0;font-family:Arial,'Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);font-size:13px}.app{width:100%;margin:0 auto}.app.locked{display:none}.header{background:linear-gradient(90deg,var(--p),var(--p2));color:#fff;text-align:center;padding:12px 8px;font-size:19px;letter-spacing:1px;position:sticky;top:0;z-index:200;font-weight:700}button,select,input{font-family:inherit;font-size:13px}button{padding:7px 12px;border:none;border-radius:8px;background:#e7edf5;color:#123;cursor:pointer;min-height:34px;font-weight:700}.ok{background:#16a34a;color:#fff}.danger{background:var(--danger);color:#fff}.card{background:var(--card);margin:8px;border-radius:14px;padding:10px;box-shadow:0 1px 6px rgba(31,78,121,.10);border:1px solid #edf2f7}.identity-title,.week-title,.section-title{font-weight:bold;color:#1f4e79;border-left:5px solid #2f75b5;padding-left:8px;margin:0 0 8px;font-size:15px;line-height:20px}.identity-line{display:flex;justify-content:center;gap:13px;align-items:center;flex-wrap:wrap;line-height:24px;font-size:14px}.identity-item{display:inline-flex;align-items:center;gap:5px;font-weight:700}.identity-sep{width:1px;height:17px;background:#d4dee9}.identity-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;background:#eef8f0;border:1px solid #b9e6c4;color:#15803d;font-weight:800}.autosave-badge{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 12px;border-radius:999px;background:#eafaf0;color:#15803d;font-size:13px;font-weight:bold}.autosave-badge.saving{background:#fff7ed;color:#c2410c}.autosave-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}.logout-btn{background:#eef2f7;color:#334155}.identity-logout-btn{height:28px!important;min-height:28px!important;padding:0 16px!important;border-radius:999px!important;background:linear-gradient(180deg,#ffffff,#edf2f7)!important;border:1px solid #cbd5e1!important;color:#334155!important;box-shadow:0 1px 3px rgba(0,0,0,.08)!important;font-size:13px!important}.identity-logout-btn:hover{background:#e2ecf7!important}.login-screen{min-height:100vh;background:linear-gradient(135deg,#0f2742,#163b5f 55%,#0f2742);display:flex;align-items:center;justify-content:center;padding:18px}.login-card{width:100%;max-width:420px;background:#fff;border-radius:18px;box-shadow:0 18px 45px rgba(0,0,0,.28);padding:18px}.login-title{text-align:center;font-size:20px;color:#1f4e79;font-weight:bold;margin:4px 0 12px}.login-row{margin:10px 0}.login-row label{display:block;font-size:13px;color:#334155;margin-bottom:5px;font-weight:bold}.login-row input{width:100%;height:42px;border:1px solid #cbd5e1;border-radius:10px;padding:0 12px;font-size:16px}.login-btn{width:100%;height:42px;background:#16a34a;color:#fff;border-radius:10px;font-size:15px;font-weight:bold;margin-top:8px}.login-error{min-height:20px;color:#dc2626;text-align:center;font-size:13px;margin-top:8px;font-weight:bold}.week-section{background:#fff;margin:8px;border-radius:14px;padding:10px;box-shadow:0 1px 6px rgba(31,78,121,.10);border:1px solid #edf2f7}.week-card-row{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:8px}.week-card{height:48px;border-radius:10px;border:1px solid #b7d4f1;background:#e8f3ff;color:#1f4e79;display:flex;align-items:center;justify-content:center;font-weight:bold;cursor:pointer;padding:0 4px;font-size:15px}.week-card.current{background:#0b86df;color:#fff;border-color:#0b86df}.week-card.locked{background:#ffe1e1;color:#9a1b1b;border-color:#ffc6c6}.week-card.current.locked{background:#c2410c;color:#fff}.bar{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.add-btn{background:#16a34a;color:#fff;font-size:15px;min-width:115px}.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;max-height:calc(100vh - 245px);padding:0;border-radius:8px}.work-table{border-collapse:separate;border-spacing:0;table-layout:fixed;width:max-content;min-width:940px;background:#fff;font-size:10.5px}.work-table th,.work-table td{border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:1px;text-align:center;white-space:nowrap;height:28px;line-height:1.15;overflow:hidden;text-overflow:ellipsis}.work-table th:first-child,.work-table td:first-child{border-left:1px solid var(--line)}.work-table thead tr:first-child th{border-top:1px solid var(--line);background:var(--head);position:sticky;top:0;z-index:80;color:#1f4e79;font-weight:bold}.work-table thead tr:nth-child(2) th{background:var(--sub);position:sticky;top:28px;z-index:60;color:#1f4e79;font-weight:bold}.work-table tfoot td{background:#f8fafc;position:sticky;bottom:0;z-index:55}.work-table col.c-type{width:56px}.work-table col.c-project{width:58px}.work-table col.c-unit{width:48px}.work-table col.c-remark{width:60px}.work-table col.c-time{width:34px}.work-table col.c-sum{width:44px}.work-table col.c-action{width:46px}.work-table thead tr:first-child th:nth-child(1),.work-table tbody td:nth-child(1),.work-table tfoot td:nth-child(1){position:sticky!important;left:0!important;background:#fff;z-index:70}.work-table thead tr:first-child th:nth-child(2),.work-table tbody td:nth-child(2),.work-table tfoot td:nth-child(2){position:sticky!important;left:56px!important;background:#fff;z-index:70}.work-table thead tr:first-child th:nth-child(3),.work-table tbody td:nth-child(3),.work-table tfoot td:nth-child(3){position:sticky!important;left:114px!important;background:#fff;z-index:70}.work-table thead tr:first-child th:nth-child(4),.work-table tbody td:nth-child(4),.work-table tfoot td:nth-child(4){position:sticky!important;left:162px!important;background:#fff;z-index:70;box-shadow:3px 0 5px rgba(0,0,0,.08)}.work-table thead tr:first-child th:nth-child(-n+4){background:var(--head)!important;z-index:95!important}.work-table tfoot td:nth-child(-n+4){background:#f8fafc!important;z-index:90!important}#adminTable thead tr:first-child th:nth-child(1),#adminTable tbody td:nth-child(1){position:sticky!important;left:0!important;background:#fff!important;z-index:100!important}#adminTable thead tr:first-child th:nth-child(2),#adminTable tbody td:nth-child(2){position:sticky!important;left:76px!important;background:#fff!important;z-index:100!important}#adminTable thead tr:first-child th:nth-child(1),#adminTable thead tr:first-child th:nth-child(2){background:var(--head)!important}.time-wrap{width:28px;min-width:28px;max-width:28px;margin:auto}.time-cell{width:28px;height:22px;border:1px solid #c7d2de;border-radius:5px;text-align:center;font-size:10.5px;padding:0;background:#fff}.time-cell:focus{outline:2px solid #1e90ff;background:#eef8ff}.time-cell:disabled{background:#f1f5f9!important;color:#64748b!important;border-color:#cbd5e1!important;cursor:not-allowed!important}.day-ok{background:#fff!important}.day-zero{background:#ffe4e6!important}.day-warn{background:#fff7cc!important}.day-over{background:#ffd6d6!important;color:#991b1b!important;font-weight:bold!important}.day-zero input{background:#fff1f2!important;border-color:#f3a2a8!important}.day-warn input{background:#fffaf0!important;border-color:#f3c760!important}.day-over input{background:#fff1f2!important;border-color:#ef4444!important;color:#991b1b!important;font-weight:bold!important}.time-cell.active-input{border:2px solid #0ea5e9!important;box-shadow:0 0 0 2px rgba(14,165,233,.2)!important}.action-btn{padding:3px 5px;min-height:25px;border-radius:5px;font-size:11px}.action-btn.danger,.danger.action-btn{background:#dc3545!important;color:#fff!important}.empty{padding:22px;text-align:center;color:#6b7280}.stat-grid{display:grid;grid-template-columns:repeat(5,minmax(90px,1fr));gap:7px}.stat-card{background:linear-gradient(180deg,#ffffff,#f1f5f9);border:1px solid #dbeafe;border-radius:10px;padding:8px;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.05)}.stat-num{font-size:18px;font-weight:bold;color:#0b86df}.stat-label{font-size:11px;color:#64748b;margin-top:3px}.modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.46);display:none;z-index:1000;align-items:flex-start;justify-content:center;padding:44px 8px 8px}.modal-panel{width:100%;max-width:880px;max-height:90vh;background:#fff;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.25);overflow:hidden;display:flex;flex-direction:column}.modal-head{height:50px;background:#eaf1f8;display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-weight:bold}.modal-body{padding:10px;overflow:auto}.v55-top-summary{position:sticky;top:0;z-index:20;background:#eef8ff;border:1px solid #b9d8f3;border-radius:10px;padding:9px 10px;font-weight:800;margin-bottom:10px;color:#1f4e79}.choice-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.choice-btn{border:1px solid #d8e2ec;background:#f7fbff;color:#0b5286;border-radius:8px;padding:8px 4px;text-align:center;min-height:34px}.choice-btn.active{background:#d9f7e4;border:2px solid #16a34a;color:#137333;padding:7px 3px}.unit-tools{display:flex;gap:7px;align-items:center;margin:5px 0 7px}.unit-columns{display:grid;grid-template-columns:1fr 1fr;gap:7px}.unit-panel{border:1px solid #d6e2ee;border-radius:12px;overflow:hidden;background:#fff;min-height:240px}.unit-panel-title{padding:8px;text-align:center;background:#e8f5ff;color:#005a8d;font-weight:bold}.unit-panel.container .unit-panel-title{background:#fff3df;color:#b45f00}.unit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:5px;padding:6px}.remark-line{display:flex;gap:7px}.remark-line input{flex:1;border:1px solid #c7d7e7;border-radius:9px;padding:0 10px;height:36px;font-weight:bold}.apply-btn{background:#0078d4;color:#fff;min-width:64px}.split-box{border:1px solid #d6e2ee;border-radius:12px;padding:10px;background:#fbfdff}.split-pill{display:flex;align-items:center;gap:8px;margin-bottom:8px}.split-pill input{width:22px;height:22px;accent-color:#0b86df}.split-row-v55{display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:8px;align-items:end}.split-field{display:flex;flex-direction:column;gap:4px}.split-field span{font-size:12px;color:#475569;font-weight:800}.split-field select,.split-field input{height:34px;border:1px solid #c7d7e7;border-radius:8px;background:#fff;text-align:center;font-weight:700;width:100%}.split-hint{background:#eef8ff;border:1px solid #b9d8f3;color:#1f4e79;border-radius:999px;padding:7px 10px;font-weight:800;white-space:nowrap}.muted{font-size:11px;color:#607080;margin-top:6px}.modal-foot{display:flex;gap:10px;padding:10px;background:#fff;border-top:1px solid #eef2f6;position:sticky;bottom:0}.modal-foot button{flex:1;height:42px}.generate-btn{background:#16a34a;color:#fff;font-weight:bold;font-size:15px;box-shadow:0 6px 14px rgba(22,163,74,.35)}.cancel-btn{background:#f3f4f6;color:#111}.modal-head-actions{display:flex;gap:8px;align-items:center}.head-generate-btn{height:34px!important;min-height:34px!important;padding:0 18px!important;border-radius:8px!important;box-shadow:0 4px 10px rgba(22,163,74,.25)!important}.modal-head .generate-btn{flex:none!important;font-size:13px!important}.modal-body{padding-bottom:14px!important}@media(max-width:760px){.modal-head{height:auto!important;min-height:50px!important;padding:8px 10px!important}.modal-head-actions{gap:6px}.head-generate-btn{padding:0 10px!important;font-size:12px!important}}.no-project-tip{display:none;margin:0 0 10px;padding:10px;border-radius:10px;background:#ecfdf5;border:1px solid #86efac;color:#166534;font-weight:800}.hidden-by-type{display:none!important}.identity-line{background:linear-gradient(135deg,#f0f7ff,#e6f2ff);border:1px solid #cfe2f3;border-radius:10px;padding:6px 12px;box-shadow:0 2px 6px rgba(0,0,0,.05)}.identity-badge{background:#e8fff1!important;border:1px solid #22c55e!important;color:#16a34a!important}.bar button:not(.add-btn){border-radius:8px;border:1px solid #d0dbe6;background:linear-gradient(180deg,#ffffff,#edf2f7);box-shadow:0 1px 3px rgba(0,0,0,.1)}.add-btn{background:linear-gradient(135deg,#22c55e,#16a34a)!important;color:#fff!important;border:none!important;font-weight:700}.add-btn:hover{transform:translateY(-1px);box-shadow:0 4px 10px rgba(22,163,74,.35)}@media(max-width:760px){.identity-logout-btn{height:26px!important;min-height:26px!important;padding:0 12px!important}.header{font-size:17px}.identity-line{gap:8px}.identity-sep{display:none}.week-card{height:42px}.split-box{padding:8px}.split-pill{margin-bottom:6px}.split-row-v55{grid-template-columns:1fr 1fr 1fr .95fr;gap:4px;align-items:end}.split-field{gap:2px;min-width:0}.split-field span{font-size:10px}.split-field select,.split-field input{height:30px;font-size:12px;padding:0 4px}.split-hint{height:30px;font-size:10px;padding:0 4px;border-radius:8px;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stat-grid{grid-template-columns:repeat(3,1fr)}}@media(min-width:761px){.app,.header{max-width:1160px!important;margin-left:auto!important;margin-right:auto!important}.card,.week-section,.table-wrap{max-width:1160px!important;margin-left:auto!important;margin-right:auto!important}.week-section{padding:8px 10px!important}.week-card{height:34px!important;min-height:34px!important;line-height:34px!important;font-size:14px!important}.week-card-row{gap:8px!important}}@media(min-width:1024px){.work-table{min-width:1160px!important;font-size:12px!important}.work-table col.c-type{width:68px!important}.work-table col.c-project{width:70px!important}.work-table col.c-unit{width:60px!important}.work-table col.c-remark{width:76px!important}.work-table col.c-time{width:42px!important}.work-table col.c-sum{width:54px!important}.work-table col.c-action{width:56px!important}.work-table thead tr:first-child th:nth-child(2),.work-table tbody td:nth-child(2),.work-table tfoot td:nth-child(2){left:68px!important}.work-table thead tr:first-child th:nth-child(3),.work-table tbody td:nth-child(3),.work-table tfoot td:nth-child(3){left:138px!important}.work-table thead tr:first-child th:nth-child(4),.work-table tbody td:nth-child(4),.work-table tfoot td:nth-child(4){left:198px!important}.time-wrap{width:34px!important;min-width:34px!important;max-width:34px!important}.time-cell{width:34px!important;height:24px!important;font-size:12px!important}}
-/* ===== V5.12.3 管理员端样式合并版：移除历史多轮重复补丁，仅保留最终有效规则 ===== */
+.secure-input{-webkit-text-security:disc!important;text-security:disc!important}.no-password-manager{ime-mode:disabled!important}input[data-form-type="other"]{background-clip:padding-box!important}
+/* ===== V5.12.13 管理员端样式合并版：移除历史多轮重复补丁，仅保留最终有效规则 ===== */
 
 /* 登录框允许浏览器保存账号密码；其它工时输入仍由 JS 控制为不触发密码管理器 */
 #loginEmpNo,
@@ -70,6 +71,7 @@
 #adminTable col.c-admin-type{width:66px!important;}
 #adminTable col.c-admin-project{width:76px!important;}
 #adminTable col.c-admin-unit{width:55px!important;}
+#adminTable col.c-admin-issue{width:80px!important;}
 #adminTable col.c-admin-remark{width:140px!important;}
 
 #adminTable thead tr:first-child th:nth-child(1),
@@ -92,6 +94,7 @@
 #adminTable tfoot td:nth-child(-n+5){background:#f8fafc!important;z-index:530!important;font-weight:800!important;}
 #adminTable tbody td:nth-child(-n+5),#adminTable thead th:nth-child(-n+5),#adminTable tfoot td:nth-child(-n+5){padding-left:0!important;padding-right:0!important;text-align:center!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
 #adminTable tbody td.admin-remark-cell{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-align:left!important;padding-left:6px!important;}
+#adminTable tbody td.admin-issue-cell{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;text-align:center!important;padding-left:4px!important;padding-right:4px!important;}
 #adminTable tbody td:nth-child(16),#adminTable tbody td:nth-child(17){background:#fff1f2!important;}
 
 /* 手机端管理员表：固定列尽量贴紧，为右侧日期工时释放空间 */
@@ -112,7 +115,7 @@
   #adminTable thead tr:first-child th{top:0!important;}
   #adminTable thead tr:nth-child(2) th{top:28px!important;}
 }
-/* ===== V5.12.3 管理员端：按钮同一行 + 姓名筛选 + 自动保存放入统计卡 + 员工填报分数显示 ===== */
+/* ===== V5.12.13 管理员端：按钮同一行 + 姓名筛选 + 自动保存放入统计卡 + 员工填报分数显示 ===== */
 #adminView .admin-action-bar{display:flex!important;flex-wrap:nowrap!important;gap:8px!important;align-items:center!important;justify-content:flex-start!important;overflow-x:auto!important;}
 #adminView .admin-action-bar button{flex:0 0 auto!important;white-space:nowrap!important;}
 #adminView .admin-name-filter{flex:0 0 155px!important;height:30px!important;min-height:30px!important;padding:0 10px!important;border:1px solid #cbd5e1!important;border-radius:8px!important;background:#fff!important;color:#0f172a!important;font-weight:800!important;outline:none!important;}
@@ -129,7 +132,7 @@
   #adminView .admin-save-badge{font-size:11px!important;padding:2px 6px!important;}
   #adminView .admin-save-badge .autosaveText{max-width:86px!important;}
 }
-/* ===== V5.12.3 管理员端图标化：按钮 + 统计卡 ===== */
+/* ===== V5.12.13 管理员端图标化：按钮 + 统计卡 ===== */
 #adminView .admin-action-bar button{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;font-weight:800!important;}
 #adminView .stat-icon{font-size:18px!important;line-height:20px!important;margin-bottom:2px!important;}
 #adminView .admin-stat-grid .stat-card{min-height:66px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;}
@@ -140,7 +143,7 @@
   #adminView .stat-icon{font-size:17px!important;line-height:18px!important;}
   #adminView .admin-stat-grid .stat-card{min-height:62px!important;}
 }
-/* ===== V5.12.3 管理员统计卡：一行七列 + 图标数字水平排列 ===== */
+/* ===== V5.12.13 管理员统计卡：一行七列 + 图标数字水平排列 ===== */
 #adminStats.card{padding:6px!important;}
 #adminView .admin-stat-grid{
   display:grid!important;
@@ -227,20 +230,20 @@
   #adminView .admin-save-badge .autosave-dot{width:5px!important;height:5px!important;}
 }
 
-/* ===== V5.12.3 登录页工时图标 ===== */
+/* ===== V5.12.13 登录页工时图标 ===== */
 .login-time-icon{width:58px;height:58px;margin:0 auto 10px;border-radius:18px;background:linear-gradient(135deg,#1f4e79,#2f75b5);box-shadow:0 8px 18px rgba(31,78,121,.28);position:relative;display:flex;align-items:center;justify-content:center}.login-time-icon:before{content:"";width:34px;height:34px;border:3px solid #fff;border-radius:50%;display:block}.login-time-icon:after{content:"";position:absolute;width:13px;height:3px;background:#fff;border-radius:99px;left:30px;top:28px;box-shadow:-7px -9px 0 -1px #fff;transform-origin:left center;transform:rotate(0deg)}
-/* ===== V5.12.3 工时明细表颜色统一规则 ===== */
+/* ===== V5.12.13 工时明细表颜色统一规则 ===== */
 .work-table td.day-ok,.work-table td.day-ok input,.day-ok{background:#ffffff!important;color:#1f2937!important}.work-table td.day-zero,.work-table td.day-warn,.work-table td.day-zero input,.work-table td.day-warn input,.day-zero,.day-warn{background:#fff3bf!important;color:#1f2937!important;border-color:#c7d2de!important}.work-table td.day-over,.work-table td.day-over input,.day-over{background:#ffd6d6!important;color:#1f2937!important;border-color:#c7d2de!important;font-weight:normal!important}
 #empTable tbody td:nth-child(15),#empTable tbody td:nth-child(16),#empTable tfoot td:nth-child(15),#empTable tfoot td:nth-child(16){background:#e0f2fe!important}#empTable tbody td:nth-child(15) input,#empTable tbody td:nth-child(16) input{background:#f0f9ff!important;border-color:#93c5fd!important}#adminTable tbody td:nth-child(16),#adminTable tbody td:nth-child(17),#adminTable tfoot td:nth-child(16),#adminTable tfoot td:nth-child(17){background:#e0f2fe!important}
-/* ===== V5.12.3 底部系统标识 + 汇总行视觉固定 ===== */
+/* ===== V5.12.13 底部系统标识 + 汇总行视觉固定 ===== */
 .system-footer-note{max-width:1160px;margin:8px auto 18px;padding:8px 10px 0;text-align:center;font-size:11px;line-height:16px;color:#94a3b8;letter-spacing:.2px;user-select:none}.system-footer-note .cn,.system-footer-note .en{font-weight:400!important}.system-footer-note .en{font-size:10.5px}#empTable tfoot td,#adminTable tfoot td{background:#f8fafc!important;color:#1f2937!important;border-color:var(--line)!important;font-weight:800!important}#empTable tfoot td:nth-child(15),#empTable tfoot td:nth-child(16),#adminTable tfoot td:nth-child(16),#adminTable tfoot td:nth-child(17){background:#e0f2fe!important}
-/* ===== V5.12.3 员工端手机横向滑动 / PC隐藏多余横向条 ===== */
+/* ===== V5.12.13 员工端手机横向滑动 / PC隐藏多余横向条 ===== */
 @media(min-width:761px){#empView .table-wrap{overflow-x:hidden!important;overflow-y:auto!important}#empView .table-wrap::-webkit-scrollbar{height:0!important}}@media(max-width:760px){#empView .table-wrap{overflow-x:auto!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important}#empView .work-table{width:max-content!important;min-width:940px!important}.system-footer-note{margin:6px 8px 14px;font-size:10.5px;line-height:15px}.system-footer-note .en{font-size:10px}}
-/* ===== V5.12.3 新增弹框：单元类自适应多列，容器为空/很少时隐藏右侧 ===== */
+/* ===== V5.12.13 新增弹框：单元类自适应多列，容器为空/很少时隐藏右侧 ===== */
 .unit-columns.single-unit-panel{grid-template-columns:1fr!important}.unit-columns.single-unit-panel .unit-panel.normal-only{grid-column:1 / -1!important}.unit-columns.single-unit-panel .unit-panel.normal-only .unit-grid{grid-template-columns:repeat(4,1fr)!important}@media(max-width:760px){.unit-columns.single-unit-panel .unit-panel.normal-only .unit-grid{grid-template-columns:repeat(3,1fr)!important}}
 
 
-/* ===== V5.12.3 新增弹框：单元/容器自适应布局 =====
+/* ===== V5.12.13 新增弹框：单元/容器自适应布局 =====
    目标：默认 2+2 共四列；一边数量少则 3+1；无单元/无容器时单栏铺满。
 */
 .unit-columns{display:grid!important;gap:8px!important;align-items:start!important;}
@@ -265,7 +268,7 @@
 }
 
 
-/* ===== V5.12.3 管理员异常名单高级弹窗 ===== */
+/* ===== V5.12.13 管理员异常名单高级弹窗 ===== */
 .abnormal-panel{max-width:780px!important;}
 .abnormal-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px;border-bottom:1px solid #e5edf5;background:#fbfdff;}
 .abnormal-count{font-weight:900;color:#1f4e79;margin-right:auto;}
@@ -284,14 +287,14 @@
 @media(max-width:760px){.abnormal-panel{max-width:96vw!important}.abnormal-table{font-size:12px}.abnormal-table th,.abnormal-table td{padding:6px 5px}.abnormal-tools button{height:32px!important;min-height:32px!important;padding:0 10px!important;font-size:12px!important}}
 
 
-/* ===== V5.12.3 员工端数字输入框：去掉上下箭头，数字居中 ===== */
+/* ===== V5.12.13 员工端数字输入框：去掉上下箭头，数字居中 ===== */
 .time-wrap{display:flex;align-items:center;justify-content:center;}
 .time-cell{appearance:textfield!important;-moz-appearance:textfield!important;text-align:center!important;font-weight:700!important;padding:0!important;line-height:22px!important;}
 .time-cell::-webkit-outer-spin-button,.time-cell::-webkit-inner-spin-button{-webkit-appearance:none!important;margin:0!important;}
 
 </style></head><body>
 <div class="login-screen" id="loginScreen"><div class="login-card"><div class="login-time-icon" aria-hidden="true"></div><div class="login-title">车间工时填报系统</div><div class="login-row"><label>工号</label><input id="loginEmpNo" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="username" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="请输入工号，例如 991001"></div><div class="login-row"><label>密码</label><input id="loginKey" type="password" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="请输入密码"></div><button class="login-btn" onclick="doLogin()">登录</button><div class="login-error" id="loginError"></div></div></div>
-<div class="app locked" id="mainApp"><div class="header">车间工时填报系统 V5.12.3</div>
+<div class="app locked" id="mainApp"><div class="header">车间工时填报系统 V5.12.13</div>
 <div id="empView"><div class="card"><div class="identity-line"><span class="identity-item">👤 姓名：<b id="empName">测试</b></span><span class="identity-sep"></span><span class="identity-item">🆔 工号：<b id="empNo">000001</b></span><span class="identity-sep"></span><button class="logout-btn identity-logout-btn" onclick="logout()">退出</button></div></div><div class="week-section"><div class="week-card-row" id="weekCardRow"></div></div><div class="card bar"><button class="ok add-btn" onclick="openAddModal()">新增一行</button><span class="autosave-badge"><span class="autosave-dot"></span><span class="autosaveText">已自动保存</span></span><button onclick="reloadData()">刷新</button></div><div class="card table-wrap"><table class="work-table" id="empTable"></table></div></div>
 <div id="adminView" style="display:none"><div class="card"><div class="identity-line"><span class="identity-item">👤 姓名：<b>Manager</b></span><span class="identity-sep"></span><span class="identity-item">🆔 工号：<b>1237794</b></span><span class="identity-sep"></span><button class="logout-btn identity-logout-btn" onclick="logout()">退出</button></div></div><div class="week-section"><div class="week-card-row" id="adminWeekCardRow"></div></div><div class="admin-top-sticky"><div class="card bar admin-action-bar"><button onclick="lockWeek()">🔒 锁定</button><button onclick="unlockWeek()">🔓 解锁</button><button onclick="exportCSV()">📊 导出Excel</button><button onclick="showAdminAbnormalList()">📋 异常名单</button><button id="adminAnomalyBtn" title="只筛选已结束日期存在异常的人员，并显示这些人员的全部工时" onclick="toggleAdminAnomalyFilter()">⚠️ 异常筛选</button><button onclick="reloadData()">🔄 刷新</button><input id="adminNameFilter" class="admin-name-filter" type="text" placeholder="姓名/工号筛选" autocomplete="off" oninput="renderAdmin()"></div><div class="card" id="adminStats"></div></div><div class="card table-wrap"><table class="work-table" id="adminTable"></table></div></div><div class="system-footer-note"><div class="cn">宁波工时填报系统</div><div class="en">Ningbo Workshop Manhour System</div></div></div>
 <div class="modal-mask" id="addModal"><div class="modal-panel"><div class="modal-head"><div>新增单条或多条工时</div><div class="modal-head-actions"><button class="generate-btn head-generate-btn" id="generateBtn" onclick="generateRowsFromModal()">确定生成 0 条</button><button onclick="closeAddModal()">关闭</button></div></div><div class="modal-body"><div class="section-title">1. 工时类别</div><div class="choice-grid" id="modalTypeBox"></div><div class="no-project-tip" id="noProjectTip">✅ 当前类别不需要项目号和单元号，系统将自动生成 1 条公共工时记录。</div><div id="projectSection"><div class="section-title">2. 项目号</div><div class="choice-grid" id="modalProjectBox"></div></div><div id="unitSection"><div class="section-title">3. 单元号</div><div class="unit-tools"><button onclick="selectAllUnits()">全选</button><button onclick="clearUnits()">清空</button><span id="selectedCount">已选 0 个</span></div><div class="unit-columns"><div class="unit-panel normal-only"><div class="unit-panel-title">单元类</div><div class="unit-grid" id="unitNormalBox"></div></div><div class="unit-panel container"><div class="unit-panel-title">容器类</div><div class="unit-grid" id="unitContainerBox"></div></div></div></div><div class="section-title">4. 备注</div><div class="remark-line"><input id="customRemark" placeholder="可选备注，也可输入"><button class="apply-btn" onclick="applyCustomRemark()">应用</button></div><div class="choice-grid" id="modalRemarkBox" style="margin-top:8px"></div><div class="section-title">5. 可选：平均工时</div><div class="split-box"><label class="split-pill"><input type="checkbox" id="splitEnabled" onchange="updateSplitRemaining()"> 平分工时</label><div class="split-row-v55"><div class="split-field"><span>类型</span><select id="splitType" onchange="updateSplitRemaining()"><option value="normal">正常</option><option value="weekdayOT">加班</option><option value="weekendOT">周末</option></select></div><div class="split-field"><span>日期</span><select id="splitDay" onchange="syncSplitTypeByDay();updateSplitRemaining()"><option value="mon">周一</option><option value="tue">周二</option><option value="wed">周三</option><option value="thu">周四</option><option value="fri">周五</option><option value="sat">周六</option><option value="sun">周日</option></select></div><div class="split-field"><span>总工时</span><input id="splitTotal" class="no-password-manager" type="number" inputmode="decimal" min="0" step="0.25" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" aria-autocomplete="none" placeholder="自动限制" oninput="guardSplitTotal()"></div><span class="split-hint" id="splitRemainText">最大可填：-</span></div><div class="muted">系统会按当天已填写的工时自动计算最大剩余值，避免和外部明细表冲突。</div></div></div></div></div>
@@ -301,42 +304,51 @@
 const API_BASE="https://timesheet-d6g9cfu6c9d0e7fce-1448165566.ap-shanghai.app.tcloudbase.com/timesheetApi";
 let records=[],currentWeekOffset=0,currentLoginId="",currentUserRole="employee",currentUserName="",currentWeekLocked=false,lockCache={},autoRefreshTimer=null,lockRefreshTimer=null,adminAnomalyOnly=false;
 /* =========================================================
-   V5.12.3 CONFIG 配置中心
+   V6.0 CONFIG 配置中心
    以后新增/删除员工、修改密码、新增项目/单元/容器、维护备注分类，
    优先只改这里；下面业务逻辑尽量不要动。
    ========================================================= */
 const CONFIG={
+
   // 管理员工号
   adminEmpNo:"1237794",
 
+  // 员工顺序：严格按照 Excel 员工表从上到下
+  employeeOrder:["1237794","1235746","1177338","1236416","1262912","1177264","1177310","1177342","1177265","1177339","1259740","1239728","1177266","1177215","1177333","1177235","991005","991001","991012","991008","991009","991013","1177336","1254596","991002","991003","991004","991006","991007","991011","991010","991014","991015","991016","991017"],
+
   // 员工清单："工号":"姓名"
-  employees:{"991001":"林泽学","991005":"邓茂胜","991008":"曹珪","991009":"侯自峰","991012":"唐先发","991013":"梁庄华","1177215":"官辉","1177235":"王家伟","1177264":"李剑锋","1177265":"李建军","1177266":"李念亭","1177310":"师海芳","1177333":"黄维昆","1177336":"席新永","1177338":"叶峰","1177339":"虞志胜","1177342":"庄允吉","1235746":"丁允志","1236416":"张道仅","1237794":"Manager","1239728":"郭振宗","1254596":"候海晴","1259740":"汪保平","1262912":"向波"},
+  employees:{"991001":"林泽学","991002":"邓春华","991003":"宋冠楠","991004":"秦宾宾","991005":"邓茂胜","991006":"堂自赠","991007":"刘建希","991008":"曹珪","991009":"侯自峰","991010":"刘晨光","991011":"肖永登","991012":"唐先发","991013":"梁庄华","991014":"孙永奇","991015":"史新房","991016":"张云周","991017":"王永才","1177215":"官辉","1177235":"王家伟","1177264":"李剑锋","1177265":"李建军","1177266":"李念亭","1177310":"师海芳","1177333":"黄维昆","1177336":"席新永","1177338":"叶峰","1177339":"虞志胜","1177342":"庄允吉","1235746":"丁允志","1236416":"张道仅","1237794":"Manager","1239728":"郭振宗","1254596":"候海晴","1259740":"汪保平","1262912":"向波"},
 
   // 登录密码："工号":"密码"
-  passwords:{"991001":"100155","991005":"100578","991008":"100838","991009":"100956","991012":"101270","991013":"101355","1177215":"721583","1177235":"723511","1177264":"726410","1177265":"726517","1177266":"726667","1177310":"731050","1177333":"733380","1177336":"733636","1177338":"733818","1177339":"733985","1177342":"734257","1235746":"574629","1236416":"641616","1237794":"7794888","1239728":"972819","1254596":"459618","1259740":"974031","1262912":"291258"},
+  passwords:{"991001":"100155","991002":"100245","991003":"100358","991004":"100447","991005":"100578","991006":"100686","991007":"100745","991008":"100838","991009":"100956","991010":"101058","991011":"101196","991012":"101270","991013":"101355","991014":"101487","991015":"101593","991016":"101628","991017":"101727","1177215":"721583","1177235":"725311","1177264":"726410","1177265":"726517","1177266":"726667","1177310":"731050","1177333":"733380","1177336":"733657","1177338":"733818","1177339":"733985","1177342":"734257","1235746":"574629","1236416":"641616","1237794":"7794888","1239728":"972819","1254596":"459618","1259740":"974031","1262912":"291258"},
 
-  // 员工状态：在职/离职/停用；离职、停用禁止登录
-  employeeStatus:{"991001":"在职","991005":"在职","991008":"在职","991009":"在职","991012":"在职","991013":"在职","1177215":"在职","1177235":"在职","1177264":"在职","1177265":"在职","1177266":"在职","1177310":"在职","1177333":"在职","1177336":"在职","1177338":"在职","1177339":"在职","1177342":"在职","1235746":"在职","1236416":"在职","1237794":"在职","1239728":"在职","1254596":"在职","1259740":"在职","1262912":"在职"},
+  // 员工状态：在职/离职/停用
+  employeeStatus:{"991001":"在职","991002":"离职","991003":"离职","991004":"离职","991005":"在职","991006":"离职","991007":"离职","991008":"在职","991009":"在职","991010":"离职","991011":"离职","991012":"在职","991013":"在职","991014":"在职","991015":"在职","991016":"在职","991017":"在职","1177215":"在职","1177235":"在职","1177264":"在职","1177265":"在职","1177266":"在职","1177310":"在职","1177333":"在职","1177336":"在职","1177338":"在职","1177339":"在职","1177342":"在职","1235746":"在职","1236416":"在职","1237794":"在职","1239728":"在职","1254596":"在职","1259740":"在职","1262912":"在职"},
+
+  // 员工入职日期："工号":"YYYY-MM-DD"
+  employeeJoinDateMap:{"991001":"2019-03-19","991002":"2019-03-19","991003":"2019-03-19","991004":"2019-03-19","991005":"2019-03-19","991006":"2019-03-19","991007":"2019-03-19","991008":"2019-03-19","991009":"2019-03-19","991010":"2019-03-19","991011":"2019-03-19","991012":"2019-03-19","991013":"2019-03-19","991014":"2026-07-01","991015":"2026-07-01","991016":"2026-07-01","991017":"2026-07-01","1177215":"2019-03-19","1177235":"2019-03-19","1177264":"2019-03-19","1177265":"2019-03-19","1177266":"2019-03-19","1177310":"2019-03-19","1177333":"2019-03-19","1177336":"2019-03-19","1177338":"2019-03-19","1177339":"2019-03-19","1177342":"2019-03-19","1235746":"2019-03-19","1236416":"2019-03-19","1237794":"2019-03-19","1239728":"2019-03-19","1254596":"2019-03-19","1259740":"2019-03-19","1262912":"2019-03-19"},
+
+  // 员工离职日期："工号":"YYYY-MM-DD"
+  employeeLeaveDateMap:{"991002":"2026-01-01","991003":"2026-01-01","991004":"2026-01-01","991006":"2026-01-01","991007":"2026-01-01","991010":"2026-01-01","991011":"2026-01-01"},
 
   // 工时类别与备注按钮
-  remarks:{"机械组装":["下料组装","焊接","压力测试","配件打磨","气管安装"],"保温作业":["管道补漆","保温下料","保温安装","保温发泡","保温清理"],"电气安装":["桥架安装","布线接线","FAT帮忙"],"额外工时":["设计问题","特殊支架","供应商问题","其它问题"],"其它作业":["整理5S等","培训","早会","车间管理"],"请假":["年假","病假","事假","出差"],"仓库作业":["收发退料","装箱发货","仓库帮忙"]},
+  remarks:{"机械组装":["下料组装","焊接","压力测试","气管安装"],"保温作业":["保温下料","保温安装","保温发泡","保温清理"],"电气安装":["桥架安装","布线接线","FAT帮忙"],"额外工时":["设计问题","特殊支架","供应商问题","其它问题"],"其它作业":["整理5S等","培训早会","车间管理"],"请假":["年假","病假","事假"],"仓库作业":["收发退料","装箱发货","仓库帮忙"]},
 
   // 不需要项目号/单元号的工时类别
   noProjectTypes:["其它作业","请假","仓库作业"],
 
   // 项目号与单元号/容器号；NIN- 开头会自动识别为容器类
-  projects:{"P0351706":["U503","U451","U381","U361","U344","U343","U335","U123-1","U115-1","U114-1","U112-3","U112-1","U110-1","U104","U103"],"P0384374":["U641D","U641C","U641B","U641A","U451","U387","U381","U373","U371","U368-3","U368-1","U368","U361","U343","U335","U201A","U126-1","U126","U120","NIN-52981"],"P0373305":["U641","U611-D","U611-C","U611-B","U611-A","U611","U503","U387","U381","U368-3","U368-1","U368","U361","U342","U335","U142","U123-1","U123","U121"],"P88359":["U451","U381","U371","U361","U341","U335","U201-2","NIN-53054"],"P0382530":["U501","U401","U381","U361","U344","U335","U201B","U201A","U125","U114-1","NIN-53076","NIN-53073","NIN-53072","NIN-53071","NIN-53070","NIN-53069","NIN-53068","NIN-53067","NIN-53066","NIN-53065","NIN-53064","NIN-53061","NIN-53060","NIN-53053"],"P0407596":["U641C-1","U641C","U641B-1","U641B","U641A-1","U641A","U503","U451","U387","U382","U381","U373","U371","U368-3","U368-1","U368","U361","U343","U335","U123-1","U123","NIN-53063","NIN-53062"],"销售订单":["NIN-53111","NIN-53086","NIN-53085","NIN-53084","NIN-53083","NIN-53082"]},
+  projects:{"P0351706":["U503","U451","U381","U361","U344","U343","U335","U123-1","U123","U115-1","U115","U114-1","U114","U112-3","U112-1","U112","U110-1","U104","U103"],"P0384374":["NIN-52981","U641D","U641C","U641B","U641A","U451","U387","U381","U373","U371","U368-3","U368-1","U368","U361","U343","U335","U201A","U126-1","U126","U120"],"P0373305":["U611-D","U611-C","U611-B","U611-A","U611","U503","U641","U387","U381","U368-3","U368-1","U368","U361","U342","U335","U142","U123-1","U123","U121"],"P88359":["NIN-53054","U451","U381","U371","U361","U341","U335","U201-2"],"P0382530":["NIN-53076","U125","U344","NIN-53073","NIN-53072","NIN-53071","NIN-53070","NIN-53069","NIN-53068","NIN-53067","NIN-53066","NIN-53065","NIN-53064","NIN-53061","NIN-53060","U335","NIN-53053","U401","U381","U361","U201B","U201A","U114-1"],"P0407596":["NIN-53063","NIN-53062","U641C-1","U641B-1","U641C","U641B","U641A-1","U641A","U503","U387","U451","U382","U381","U373","U371","U368-3","U368-1","U368","U361","U343","U335","U123-1","U123"],"销售订单":["NIN-53111","NIN-53086","NIN-53085","NIN-53084","NIN-53083","NIN-53082"]},
 
-  // 生产号映射："项目号|单元号":"生产号"，由 CONFIG 生成器 V5.2 输出；为空时不影响原逻辑
-  productionOrderMap:{},
+  // 生产号映射："项目号|单元号":"生产号"
+  productionOrderMap:{"P0351706|U503":"0351706-02-31","P0351706|U451":"0351706-02-27","P0351706|U381":"0351706-02-26","P0351706|U361":"0351706-02-25","P0351706|U344":"0351706-02-24","P0351706|U343":"0351706-02-23","P0351706|U335":"0351706-02-22","P0351706|U123-1":"0351706-02-20","P0351706|U123":"0351706-02-19","P0351706|U115-1":"0351706-02-17","P0351706|U115":"0351706-02-16","P0351706|U114-1":"0351706-02-14","P0351706|U114":"0351706-02-13","P0351706|U112-3":"0351706-02-11","P0351706|U112-1":"0351706-02-09","P0351706|U112":"0351706-02-08","P0351706|U110-1":"0351706-02-07","P0351706|U104":"0351706-02-04","P0351706|U103":"0351706-02-03","P0384374|NIN-52981":"NIN-52981","P0384374|U641D":"0384374-02-23","P0384374|U641C":"0384374-02-22","P0384374|U641B":"0384374-02-21","P0384374|U641A":"0384374-02-20","P0384374|U451":"0384374-02-19","P0384374|U387":"0384374-02-17","P0384374|U381":"0384374-02-16","P0384374|U373":"0384374-02-15","P0384374|U371":"0384374-02-14","P0384374|U368-3":"0384374-02-13","P0384374|U368-1":"0384374-02-12","P0384374|U368":"0384374-02-11","P0384374|U361":"0384374-02-10","P0384374|U343":"0384374-02-09","P0384374|U335":"0384374-02-08","P0384374|U201A":"0384374-02-07","P0384374|U126-1":"0384374-02-06","P0384374|U126":"0384374-02-05","P0384374|U120":"0384374-02-03","P0373305|U611-D":"NIN-53058","P0373305|U611-C":"NIN-53057","P0373305|U611-B":"NIN-53056","P0373305|U611-A":"NIN-53055","P0373305|U611":"0373305-02-34","P0373305|U503":"0373305-02-21","P0373305|U641":"0373305-02-19","P0373305|U387":"0373305-02-16","P0373305|U381":"0373305-02-15","P0373305|U368-3":"0373305-02-14","P0373305|U368-1":"0373305-02-13","P0373305|U368":"0373305-02-12","P0373305|U361":"0373305-02-11","P0373305|U342":"0373305-02-10","P0373305|U335":"0373305-02-09","P0373305|U142":"0373305-02-07","P0373305|U123-1":"0373305-02-06","P0373305|U123":"0373305-02-05","P0373305|U121":"0373305-02-03","P88359|NIN-53054":"NIN-53054","P88359|U451":"88359-02-14","P88359|U381":"88359-02-11","P88359|U371":"88359-02-10","P88359|U361":"88359-02-09","P88359|U341":"88359-02-08","P88359|U335":"88359-02-07","P88359|U201-2":"88359-02-06","P0382530|NIN-53076":"NIN-53076","P0382530|U125":"NIN-53075","P0382530|U344":"NIN-53074","P0382530|NIN-53073":"NIN-53073","P0382530|NIN-53072":"NIN-53072","P0382530|NIN-53071":"NIN-53071","P0382530|NIN-53070":"NIN-53070","P0382530|NIN-53069":"NIN-53069","P0382530|NIN-53068":"NIN-53068","P0382530|NIN-53067":"NIN-53067","P0382530|NIN-53066":"NIN-53066","P0382530|NIN-53065":"NIN-53065","P0382530|NIN-53064":"NIN-53064","P0382530|NIN-53061":"NIN-53061","P0382530|NIN-53060":"NIN-53060","P0382530|U335":"NIN-53059","P0382530|NIN-53053":"NIN-53053","P0382530|U401":"0382530-02-20","P0382530|U381":"0382530-02-19","P0382530|U361":"0382530-02-18","P0382530|U201B":"0382530-02-16","P0382530|U201A":"0382530-02-15","P0382530|U114-1":"0382530-02-08","P0407596|NIN-53063":"NIN-53063","P0407596|NIN-53062":"NIN-53062","P0407596|U641C-1":"0407596-02-26","P0407596|U641B-1":"0407596-02-25","P0407596|U641C":"0407596-02-24","P0407596|U641B":"0407596-02-23","P0407596|U641A-1":"0407596-02-22","P0407596|U641A":"0407596-02-21","P0407596|U503":"0407596-02-20","P0407596|U387":"0407596-02-18","P0407596|U451":"0407596-02-16","P0407596|U382":"0407596-02-15","P0407596|U381":"0407596-02-14","P0407596|U373":"0407596-02-13","P0407596|U371":"0407596-02-12","P0407596|U368-3":"0407596-02-11","P0407596|U368-1":"0407596-02-10","P0407596|U368":"0407596-02-09","P0407596|U361":"0407596-02-08","P0407596|U343":"0407596-02-07","P0407596|U335":"0407596-02-06","P0407596|U123-1":"0407596-02-04","P0407596|U123":"0407596-02-03","销售订单|NIN-53111":"NIN-53111","销售订单|NIN-53086":"NIN-53086","销售订单|NIN-53085":"NIN-53085","销售订单|NIN-53084":"NIN-53084","销售订单|NIN-53083":"NIN-53083","销售订单|NIN-53082":"NIN-53082"},
 
-  // 项目状态：进行中/已完成/已发货/暂停/取消；员工端仅显示进行中/在制/未完成/Active/Open/混合项目
-  projectStatusMap:{"P0351706":"进行中","P0384374":"进行中","P0373305":"进行中","P88359":"进行中","P0382530":"进行中","P0407596":"进行中","销售订单":"进行中"},
+  // 项目状态：进行中/已完成/已发货/暂停/取消
+  projectStatusMap:{"P0351706":"进行中","P0384374":"进行中","P0373305":"进行中","P88359":"进行中","P0382530":"进行中","P0407596":"进行中","销售订单":"已完成"},
 
-  // 项目+单元状态："项目号|单元号":"状态"；用于混合项目下按单元过滤
+  // 项目+单元状态："项目号|单元号":"状态"
   projectUnitStatusMap:{}
 };
-
 // ===== 以下为兼容原业务逻辑的变量映射，不需要日常维护 =====
 const employeeMap=CONFIG.employees||{};
 const employeeKeyMap=CONFIG.passwords||{};
@@ -345,7 +357,6 @@ const employeeOrder=Array.isArray(CONFIG.employeeOrder)?CONFIG.employeeOrder.map
 const employeeJoinDateMap=CONFIG.employeeJoinDateMap||{};
 const employeeLeaveDateMap=CONFIG.employeeLeaveDateMap||{};
 const remarkMap=CONFIG.remarks||{};
-const remarkSetMap=Object.fromEntries(Object.keys(remarkMap).map(k=>[k,new Set((remarkMap[k]||[]).map(v=>String(v||'').trim()).filter(Boolean))]));
 const workTypes=Object.keys(remarkMap);
 const noProjectTypes=CONFIG.noProjectTypes||[];
 const ADMIN_EMP_NO=CONFIG.adminEmpNo;
@@ -443,6 +454,23 @@ function displayRemarkDetail(r){
   if(String((r&&r.type)||'')==='额外工时')return splitExtraRemarkValue((r&&r.remark)||'').detail;
   return String((r&&r.remark)||'').trim();
 }
+function displayRemark(r,admin=false){return displayRemarkDetail(r)}
+function displayMergedRemark(r){
+  if(!r)return '';
+  const type=String(r.type||'').trim();
+  const detail=String(displayRemarkDetail(r)||'').trim();
+  if(r.__empty||type==='未填报')return detail||'未填报';
+  if(!detail)return '';
+  if(type==='额外工时'){
+    const issue=String(r.extraReasonType||displayIssueCategory(r)||'').trim();
+    if(!issue)return detail;
+    if(detail===issue||detail.startsWith(issue+' - '))return detail;
+    return issue+' - '+detail;
+  }
+  const defaults=(remarkMap[type]||[]).map(v=>String(v||'').trim()).filter(Boolean);
+  if(defaults.includes(detail))return '';
+  return detail;
+}
 let modalState={type:"",project:"",units:[],extraReasonType:"",remark:""};
 let loginScreenTemplate="";
 function captureLoginScreenTemplate(){
@@ -469,7 +497,7 @@ function removeLoginScreenDom(){
 async function apiCall(action,payload={}){const res=await fetch(API_BASE,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,payload})});if(!res.ok)throw new Error("HTTP "+res.status);const data=await res.json();if(!data.ok)throw new Error(data.error||"云函数返回失败");return data.data||{}}
 function num(v){let n=parseFloat(v);return isNaN(n)?0:n}function showNum(v){v=num(v);return v===0?'':v}function getISOWeek(d){const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())),dayNum=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-dayNum);const yearStart=new Date(Date.UTC(date.getUTCFullYear(),0,1));return Math.ceil((((date-yearStart)/86400000)+1)/7)}function getWeekNo(o=0){const d=new Date();d.setDate(d.getDate()+o*7);return "W"+String(getISOWeek(d)).padStart(2,"0")}function defaultRecord(){return {employee:currentUserName||employeeMap[currentLoginId]||"",empNo:currentLoginId,week:getWeekNo(currentWeekOffset),type:"机械组装",project:"",unit:"",extraReasonType:"",remark:"",monN:0,monO:0,tueN:0,tueO:0,wedN:0,wedO:0,thuN:0,thuO:0,friN:0,friO:0,satO:0,sunO:0}}function toast(m){alert(m)}
 
-/* ===== V5.12.3 相同前置信息自动合并 =====
+/* ===== V5.12.13 相同前置信息自动合并 =====
    合并规则：同一员工、同一周、同一工时类别、项目号、单元号、备注完全一致时，
    周一到周日的工时数据自动汇总到同一行。
 */
@@ -524,31 +552,31 @@ function empCellClass(k){
 function timeInputCell(i,k,v,admin=false,r=null){if(admin)return `<td class="${adminCellClass(r,k)}">${showNum(v)}</td>`;return `<td class="${empCellClass(k)}"><div class="time-wrap"><input class="time-cell no-password-manager" type="number" inputmode="decimal" min="0" step="0.25" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-lpignore="true" data-1p-ignore="true" data-bwignore="true" data-form-type="other" aria-autocomplete="none" value="${num(v)===0?'':num(v)}" ${isLocked()?'disabled':''} onchange="updateCell(${i},'${k}',this.value)" onfocus="this.select();setActiveCell(this)"></div></td>`}async function updateCell(i,k,value){if(isLocked())return toast('本周已锁定，不能修改工时');let v=num(value);if(v<0)v=0;if(INPUT_LIMITS[k]!==undefined){const used=records.reduce((a,r,idx)=>idx===i?a:a+num(r[k]),0);const remain=Math.max(0,Math.round((INPUT_LIMITS[k]-used)*100)/100);if(v>remain){v=remain;toast('超出当天可填上限，已自动校正为剩余可填工时：'+remain)}}records[i][k]=v;await saveData();renderEmp()}function setActiveCell(input){document.querySelectorAll('.active-input').forEach(e=>e.classList.remove('active-input'));input.classList.add('active-input')}
 function colgroup(extra=false){
   if(extra){
-    return `<colgroup><col class="c-admin-name"><col class="c-admin-week"><col class="c-admin-type"><col class="c-admin-project"><col class="c-admin-unit">${'<col class="c-time">'.repeat(12)}<col class="c-sum"><col class="c-sum"><col class="c-sum"><col class="c-admin-issue"><col class="c-admin-remark"></colgroup>`;
+    return `<colgroup><col class="c-admin-name"><col class="c-admin-week"><col class="c-admin-type"><col class="c-admin-project"><col class="c-admin-unit">${'<col class="c-time">'.repeat(12)}<col class="c-sum"><col class="c-sum"><col class="c-sum"><col class="c-admin-remark"></colgroup>`;
   }
   return `<colgroup><col class="c-type"><col class="c-project"><col class="c-unit"><col class="c-remark">${'<col class="c-time">'.repeat(12)}<col class="c-sum"><col class="c-sum"><col class="c-sum"><col class="c-action"><col class="c-action"></colgroup>`;
 }
 function tableHead(extra=false){
   if(extra){
-    return `${colgroup(true)}<thead><tr><th rowspan="2">姓名</th><th rowspan="2">周数</th><th rowspan="2">工时类别</th><th rowspan="2">项目号</th><th rowspan="2">单元号</th><th colspan="2">周一</th><th colspan="2">周二</th><th colspan="2">周三</th><th colspan="2">周四</th><th colspan="2">周五</th><th rowspan="2">周六<br>加班</th><th rowspan="2">周日<br>加班</th><th colspan="3">汇总</th><th rowspan="2">问题类别</th><th rowspan="2">备注</th></tr><tr><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>工作日</th><th>周末</th></tr></thead>`;
+    return `${colgroup(true)}<thead><tr><th rowspan="2">姓名</th><th rowspan="2">周数</th><th rowspan="2">工时类别</th><th rowspan="2">项目号</th><th rowspan="2">单元号</th><th colspan="2">周一</th><th colspan="2">周二</th><th colspan="2">周三</th><th colspan="2">周四</th><th colspan="2">周五</th><th rowspan="2">周六<br>加班</th><th rowspan="2">周日<br>加班</th><th colspan="3">汇总</th><th rowspan="2">备注</th></tr><tr><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>工作日</th><th>周末</th></tr></thead>`;
   }
   return `${colgroup(false)}<thead><tr><th rowspan="2">工时类别</th><th rowspan="2">项目号</th><th rowspan="2">单元号</th><th rowspan="2">备注</th><th colspan="2">周一</th><th colspan="2">周二</th><th colspan="2">周三</th><th colspan="2">周四</th><th colspan="2">周五</th><th rowspan="2">周六<br>加班</th><th rowspan="2">周日<br>加班</th><th colspan="3">汇总</th><th rowspan='2'>编辑</th><th rowspan='2'>删除</th></tr><tr><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>加班</th><th>正常</th><th>工作日</th><th>周末</th></tr></thead>`;
 }
 function rowCells(r,i,admin=false){
   const tn=normalTotal(r),tw=weekdayOT(r),te=weekendOT(r);
   if(admin){
-    return `<td>${r.employee||''}</td><td>${r.week||''}</td><td>${r.type||''}</td><td>${r.project||''}</td><td>${r.unit||''}</td>${timeInputCell(i,'monN',r.monN,true,r)}${timeInputCell(i,'monO',r.monO,true,r)}${timeInputCell(i,'tueN',r.tueN,true,r)}${timeInputCell(i,'tueO',r.tueO,true,r)}${timeInputCell(i,'wedN',r.wedN,true,r)}${timeInputCell(i,'wedO',r.wedO,true,r)}${timeInputCell(i,'thuN',r.thuN,true,r)}${timeInputCell(i,'thuO',r.thuO,true,r)}${timeInputCell(i,'friN',r.friN,true,r)}${timeInputCell(i,'friO',r.friO,true,r)}${timeInputCell(i,'satO',r.satO,true,r)}${timeInputCell(i,'sunO',r.sunO,true,r)}<td>${showNum(tn)}</td><td>${showNum(tw)}</td><td>${showNum(te)}</td><td class="admin-issue-cell">${displayIssueCategory(r)}</td><td class="admin-remark-cell">${displayRemarkDetail(r)}</td>`;
+    return `<td>${r.employee||''}</td><td>${r.week||''}</td><td>${r.type||''}</td><td>${r.project||''}</td><td>${r.unit||''}</td>${timeInputCell(i,'monN',r.monN,true,r)}${timeInputCell(i,'monO',r.monO,true,r)}${timeInputCell(i,'tueN',r.tueN,true,r)}${timeInputCell(i,'tueO',r.tueO,true,r)}${timeInputCell(i,'wedN',r.wedN,true,r)}${timeInputCell(i,'wedO',r.wedO,true,r)}${timeInputCell(i,'thuN',r.thuN,true,r)}${timeInputCell(i,'thuO',r.thuO,true,r)}${timeInputCell(i,'friN',r.friN,true,r)}${timeInputCell(i,'friO',r.friO,true,r)}${timeInputCell(i,'satO',r.satO,true,r)}${timeInputCell(i,'sunO',r.sunO,true,r)}<td>${showNum(tn)}</td><td>${showNum(tw)}</td><td>${showNum(te)}</td><td class="admin-remark-cell">${displayMergedRemark(r)}</td>`;
   }
   return `<td>${r.type||''}</td><td>${r.project||''}</td><td>${r.unit||''}</td><td>${displayRemarkDetail(r)}</td>${timeInputCell(i,'monN',r.monN,false,r)}${timeInputCell(i,'monO',r.monO,false,r)}${timeInputCell(i,'tueN',r.tueN,false,r)}${timeInputCell(i,'tueO',r.tueO,false,r)}${timeInputCell(i,'wedN',r.wedN,false,r)}${timeInputCell(i,'wedO',r.wedO,false,r)}${timeInputCell(i,'thuN',r.thuN,false,r)}${timeInputCell(i,'thuO',r.thuO,false,r)}${timeInputCell(i,'friN',r.friN,false,r)}${timeInputCell(i,'friO',r.friO,false,r)}${timeInputCell(i,'satO',r.satO,false,r)}${timeInputCell(i,'sunO',r.sunO,false,r)}<td>${showNum(tn)}</td><td>${showNum(tw)}</td><td>${showNum(te)}</td><td><button class="action-btn" onclick="editRow(${i})">编辑</button></td><td><button class="action-btn danger" onclick="delRow(${i})">删除</button></td>`;
 }
 function renderEmp(){let b='<tbody>';if(!records.length)b+=`<tr><td colspan="23" class="empty">暂无数据，请点击“新增一行”</td></tr>`;records.forEach((r,i)=>b+=`<tr>${rowCells(r,i,false)}</tr>`);b+='</tbody>';document.getElementById('empTable').innerHTML=tableHead(false)+b+sumFoot(false);hardenMobileInputs()}
-function renderAdmin(){const list=getAdminDisplayRecords();let b='<tbody>';if(!list.length)b+=`<tr><td colspan="22" class="empty">${adminAnomalyOnly?'当前没有异常人员':'没有符合条件的数据'}</td></tr>`;list.forEach((r,i)=>b+=`<tr>${rowCells(r,i,true)}</tr>`);b+='</tbody>';document.getElementById('adminTable').innerHTML=tableHead(true)+b+sumFoot(true,list);renderAdminStats(list);updateAdminAnomalyButton();hardenMobileInputs()}
+function renderAdmin(){const list=getAdminDisplayRecords();let b='<tbody>';if(!list.length)b+=`<tr><td colspan="21" class="empty">${adminAnomalyOnly?'当前没有异常人员':'没有符合条件的数据'}</td></tr>`;list.forEach((r,i)=>b+=`<tr>${rowCells(r,i,true)}</tr>`);b+='</tbody>';document.getElementById('adminTable').innerHTML=tableHead(true)+b+sumFoot(true,list);renderAdminStats(list);updateAdminAnomalyButton();hardenMobileInputs()}
 function sumFoot(admin=false,list=records){
   const s={monN:0,monO:0,tueN:0,tueO:0,wedN:0,wedO:0,thuN:0,thuO:0,friN:0,friO:0,satO:0,sunO:0,n:0,w:0,e:0};
   list.forEach(r=>{TIME_FIELDS.forEach(k=>s[k]+=num(r[k]));s.n+=normalTotal(r);s.w+=weekdayOT(r);s.e+=weekendOT(r)});
   const clsN=k=>admin?'':normalClass(s[k]),clsO=k=>admin?'':otClass(s[k]);
   if(admin){
-    return `<tfoot><tr><td></td><td></td><td></td><td></td><td>汇总</td><td>${showNum(s.monN)}</td><td>${showNum(s.monO)}</td><td>${showNum(s.tueN)}</td><td>${showNum(s.tueO)}</td><td>${showNum(s.wedN)}</td><td>${showNum(s.wedO)}</td><td>${showNum(s.thuN)}</td><td>${showNum(s.thuO)}</td><td>${showNum(s.friN)}</td><td>${showNum(s.friO)}</td><td>${showNum(s.satO)}</td><td>${showNum(s.sunO)}</td><td>${showNum(s.n)}</td><td>${showNum(s.w)}</td><td>${showNum(s.e)}</td><td></td><td></td></tr></tfoot>`;
+    return `<tfoot><tr><td></td><td></td><td></td><td></td><td>汇总</td><td>${showNum(s.monN)}</td><td>${showNum(s.monO)}</td><td>${showNum(s.tueN)}</td><td>${showNum(s.tueO)}</td><td>${showNum(s.wedN)}</td><td>${showNum(s.wedO)}</td><td>${showNum(s.thuN)}</td><td>${showNum(s.thuO)}</td><td>${showNum(s.friN)}</td><td>${showNum(s.friO)}</td><td>${showNum(s.satO)}</td><td>${showNum(s.sunO)}</td><td>${showNum(s.n)}</td><td>${showNum(s.w)}</td><td>${showNum(s.e)}</td><td></td></tr></tfoot>`;
   }
   return `<tfoot><tr><td></td><td></td><td></td><td>汇总</td><td class="${clsN('monN')}">${showNum(s.monN)}</td><td class="${clsO('monO')}">${showNum(s.monO)}</td><td class="${clsN('tueN')}">${showNum(s.tueN)}</td><td class="${clsO('tueO')}">${showNum(s.tueO)}</td><td class="${clsN('wedN')}">${showNum(s.wedN)}</td><td class="${clsO('wedO')}">${showNum(s.wedO)}</td><td class="${clsN('thuN')}">${showNum(s.thuN)}</td><td class="${clsO('thuO')}">${showNum(s.thuO)}</td><td class="${clsN('friN')}">${showNum(s.friN)}</td><td class="${clsO('friO')}">${showNum(s.friO)}</td><td>${showNum(s.satO)}</td><td>${showNum(s.sunO)}</td><td class="${totalNormalClass(s.n)}">${showNum(s.n)}</td><td class="${totalWeekdayOTClass(s.w)}">${showNum(s.w)}</td><td class="${totalWeekendOTClass(s.e)}">${showNum(s.e)}</td><td></td><td></td></tr></tfoot>`;
 }
@@ -596,7 +624,7 @@ function employeeOrderIndex(empNo){const arr=orderedEmployeeNos();const idx=arr.
 function productionOrderOf(r){return productionOrderMap[(r.project||'')+'|'+(r.unit||'')]||''}
 function adminDetailSortKey(r){return [String(r.type||''),String(r.project||''),String(r.unit||''),String(r.remark||'')].join('\u0001')}
 function compareAdminRows(a,b){
-  // V5.12.3：管理员主表强制按员工名单顺序排序，不再按异常等级置顶。
+  // V5.12.13：管理员主表强制按员工名单顺序排序，不再按异常等级置顶。
   // 异常查看由“异常名单”和“异常筛选”负责，主表保持花名册顺序稳定。
   const empDiff=employeeOrderIndex(a.r.empNo)-employeeOrderIndex(b.r.empNo);
   if(empDiff)return empDiff;
@@ -678,7 +706,7 @@ function toggleAdminAnomalyFilter(){
   renderAdmin();
 }
 function adminFilledTotalText(list=null){
-  // V5.12.3：如果管理员姓名筛选生效，统计卡按当前显示范围计算。
+  // V5.12.13：如果管理员姓名筛选生效，统计卡按当前显示范围计算。
   const source=Array.isArray(list)?list:getAdminBaseRecords();
   const total=new Set(source.map(r=>String(r.empNo||'')).filter(Boolean)).size;
   const filled=new Set(source.filter(r=>!r.__empty).map(r=>String(r.empNo||'')).filter(Boolean)).size;
@@ -698,7 +726,7 @@ async function delRow(i){if(isLocked())return toast('本周已锁定');const r=r
   modalState={type:r.type,project:r.project||Object.keys(projectUnits)[0],units:r.unit?[r.unit]:[],extraReasonType:extra?(displayIssueCategory(r)||extraWorkOptions()[0]||''):'',remark:displayRemarkDetail(r),editIndex:i};
   document.getElementById('customRemark').value=modalState.remark;document.getElementById('addModal').style.display='flex';renderModalAll();
 }
-const LAST_MODAL_SELECTION_KEY='timesheet_last_modal_selection_v5123';function loadLastModalSelection(){try{const d=JSON.parse(localStorage.getItem(LAST_MODAL_SELECTION_KEY)||'{}');if(d&&workTypes.includes(d.type)){return d}}catch(e){}return null}function saveLastModalSelection(){try{if(modalState.editIndex!==undefined)return;localStorage.setItem(LAST_MODAL_SELECTION_KEY,JSON.stringify({type:modalState.type,project:modalState.project,remark:isExtraWorkType()?'':modalState.remark,extraReasonType:isExtraWorkType()?modalState.extraReasonType:''}))}catch(e){}}
+const LAST_MODAL_SELECTION_KEY='timesheet_last_modal_selection_v51213';function loadLastModalSelection(){try{const d=JSON.parse(localStorage.getItem(LAST_MODAL_SELECTION_KEY)||'{}');if(d&&workTypes.includes(d.type)){return d}}catch(e){}return null}function saveLastModalSelection(){try{if(modalState.editIndex!==undefined)return;localStorage.setItem(LAST_MODAL_SELECTION_KEY,JSON.stringify({type:modalState.type,project:modalState.project,remark:isExtraWorkType()?'':modalState.remark,extraReasonType:isExtraWorkType()?modalState.extraReasonType:''}))}catch(e){}}
 function resetModal(){
   const saved=loadLastModalSelection();const t=saved&&workTypes.includes(saved.type)?saved.type:workTypes[0];const fp=firstAvailableProject();const p=saved&&saved.project&&projectUnits[saved.project]&&availableProjects().includes(saved.project)?saved.project:fp;
   const extra=isExtraWorkType(t);const issue=extra?(saved&&saved.extraReasonType&&extraWorkOptions().includes(saved.extraReasonType)?saved.extraReasonType:(extraWorkOptions()[0]||'')):'';const rm=extra?'':(saved&&saved.remark?saved.remark:(remarkMap[t]||[])[0]||'');
@@ -723,7 +751,7 @@ function renderModalAll(){syncProjectUnitVisibility();syncRemarkInputUI();render
   })));
 }
 function renderModalProjects(){const box=document.getElementById('modalProjectBox');box.innerHTML='';const ps=availableProjects();if(!ps.length){box.innerHTML='<div class="empty">暂无进行中项目</div>';return}if(!modalState.project||!ps.includes(modalState.project)){modalState.project=ps[0];modalState.units=[]}ps.forEach(p=>box.appendChild(makeBtn(p,modalState.project===p,()=>{modalState.project=p;modalState.units=[];renderModalAll()})))}function resetUnitLayout(columns,normalPanel,containerPanel){
-  if(columns)columns.classList.remove('unit-layout-balanced','unit-layout-normal-wide','unit-layout-container-wide','unit-layout-normal-only','unit-layout-container-only');
+  if(columns)columns.classList.remove('single-unit-panel','unit-layout-balanced','unit-layout-normal-wide','unit-layout-container-wide','unit-layout-normal-only','unit-layout-container-only');
   if(normalPanel)normalPanel.classList.remove('hidden-panel');
   if(containerPanel)containerPanel.classList.remove('hidden-panel');
 }
@@ -782,30 +810,91 @@ async function generateRowsFromModal(){
 }
 function exportCSV(){
   const list=getAdminDisplayRecords();
-  const esc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  const bgByClass=cls=>cls==='day-over'?'#ffd6d6':(cls==='day-warn'?'#fff3bf':'#ffffff');
-  const styleBase=(bg='#ffffff',align='center')=>`border:1px solid #d7e0ea;background:${bg};padding:4px;text-align:${align};`;
-  const tdText=(v,bg='#ffffff',align='center')=>`<td style="mso-number-format:'\\@';${styleBase(bg,align)}">${esc(v)}</td>`;
-  const tdNum=(v,bg='#ffffff')=>{const n=num(v);return `<td style="mso-number-format:'0.00';${styleBase(bg,'center')}">${n}</td>`};
-  const th=h=>`<th style="border:1px solid #d7e0ea;background:#e8edf3;padding:5px;text-align:center;mso-number-format:'\\@';">${esc(h)}</th>`;
-  const headers=['姓名','周数','工时类别','生产号','项目号','单元号','正常汇总','工作日加班','周末加班','总工时','问题类别','备注'];
-  let rows=`<tr>${headers.map(th).join('')}</tr>`;
-  const baseList=getAdminBaseRecords();
-  list.forEach(r=>{const sev=adminEmployeeSeverity(r.empNo,baseList);const frontBg=sev>=2?'#ffd6d6':(sev===1?'#fff3bf':'#ffffff');const n=normalTotal(r),w=weekdayOT(r),e=weekendOT(r),totalHours=n+w+e;rows+=`<tr>`+tdText(r.employee||'',frontBg)+tdText(r.week||'',frontBg)+tdText(r.type||'',frontBg)+tdText(productionOrderOf(r),frontBg)+tdText(r.project||'',frontBg)+tdText(r.unit||'',frontBg)+tdNum(n,bgByClass(totalNormalClass(n)))+tdNum(w,bgByClass(totalWeekdayOTClass(w)))+tdNum(e,'#e0f2fe')+tdNum(totalHours,'#dcfce7')+tdText(displayIssueCategory(r),frontBg)+tdText(displayRemarkDetail(r),frontBg,'left')+`</tr>`;});
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body><table>${rows}</table></body></html>`;
-  const blob=new Blob(['\ufeff'+html],{type:'application/vnd.ms-excel;charset=utf-8;'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  const now=new Date();
-  const pad2=n=>String(n).padStart(2,'0');
+  const workTypeCodeMap={'机械组装':20,'保温作业':50,'电气安装':60,'额外工时':70,'其它作业':88031,'请假':100,'仓库作业':101};
+  const workTypeNameMap={20:'机械组装',50:'保温作业',60:'电气安装',70:'额外工时',88031:'其它作业',100:'请假',101:'仓库作业'};
+  const now=new Date(),pad2=n=>String(n).padStart(2,'0');
   const exportTime=now.getFullYear()+pad2(now.getMonth()+1)+pad2(now.getDate())+'_'+pad2(now.getHours())+pad2(now.getMinutes())+pad2(now.getSeconds());
   const selectedWeekDate=(typeof currentWeekRange==='function'&&currentWeekRange().start)?currentWeekRange().start:new Date();
   const isoWeekYearDate=new Date(Date.UTC(selectedWeekDate.getFullYear(),selectedWeekDate.getMonth(),selectedWeekDate.getDate()));
-  const isoWeekDay=isoWeekYearDate.getUTCDay()||7;
-  isoWeekYearDate.setUTCDate(isoWeekYearDate.getUTCDate()+4-isoWeekDay);
+  const isoWeekDay=isoWeekYearDate.getUTCDay()||7;isoWeekYearDate.setUTCDate(isoWeekYearDate.getUTCDate()+4-isoWeekDay);
   const exportYear=isoWeekYearDate.getUTCFullYear();
   const exportWeek=typeof getWeekNo==='function'?getWeekNo(currentWeekOffset):'W00';
-  a.download=`车间工时_${exportYear}_${exportWeek}_${exportTime}.xls`;
-  a.click();
-  URL.revokeObjectURL(a.href)
+  const xmlEsc=v=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;').replace(/'/g,'&apos;');
+  const colName=n=>{let s='';while(n>0){let m=(n-1)%26;s=String.fromCharCode(65+m)+s;n=Math.floor((n-1)/26)}return s};
+  const safeSheetName=n=>String(n).replace(/[\\\/\?\*\[\]\:]/g,'').slice(0,31)||'Sheet';
+  const t=(v,s=2)=>({t:'s',v:String(v??''),s});
+  const n2=(v,s=3)=>({t:'n',v:num(v),s});
+  const i0=(v,s=4)=>({t:'n',v:parseInt(String(v??'').replace(/[^0-9-]/g,''),10)||0,s});
+  const fnum=(f,v=0,s=3)=>({t:'fn',f,v:num(v),s});
+
+  function sheetXml(rows,widths=[]){
+    const cols=widths.length?'<cols>'+widths.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join('')+'</cols>':'';
+    const body=rows.map((row,ri)=>`<row r="${ri+1}">`+row.map((c,ci)=>{
+      const ref=colName(ci+1)+(ri+1),s=c&&c.s!==undefined?` s="${c.s}"`:'';
+      if(!c)return `<c r="${ref}"${s}/>`;
+      if(c.t==='n')return `<c r="${ref}"${s}><v>${Number(c.v||0)}</v></c>`;
+      if(c.t==='fn')return `<c r="${ref}"${s}><f>${xmlEsc(c.f)}</f><v>${Number(c.v||0)}</v></c>`;
+      return `<c r="${ref}" t="inlineStr"${s}><is><t>${xmlEsc(c.v)}</t></is></c>`;
+    }).join('')+'</row>').join('');
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">${cols}<sheetData>${body}</sheetData><pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/></worksheet>`;
+  }
+
+  function buildDetailRows(){
+    const rows=[];
+    rows.push(['姓名','工号','年份','周数','工时类别代码','工时类别','生产号','项目号','单元号','正常汇总','工作日加班','周末加班','总工时','备注'].map(h=>t(h,1)));
+    const baseList=getAdminBaseRecords();let normalSum=0,weekdayOtSum=0,weekendOtSum=0,totalSum=0;
+    list.forEach((r,idx)=>{
+      const er=idx+2,n=normalTotal(r),w=weekdayOT(r),e=weekendOT(r),totalHours=n+w+e,typeCode=workTypeCodeMap[r.type]||0,po=productionOrderOf(r);
+      const sev=adminEmployeeSeverity(r.empNo,baseList),frontStyle=sev>=2?7:(sev===1?6:2);
+      normalSum+=n;weekdayOtSum+=w;weekendOtSum+=e;totalSum+=totalHours;
+      rows.push([
+        t(r.employee||employeeMap[r.empNo]||'',frontStyle),
+        i0(r.empNo||0,frontStyle===2?4:frontStyle),
+        i0(exportYear,frontStyle===2?4:frontStyle),
+        t(r.week||'',frontStyle),
+        i0(typeCode,frontStyle===2?4:frontStyle),
+        t(r.type||workTypeNameMap[typeCode]||'',frontStyle),
+        t(po,frontStyle),
+        t(r.project||'',frontStyle),
+        t(r.unit||'',frontStyle),
+        n2(n,totalNormalClass(n)==='day-over'?7:(totalNormalClass(n)==='day-warn'?6:3)),
+        n2(w,totalWeekdayOTClass(w)==='day-over'?7:(totalWeekdayOTClass(w)==='day-warn'?6:3)),
+        n2(e,8),
+        fnum(`J${er}+K${er}+L${er}`,totalHours,5),
+        t(displayMergedRemark(r),frontStyle)
+      ]);
+    });
+    normalSum=Math.round(normalSum*100)/100;weekdayOtSum=Math.round(weekdayOtSum*100)/100;weekendOtSum=Math.round(weekendOtSum*100)/100;totalSum=Math.round(totalSum*100)/100;
+    rows.push([t('汇总',9),t('',9),t('',9),t('',9),t('',9),t('',9),t('',9),t('',9),t('',9),n2(normalSum,10),n2(weekdayOtSum,10),n2(weekendOtSum,10),n2(totalSum,5),t('',9)]);
+    return rows;
+  }
+
+  function buildEmployeeRows(){const rows=[];rows.push(['工号','姓名','状态','入职日期','离职日期','工种/排序'].map(h=>t(h,1)));orderedEmployeeNos().forEach((empNo,idx)=>rows.push([i0(empNo),t(employeeMap[empNo]||''),t(employeeStatus[empNo]||''),t(employeeJoinDateMap[empNo]||''),t(employeeLeaveDateMap[empNo]||''),i0(idx)]));return rows;}
+  function buildProjectRows(){const rows=[];rows.push(['生产号','项目号','单元号','项目单元KEY','项目状态','单元状态'].map(h=>t(h,1)));Object.keys(projectUnits||{}).forEach(project=>(projectUnits[project]||[]).forEach(unit=>{const key=project+'|'+unit;rows.push([t(productionOrderMap[key]||''),t(project),t(unit),t(key),t(projectStatusMap[project]||''),t(projectUnitStatusMap[key]||'')]);}));return rows;}
+  function buildWorkTypeRows(){const rows=[];rows.push(['工时类别代码','工时类别'].map(h=>t(h,1)));Object.keys(workTypeNameMap).forEach(code=>rows.push([i0(code),t(workTypeNameMap[code])]));return rows;}
+  function buildRemarkRows(){const rows=[];rows.push(['工时类别','备注'].map(h=>t(h,1)));Object.keys(remarkMap||{}).forEach(type=>(remarkMap[type]||[]).forEach(remark=>rows.push([t(type),t(remark)])));return rows;}
+
+  const sheets=[
+    {name:'工时明细',rows:buildDetailRows(),widths:[12,12,10,10,14,14,18,14,14,12,14,12,12,38]},
+    {name:'员工表',rows:buildEmployeeRows(),widths:[12,12,10,14,14,12]},
+    {name:'项目表',rows:buildProjectRows(),widths:[18,14,14,22,12,12]},
+    {name:'工时类别表',rows:buildWorkTypeRows(),widths:[14,16]},
+    {name:'备注表',rows:buildRemarkRows(),widths:[16,18]}
+  ];
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FF1F4E79"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FF166534"/><name val="Calibri"/></font></fonts><fills count="7"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EDF3"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFFFFF"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF3BF"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFD6D6"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE0F2FE"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border><border><left style="thin"><color rgb="FFD7E0EA"/></left><right style="thin"><color rgb="FFD7E0EA"/></right><top style="thin"><color rgb="FFD7E0EA"/></top><bottom style="thin"><color rgb="FFD7E0EA"/></bottom><diagonal/></border></borders><cellXfs count="11"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/><xf numFmtId="49" fontId="1" fillId="2" borderId="1" applyFill="1" applyBorder="1" applyFont="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="49" fontId="0" fillId="3" borderId="1" applyFill="1" applyBorder="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="2" fontId="0" fillId="3" borderId="1" applyFill="1" applyBorder="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="1" fontId="0" fillId="3" borderId="1" applyFill="1" applyBorder="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="2" fontId="2" fillId="3" borderId="1" applyFill="1" applyBorder="1" applyFont="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="49" fontId="0" fillId="4" borderId="1" applyFill="1" applyBorder="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="49" fontId="0" fillId="5" borderId="1" applyFill="1" applyBorder="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="2" fontId="0" fillId="6" borderId="1" applyFill="1" applyBorder="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="49" fontId="1" fillId="2" borderId="1" applyFill="1" applyBorder="1" applyFont="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf><xf numFmtId="2" fontId="1" fillId="2" borderId="1" applyFill="1" applyBorder="1" applyFont="1" applyNumberFormat="1"><alignment horizontal="center" vertical="center"/></xf></cellXfs></styleSheet>`;
+  const workbook=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>${sheets.map((s,i)=>`<sheet name="${xmlEsc(safeSheetName(s.name))}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')}</sheets></workbook>`;
+  const wbRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${sheets.map((s,i)=>`<Relationship Id="rId${i+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')}<Relationship Id="rId${sheets.length+1}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;
+  const rootRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/><Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties" Target="docProps/app.xml"/></Relationships>`;
+  const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>${sheets.map((s,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')}<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/><Override PartName="/docProps/app.xml" ContentType="application/vnd.openxmlformats-officedocument.extended-properties+xml"/></Types>`;
+  const core=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>车间工时导出</dc:title><dc:creator>车间工时填报系统 V5.12.13</dc:creator><cp:lastModifiedBy>车间工时填报系统 V5.12.13</cp:lastModifiedBy></cp:coreProperties>`;
+  const app=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes"><Application>Microsoft Excel</Application></Properties>`;
+  function crc32(bytes){let c=~0;for(let i=0;i<bytes.length;i++){c^=bytes[i];for(let k=0;k<8;k++)c=(c>>>1)^(0xEDB88320&-(c&1));}return ~c>>>0;}
+  function u16(n){return new Uint8Array([n&255,(n>>>8)&255]);}function u32(n){return new Uint8Array([n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]);}
+  function concat(arrs){const len=arrs.reduce((a,b)=>a+b.length,0),out=new Uint8Array(len);let p=0;arrs.forEach(a=>{out.set(a,p);p+=a.length});return out;}function strBytes(s){return new TextEncoder().encode(s);}
+  function makeZip(files){const locals=[],centrals=[];let offset=0;const dt=new Date(),time=((dt.getHours()<<11)|(dt.getMinutes()<<5)|(dt.getSeconds()/2))|0,date=(((dt.getFullYear()-1980)<<9)|((dt.getMonth()+1)<<5)|dt.getDate())|0;files.forEach(f=>{const name=strBytes(f.name),data=strBytes(f.content),crc=crc32(data);const local=concat([u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),name,data]);locals.push(local);const central=concat([u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),name]);centrals.push(central);offset+=local.length;});const centralSize=centrals.reduce((a,b)=>a+b.length,0);const end=concat([u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(centralSize),u32(offset),u16(0)]);return concat([...locals,...centrals,end]);}
+  const files=[{name:'[Content_Types].xml',content:contentTypes},{name:'_rels/.rels',content:rootRels},{name:'docProps/core.xml',content:core},{name:'docProps/app.xml',content:app},{name:'xl/workbook.xml',content:workbook},{name:'xl/_rels/workbook.xml.rels',content:wbRels},{name:'xl/styles.xml',content:styles},...sheets.map((s,i)=>({name:`xl/worksheets/sheet${i+1}.xml`,content:sheetXml(s.rows,s.widths)}))];
+  const zip=makeZip(files),blob=new Blob([zip],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=`车间工时_${exportYear}_${exportWeek}_${exportTime}.xlsx`;a.click();URL.revokeObjectURL(a.href);
 }
 function hardenMobileInputs(){
   document.querySelectorAll('input').forEach(inp=>{
