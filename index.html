@@ -494,7 +494,7 @@ function removeLoginScreenDom(){
   const el=document.getElementById('loginScreen');
   if(el)el.remove();
 }
-async function apiCall(action,payload={}){const res=await fetch(API_BASE,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,payload})});if(!res.ok)throw new Error("HTTP "+res.status);const data=await res.json();if(!data.ok)throw new Error(data.error||"云函数返回失败");return data.data||{}}
+async function apiCall(action,payload={}){const res=await fetch(API_BASE,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,payload})});if(!res.ok)throw new Error("HTTP "+res.status);const data=await res.json();if(!data.ok)throw new Error(data.error||"云函数返回失败");return data
 function num(v){let n=parseFloat(v);return isNaN(n)?0:n}function showNum(v){v=num(v);return v===0?'':v}function getISOWeek(d){const date=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())),dayNum=date.getUTCDay()||7;date.setUTCDate(date.getUTCDate()+4-dayNum);const yearStart=new Date(Date.UTC(date.getUTCFullYear(),0,1));return Math.ceil((((date-yearStart)/86400000)+1)/7)}function getWeekNo(o=0){const d=new Date();d.setDate(d.getDate()+o*7);return "W"+String(getISOWeek(d)).padStart(2,"0")}function defaultRecord(){return {employee:currentUserName||employeeMap[currentLoginId]||"",empNo:currentLoginId,week:getWeekNo(currentWeekOffset),type:"机械组装",project:"",unit:"",extraReasonType:"",remark:"",monN:0,monO:0,tueN:0,tueO:0,wedN:0,wedO:0,thuN:0,thuO:0,friN:0,friO:0,satO:0,sunO:0}}function toast(m){alert(m)}
 
 /* ===== V5.12.13 相同前置信息自动合并 =====
